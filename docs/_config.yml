@@ -1,0 +1,16 @@
+title: Battle of the Water Futures
+description: Battle of the Water Futures website for general information, updates and documentation.
+baseurl: "/water-futures-battle"
+url: "https://waterfutures.github.io/"
+
+# Theme
+theme: jekyll-theme-cayman
+
+# Build settings
+markdown: kramdown
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
