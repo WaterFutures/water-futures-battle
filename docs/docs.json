@@ -6,13 +6,20 @@
     "primary": "#ff0000"
   },
   "navigation": {
-    "tabs": [
-        {
-        "tab": "Homepage",
-        "pages": [
-          "index.mdx"
+    "dropdowns": [
+      {
+        "dropdown": "Documentation",
+        "icon": "book",
+        "description": "How to use the Example Co. product",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": [
+              "index"
+            ]
+          },
         ]
-        }
+    }
     ]
   }
 }
