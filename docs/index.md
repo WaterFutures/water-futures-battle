@@ -44,7 +44,7 @@ More information about the conference and the regular paper submission are avail
 - **20th March 2026** Second stage solution submission deadline.
 
 **Stage 3**
-- __23rd April 2026__ Third batch of data available. 
+- __23rd March 2026__ Third batch of data available. 
 - **10th April 2026** Final deadline for submission of:
     - Third stage solution.
     - ___Short paper___.
