@@ -209,8 +209,11 @@ __marimo__/
 # MacOS
 .DS_Store
 
-# FOr ruby and Jekyll websites
+# Ruby and Jekyll websites
 _site/
 .bundle/
 vendor/
 Gemfile.lock
+
+# Project
+internal-docs
