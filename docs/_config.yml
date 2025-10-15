@@ -8,7 +8,7 @@ theme: jekyll-theme-cayman
 
 remote_theme: pages-themes/cayman@v0.2.0
 plugins:
-- jekyll-remote-theme # add this line to the plugins list if you already have one
+- jekyll-remote-theme
 
 # Build settings
 markdown: kramdown
@@ -18,10 +18,10 @@ kramdown:
 
 # Navigation
 navigation:
-  - title: "Home"
+  - title: Home
     url: /
-  # - title: Motivation
-  #   url: /motivation
+  - title: Motivation
+    url: /motivation
   - title: Participate
     url: /participating
   # - title: Problem Description
