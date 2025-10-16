@@ -15,22 +15,7 @@
       
       <!-- Navigation -->
       {% if site.navigation %}
-      <nav class="site-nav">
-        {% for item in site.navigation %}
-          {% if item.subnav %}
-            <div class="nav-item dropdown">
-              <a href="{{ item.url | relative_url }}" class="nav-link">{{ item.title }}</a>
-              <div class="dropdown-content">
-                {% for subitem in item.subnav %}
-                  <a href="{{ subitem.url | relative_url }}">{{ subitem.title }}</a>
-                {% endfor %}
-              </div>
-            </div>
-          {% else %}
-            <a href="{{ item.url | relative_url }}" class="nav-link">{{ item.title }}</a>
-          {% endif %}
-        {% endfor %}
-      </nav>
+      {% include navigation.html %}
       {% endif %}
     </header>
 
