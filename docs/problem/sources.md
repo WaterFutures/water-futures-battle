@@ -16,6 +16,8 @@ Part of [network options](./network-options).
     - elevation [??]
 - Permit
 - catchment where it belongs
+- time to implementation (min-max)
+- capital cost of implementation (min-max)
 
 ## Surface water 
 - Geographical
@@ -24,7 +26,8 @@ Part of [network options](./network-options).
     - elevation [??]
 - size?
 - availability?
-- 
+- time to implementation (min-max)
+- capital cost of implementation (min-max)
 
 ## Desalination
 - Geographical
@@ -32,4 +35,5 @@ Part of [network options](./network-options).
     - Coordinates [??]
     - elevation [??]
 - size?
--  
+- time to implementation (min-max)
+- capital cost of implementation (min-max)

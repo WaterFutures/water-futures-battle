@@ -16,7 +16,7 @@ Which is not our concern.
 See demand-model.
 
 On top of demand, each urban system will have a leak associated.
-See leak-model
+See [leak-model](./leak-model).
 Given the pipe distribution by age, diameter, pressure at the delivery point, and length of the urban system, we generate an additional leak.
 Perhaps the first 3 params will genrate m3/km which gets multiplied by the length of the urban systems
 

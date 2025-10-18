@@ -29,10 +29,10 @@ navigation:
     subnav:
       - title: Network & Options
         url: /problem/network-options
-    #   - title: Input Data & Scenarios
-    #     url: /problem/scenarios
-    #   - title: Evaluation Metrics
-    #     url: /problem/metrics
+      - title: Input Data & Scenarios
+        url: /problem/scenarios
+      - title: Evaluation Metrics
+        url: /problem/metrics
   - title: Team
     url: /team
   - title: Contact Us

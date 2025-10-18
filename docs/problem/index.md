@@ -3,7 +3,8 @@ layout: default
 title: The BWF Problem
 ---
 
-# Problem description and objective
+# Problem description and objective
+
 The Battle of the Water Futures takes place in a not so ficticious world, with a blend of real data and assumptions.
 The BWF is concerned with the optimal planning and operation of multiple regional water distribution systems in a national landscape.
 It is based on The Netherlands where KWR is located and instead of the current water ulitities division, one independent water utility is assumed for every province. 
@@ -42,27 +43,37 @@ Robust planning
 Flexible planning 
 Adpative planning
 
+# Details
 
-
-[Network options](./network-options)
-
-
+- [Network options](./network-options)
+- [Scenarios and input data](./scenarios)
+- [Metrics and KPIs](./metrics)
+x
 ---
-Motivation behind the decisions
-- Why the Netherlands?
-Because it is a rich western country with a lot of publicly available data, mild weather that could be influenced significantly from climate change, an overexploitaiton of the groundwater resources.
-Moreover, is where part of the orgainser team (KWR) is based, which makes access to this data as well as expert knowledge easier
-- Why national level distribution syste/transport?
-Once again, because of data availabliity and privacy reason. Focusing on a big city/urban context would have reuqired a non so light participation of a water utility. Once we get to this level of detail information that need to be "protected" like economics of the neighbourhood and so on would have made the work harder
-- Why a competition over a 100 years horizon?
-Because the world changed so much in the last 100 years that is nearly impossible to predict what will happen in the next ones. Also, pipe replacemnt rate of WDS is usually around 1%, meaning that a whole network is rpelinsedh after 100 years
-- Why 25 years masterplans/stages?
-Because public entities and governmanets tends to issue long-term bonds (30 years) when planning for big infrastructures projects (e.g., produciton location and so)
-It is true that even if they plan for 25 years, new plans coould be developed sooner (10-15 years), we will see if this assumptions will hold or change
-- Why so much uncertainty? Previous battles were more clearly defined in terms of input and parameters.
-Because this is the world where we live in now. Even in rich countries water utility have really tight budget and can't focus only on the day to day operations.
-Becoming more adaptive in their planning is one of the ways that water utilities could adopt to become more reliable.
-- Why so many objectives when only one solution can be implemented?
-Because cost/finances to fulfill the required level of service are not the only objective anymore.
-Greenhouse gas emission from system operations and construction needs are being considered already and aspects like generational fairness as well as living in symbiosis with nature are gaining momentum which we don't know how these priorities could change for society in the next 100 years. 
-Every team will give different priorities to the different aspects too, in the same as differetn management teams can give different priorities (in pscae between utilities, and in time, between subsquent managemtn teams at the same water utility).
+
+## Motivation behind the decisions:
+
+
+### Why the Netherlands?
+
+Because it is a rich western country with a lot of publicly available data, mild weather that could be significantly influenced by climate change, and an overexploitation of groundwater resources. Moreover, part of the organiser team (KWR) is based there, which makes access to data and expert knowledge easier.
+
+### Why national-level distribution system/transport?
+
+Again, due to data availability and privacy reasons. Focusing on a big city or urban context would have required significant participation from a water utility. At this level of detail, information that needs to be protected (such as neighborhood economics) would have made the work more difficult.
+
+### Why a competition over a 100-year horizon?
+
+Because the world has changed so much in the last 100 years that it is nearly impossible to predict what will happen in the next century. Also, the pipe replacement rate of WDS is usually around 1%, meaning that a whole network is replenished after 100 years.
+
+### Why 25-year masterplans/stages?
+
+Because public entities and governments tend to issue long-term bonds (30 years) when planning for large infrastructure projects (e.g., production location, etc.). Even if they plan for 25 years, new plans could be developed sooner (10–15 years); we will see if this assumption holds or changes.
+
+### Why so much uncertainty? Previous battles were more clearly defined in terms of input and parameters.
+
+Because this is the world we live in now. Even in rich countries, water utilities have very tight budgets and can't focus only on day-to-day operations. Becoming more adaptive in their planning is one way water utilities can become more reliable.
+
+### Why so many objectives when only one solution can be implemented?
+
+Because cost/finances to fulfill the required level of service are not the only objective anymore. Greenhouse gas emissions from system operations and construction are already being considered, and aspects like generational fairness and living in symbiosis with nature are gaining momentum. We don't know how these priorities could change for society in the next 100 years. Every team will give different priorities to the various aspects, just as different management teams can give different priorities (between utilities, and over time, between subsequent management teams at the same water utility).

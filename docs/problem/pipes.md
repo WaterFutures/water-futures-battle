@@ -12,6 +12,7 @@ Part of [network options](./network-options).
 Two tables should be enough to represent all possible pipe options.
 
 **Table 1:** possible pipe locations
+
 | id | from | to | length | duplicate |
 | --- | --- | --- | --- | --- |
 | 12443 | Utrecht | Amsterdam | 45 | true |
