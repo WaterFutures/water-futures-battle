@@ -25,7 +25,7 @@ Each node's available budget is therefore:
 
 $B_i = s_i \cdot B_{\text{total}}$
 
-Each team can select a fraction of the total available budget, which can be anything between 0% (no budget will be utilized) and 100% (all the budget will be utilized).
+Each team can select a fraction of the total available budget at each stage, which can be anything between 0% (no budget will be utilized) and 100% (all the budget will be utilized).
 
 ---
 
