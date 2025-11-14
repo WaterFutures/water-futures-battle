@@ -11,11 +11,48 @@ parent_title: Problem
 
 Each team’s plan will be evaluated using a set of **hydraulic, economic, environmental, and fairness metrics**.  
 Each metric combines outputs from:
-- **Hydraulic simulations** (EPANET): pressures, flows, energy, water age.  
+- **Hydraulic simulations** (EPANET): pressures, flows, energy 
 - **Financial simulations**: CAPEX, OPEX, bond costs, and tariffs.  
-- **Socioeconomic data**: income distribution, population, node classifications.  
+- **Socioeconomic data**: income distribution, population, node classifications.
 
-All values are calculated for one **stage (25 years)** and expressed as annualized metrics.
+
+### 1. Total Annualized Cost (€)
+
+- **Formula:** $TAC = \sum_j \frac{K_j}{L_j} + OPEX + (coupon × P_{issue})$
+- Calculated over all dimensions (utility, time). Ranked based on cumulative amount across time and utilities.
+
+### 2. Water-Age Above Threshold (hours)
+**REMOVED AFTER DISCUSSION WITH THE TEAM ON 2025-10-24**
+Reason: doesn't make sense at transport level but only distribution.
+
+### 3. GHG Emissions (tCO₂e/year)
+
+- **Formula:** $\text{GHG} = \sum_j \frac{K_j \times EF^{\text{emb}}_j}{L_j} + \sum_t \frac{E_t \times EF}{1000}$
+- Calculated over all dimensions (utility, time). Ranked based on cumulative amount across time and utilities.
+
+### 4. Service Fairness / Reliability (0–1)
+
+- **Formula:** ??
+  **MODIFY: adjust based on undelivered demand over requested demand**
+-  Calculated over all dimensions (municipality, household class, and time). Participants will be ranked based on **one specific combination** of these dimensions, which is kept uncertain and can change between stages.
+
+### 5. Affordability Fairness (%)
+
+- **Formula:** $AF = \frac{p_v × V_{lifeline} + F_{fixed}}{I_{p20}} × 100$
+-  Calculated over all dimensions (municipality, household class, and time). Participants will be ranked based on **one specific combination** of these dimensions, which is kept uncertain and can change between stages.
+  
+### 6. Fairness for Critical Users (%)
+**REMOVED AFTER DISCUSSION ON 2025-10-24**
+Reason: we don't distinguish between critical and non critical users
+
+### 7. Water Losses (%)
+
+- **Formula:** ??
+  **MODIFY: adjust based on the new leak model**
+  Goal: reduce the class in which the municipalities stay for most of the time.
+  We can use the municipality NRW class directly and track it over time).
+  Final calculation could be the amount (or share) of municipalities in a given class of worse (e.g., C), summed over time. See what the EU goal is.
+
 
 ---
 

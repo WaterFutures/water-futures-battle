@@ -85,19 +85,55 @@ Example (assuming $r_f = 3\%$, $cs = 1\%$, $a = 2\%$):
 
 ---
 
-## 5. Budget Allocation Among Nodes
+After meeting 2025-10-24 (notes fixed with AI):
 
-Each team must decide **how to distribute its total available budget** among its municipalities or network nodes.
+### **1. Annual Budget Allocation**
 
-- Let $s_i$ be the share of budget allocated to node *i*.
-- The shares must satisfy: $\sum_i s_i = 1$
+The total 25-year budget is divided **equally** across all 25 years to determine the **Yearly Budget**. This annual amount is split into two parts based on a pre-defined policy:
 
-- Allocations can reflect:
-  - Strategic priorities (e.g., large cities, critical users, low-income areas)
-  - Infrastructure condition (pipe age, leak rate, etc.)
-  - Affordability objectives
+1. **Water Utilities' Share:** Funds distributed among the **12 water utilities**.
+    
+2. **National Budget:** Funds reserved for **common interventions** (e.g., interconnections, desalination).
+    
 
-The allocation influences **which nodes receive upgrades investments** in the simulation.
+#### **Budget Sharing Policies**
+
+Competitors must specify a policy to determine the annual split. This policy remains in effect until a simulated management change overwrites it.
+
+- **"By Population":** A fixed percentage (x%) goes to the national budget; the remaining funds are distributed to the 12 utilities proportionally to their **population size**.
+    
+- **"By Revenue":** A fixed percentage (x%) goes to the national budget; the remaining funds are distributed to the 12 utilities proportionally to their **previous year's revenue**.
+    
+- **"Custom":** A specific percentage (x%) is allocated to _each_ of the 12 water utilities; the remaining balance funds the national budget (the sum of all allocations must equal 100%).
+
+> note we could also hae the 25-years budget split only between the water utilities and any common intervention would result in a shared bond. Probably easier to express like this.
+
+---
+
+### **2. Financial Mechanics**
+
+The yearly **Cash Inflow** is the sum of **water revenue** and the **yearly budget** allocation.
+
+The yearly **Cash Outflow** includes **interventions** (new pipes, leak reduction, etc.), **operational costs**, and **coupon payments** (on bonds).
+
+- If the Cash Inflow is **less** than the Cash Outflow, a **bond** will be automatically issued to cover the deficit.
+    
+- Any **budget surplus** will be carried over as retained earnings into the following year.
+    
+---
+
+### **3. Water Tariffs**
+
+Water tariffs are determined **per household type** (to be determined based on CBS data) and consist of two independent components:
+
+1. A **fixed component**.
+    
+2. A **volumetric component**.
+    
+
+Competitors have the flexibility to adjust these two components **independently** and can choose to apply different adjustments across different household classes and utilities or the same adjustment across all classes.
+
+However, such increase can not happen more before 5 years have passed from the previous increase.
 
 ---
 
@@ -107,48 +143,40 @@ Teams must specify their financial decisions in the solution file as follows (as
 
 ```json
 {
-  "finance": [{
-    "budget_share": 0.15,
-    "bond_issuance": {
-      "issue_amount_eur": 80000000
+  year_2025: {
+    "finance": {
+      "budget_sharing_policy": "by_population",
+      ... more TBD
     },
-    "budget_allocation": {
-      "Node_001": 0.25,
-      "Node_002": 0.35,
-      "Node_003": 0.40
-    }
+    "leak_reduction_interventions": {
+        ...
+    },
+    "connections_interventions": {
+      "pipe A", ...
   },
-{
-    "budget_share": 0.45,
-    "bond_issuance": {
-      "issue_amount_eur": 0
+  year_2030: {
+    "finance": {
+      "budget_sharing_policy": "custom",
+      "budget_sharing_args": {
+          "water_utility_1": 0.1,
+          "water_utility_2": 0.06,
+          ...
+      },
+      "water_price_tariffs": {
+        "increase": [
+            {
+                "fixed_component": {
+                    "class_A": 2, # %
+                    "class_C": 4, 
+                    "all": 3 # classes B and D
+                },
+          }
+      ]
+      # TO BE IMPROVED
     },
-    "budget_allocation": {
-      "Node_001": 0.55,
-      "Node_002": 0.15,
-      "Node_003": 0.30
-    }
-  }
-{
-    "budget_share": 0.20,
-    "bond_issuance": {
-      "issue_amount_eur": 60000000
+    "leak_reduction_interventions": {
+        ...
     },
-    "budget_allocation": {
-      "Node_001": 0.25,
-      "Node_002": 0.35,
-      "Node_003": 0.40
-    }
-  }
-{
-    "budget_share": 0.20,
-    "bond_issuance": {
-      "issue_amount_eur": 10000000
-    },
-    "budget_allocation": {
-      "Node_001": 0.20,
-      "Node_002": 0.60,
-      "Node_003": 0.20
-    }
-  }]
-}
+    "connections_interventions": {
+      "pipe A", ...
+  },
