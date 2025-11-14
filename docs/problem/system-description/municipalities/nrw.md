@@ -1,9 +1,14 @@
 ---
-layout: default
-title: Demand Nodes
-parent: /problem/network-options/
-parent_title: Network & Design Options
+layout: level_two
+title: Non Revenue Water Model
+parent: /problem/system-description/municipalities
+parent_title: Municipalities
+authors:
+  - A. Artelt
+  - D. Eliades
+  - D. Zanutto
 ---
+
 Regarding the cost of non-revenue-water reduction, we can use something like 500-800 Euros per m3 per day. In the reference below (page 25) Dublin estimated the cost to 750USD, whereas in Asia they may achieve similar targets with 250-500 USD. An example calculation is provided below. 
 https://documents1.worldbank.org/curated/en/385761468330326484/pdf/394050Reducing1e0water0WSS81PUBLIC1.pdf
 

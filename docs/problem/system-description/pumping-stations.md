@@ -1,8 +1,8 @@
 ---
-layout: default
+layout: level_two
 title: Pumps
-parent: /problem/network-options/
-parent_title: Network & Design Options
+parent: /problem/system-description/
+parent_title: System Description
 ---
 
 # Pumps

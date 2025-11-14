@@ -11,7 +11,7 @@
 
 .site-nav a {
   color: white;
-  margin: 0 10px;
+  margin: 8px 10px;
   padding: 8px 16px;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 4px;
@@ -43,4 +43,26 @@
     width: 200px;
     margin: 0;
   }
+}
+
+.erc-ack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  color: #333;
+  font-size: 0.95em;
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.erc-ack .erc-logo {
+  height: 32px;
+  margin-right: 12px;
+}
+
+.erc-ack span {
+  flex: 1;
 }

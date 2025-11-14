@@ -1,10 +1,16 @@
+---
+layout: level_two
+title: Economy and financing
+parent: /problem/external-drivers/
+parent_title: External drivers
+---
 # 💧 Financing Options and Budget Rules
 
 ## 1. Overview
 
-Every team must fund its interventions (e.g., pipe change, leak reduction, desalination, renewable energy installations) using a combination of:
+Every team must fund its interventions (e.g., pipe change, leak reduction, production locations, renewable energy installations) using a combination of:
 
-1. **Base budget allocation** (shared across all participants)
+1. **Base budget allocation** between the utilities
 2. **Utility revenues** from water sales (automatically simulated)
 3. **Optional bond issuance** for additional capital needs
 

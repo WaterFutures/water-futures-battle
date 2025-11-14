@@ -1,9 +1,10 @@
 ---
-layout: default
-title: Network & Design Options
+layout: level_two
+title: System Description
 parent: /problem/
-parent_title: Problem Description
+parent_title: Problem
 ---
+
 
 # System
 

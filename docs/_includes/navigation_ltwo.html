@@ -1,0 +1,33 @@
+<nav class="site-nav">
+  {%- assign home = site.navigation[0] -%}
+  <a href="{{ home.url | relative_url }}"
+     {% if page.url == item.url or page.url contains item.url %}class="active"{% endif %}>
+    {{ home.title }}
+  </a>
+  {%- for item in site.navigation -%}
+    {%- if item.subnav and page.url contains item.url -%}
+      {%- for subitem in item.subnav -%}
+        <a href="{{ subitem.url | relative_url }}"
+           {% if page.url == subitem.url or page.url contains subitem.url %}class="active"{% endif %}>
+          {{ subitem.title }}
+        </a>
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- for item in site.navigation -%}
+    {%- if item.subnav and page.url contains item.url -%}
+      {%- for subitem in item.subnav -%}
+        {%- if subitem.subnav and page.url contains subitem.url -%}
+          <div class="subnav">
+          {%- for subsubitem in subitem.subnav -%}
+            <a href="{{ subsubitem.url | relative_url }}"
+               {% if page.url == subsubitem.url or page.url contains subsubitem.url %}class="active"{% endif %}>
+              {{ subsubitem.title }}
+            </a>
+          {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
+</nav>

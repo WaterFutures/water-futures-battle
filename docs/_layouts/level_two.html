@@ -15,7 +15,7 @@
       
       <!-- Navigation -->
       {% if site.navigation %}
-      {% include navigation.html %}
+      {% include navigation_ltwo.html %}
       {% endif %}
     </header>
 
@@ -23,14 +23,8 @@
       {{ content }}
 
       <footer class="site-footer">
-        <div class="erc-ack">
-          <img src="{{ '/assets/img/erc-logo.png' | relative_url }}" alt="ERC Logo" class="erc-logo">
-          <span>
-            Water-Futures has received funding from the European Research Council (ERC) under a Synergy Grant (Grant Agreement No. 951424).
-          </span>
-        </div>
+        <span class="site-footer-credits">© {{ site.time | date: '%Y' }} {{ site.title }}</span>
       </footer>
-      <span class="site-footer-credits">© {{ site.time | date: '%Y' }} {{ site.title }}</span>
     </main>
   </body>
 </html>
