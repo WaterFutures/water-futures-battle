@@ -8,14 +8,16 @@ title: Team 🧠
 Individuals who contributed directly to the development, design, implementation, and writing of the project. 
 
 - Dennis Zanutto, **Corresponding author**, KWR Water Research Insitute, Politecnico di Milano
-- Jasmin Brandt, Bielefeld University
-- Stelios Vrachimis, KIOS Research and Innovation Center of Excellence at the University of Cyprus
-- Panagiotis Samartzis, University of Macedonia
-- Demetrios Eliades, KIOS Research and Innovation Center of Excellence at the University of Cyprus
 - Christos Michalopoulos, KWR Water Research Institute, National Technical University of Athens
 - Lydia Tsiami, KWR Water Research Institute, National Technical University of Athens
 - Andre Artelt, Bielefeld University,
+- Jasmin Brandt, Bielefeld University
+- Demetrios Eliades, KIOS Research and Innovation Center of Excellence at the University of Cyprus
+- Stelios Vrachimis, KIOS Research and Innovation Center of Excellence at the University of Cyprus
 - Stefano Alvisi, Università di Ferrara
+- Valentina Marsili, Università di Ferrara
+- Filippo Mazzoni, Università di Ferrara
+- Panagiotis Samartzis, University of Macedonia
 
 ## Promotors
 
@@ -31,8 +33,10 @@ Supervisors, advisors, or founders who provided overall guidance, project direct
 People whose feedback, discussions, or suggestions significantly influenced the project’s direction or helped solve specific problems.
 
 - David Gold
+- Luke Butler
 - Yvonne 
 - Mark
 - Mirjam
-- Luke Butler
-- Alvisi team
+- Djordje
+- Karel
+- Ina
