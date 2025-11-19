@@ -180,7 +180,7 @@ Teams must specify their financial decisions in the solution file as follows (as
     "connections_interventions": {
       "pipe A", ...
   },
-
+```
 ---
 
 Final summary:
