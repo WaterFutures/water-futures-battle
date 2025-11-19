@@ -180,3 +180,15 @@ Teams must specify their financial decisions in the solution file as follows (as
     "connections_interventions": {
       "pipe A", ...
   },
+
+---
+
+Final summary:
+
+## Bond Issuance
+The bond issuance governs how additional capital is raised when a utility exhausts its allocated budget for a period. When the available budget is fully utilized, a bond is automatically issued to cover the costs of planned interventions. The price and yield of this bond are determined by the modeled bond demand and market conditions specific to the issuance year. These bonds introduce future repayment obligations, and all associated interest payments accumulate as part of the total financial cost of the interventions.
+While utilities cannot directly control bond yields, they can anticipate debt accumulation through scenario analysis and adopt strategies that maintain financial sustainability. For instance, utilities may design pacing of interventions to minimize borrowing, or evaluate alternative interventions that reduce the likelihood of large bond issuances during periods with unfavorable yield conditions.
+
+---
+## Budget Allocation 
+The budget allocation module governs how national funding is distributed across provincial water utilities, each of which operates and maintains its own water distribution system. This allocation affects the resources available to implement interventions and support operations. Budget distribution can follow several principled rules: proportional allocation to population size; inverse-proportional schemes favoring smaller regions; income-based allocations reflecting socioeconomic considerations; inverse-proportional schemes favoring less wealthy regions; or fully customized schemes. 
