@@ -1,5 +1,5 @@
 ---
-layout: level_two
+layout: default
 title: System Interventions
 parent: /problem/
 parent_title: Problem

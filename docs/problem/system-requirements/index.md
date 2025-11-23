@@ -1,5 +1,5 @@
 ---
-layout: level_two
+layout: default
 title: System Requirements
 parent: /problem/
 parent_title: Problem

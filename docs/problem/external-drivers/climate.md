@@ -1,5 +1,5 @@
 ---
-layout: level_two
+layout: default
 title: Climate
 parent: /problem/external-drivers/
 parent_title: External drivers

@@ -1,5 +1,5 @@
 ---
-layout: level_two
+layout: default
 title: Municipalities
 parent: /problem/system-description/
 parent_title: problem

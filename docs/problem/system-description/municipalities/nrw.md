@@ -1,5 +1,5 @@
 ---
-layout: level_two
+layout: default
 title: Non Revenue Water Model
 parent: /problem/system-description/municipalities
 parent_title: Municipalities

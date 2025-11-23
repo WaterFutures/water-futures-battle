@@ -1,19 +1,19 @@
 ---
 layout: default
 title: Contact 📧
+authors:
+  - D. Zanutto
 ---
 
-For questions or further information, please contact the team or the corresponding author:
-**battlewaterfutures@kwrwater.nl**
+For questions or further information, please contact the team or the corresponding author at
+<a href="mailto:battlewaterfutures@kwrwater.nl">battlewaterfutures@kwrwater.nl</a>.
 
 Additional resources:
-- Visit the [Q&A section of the GitHub repository](https://github.com/WaterFutures/water-futures-battle/discussions) to ask questions or browse previous discussions.
-
-Useful links:
-- [Competition website](https://waterfutures.github.io/water-futures-battle/)
-- [Conference website](https://www.wdsa-ccwi2026.ucy.ac.cy)
-- [Water-Futures project website](https://waterfutures.eu/)
-- [Water-Futures GitHub organization](https://github.com/WaterFutures) — see more projects from the team.
-
----
-*Water-Futures has received funding from the European Research Council (ERC) under the European Union’s Horizon 2020 research and innovation program (Grant Agreement No. 951424).*
+- [Q&A section of the GitHub repository](https://github.com/WaterFutures/water-futures-battle/discussions) to ask questions or browse previous discussions.
+- [Competition website](https://waterfutures.github.io/water-futures-battle/) (this website).
+- [Conference website](https://www.wdsa-ccwi2026.ucy.ac.cy) for submission and to find other organisational information.
+- [Water-Futures project website](https://waterfutures.eu/) to learn more about the Water-Futures team and project (and perhaps get inspiration on how to solve this problem).
+- [Water-Futures GitHub organization](https://github.com/WaterFutures) to explore more tools developed by the team.
+- [Arxiv entry]() with the problem description.
+- [Zenodo entry]() for the backup version of the competition, the data relaese etc. (can also be viewed on the [GitHub entry releases page](https://github.com/WaterFutures/water-futures-battle/releases))
+- [GitHub repository]() to explore the open-source evaluator.

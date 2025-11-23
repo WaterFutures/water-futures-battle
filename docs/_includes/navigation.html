@@ -5,18 +5,4 @@
        {{ item.title }}
     </a>
   {% endfor %}
-  {% for item in site.navigation %}
-    {% if page.url == item.url %}
-      {% if item.subnav %}
-        <div class="subnav">
-          {% for subitem in item.subnav %}
-            <a href="{{ subitem.url | relative_url }}"
-              {% if page.url == subitem.url or page.url contains subitem.url %}class="active"{% endif %}>
-              {{ subitem.title }}
-            </a>
-          {% endfor %}
-        </div>
-      {% endif %}
-    {% endif %}
-  {% endfor %}
 </nav>

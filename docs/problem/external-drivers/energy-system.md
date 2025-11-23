@@ -1,5 +1,5 @@
 ---
-layout: level_two
+layout: default
 title: Energy System
 parent: /problem/external-drivers/
 parent_title: External drivers

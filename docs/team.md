@@ -1,7 +1,14 @@
 ---
 layout: default
 title: Team 🧠
+authors:
+  - D. Zanutto
 ---
+
+# The Battle of the Water Futures team
+
+On this page, you can find everyone who contributed to the project.
+Learn more about the Water-Futures team and our broader initiatives on our [website](https://waterfutures.eu/) and our [GitHub page](https://github.com/WaterFutures).
 
 ## Authors
 
@@ -40,3 +47,4 @@ People whose feedback, discussions, or suggestions significantly influenced the 
 - Djordje
 - Karel
 - Ina
+

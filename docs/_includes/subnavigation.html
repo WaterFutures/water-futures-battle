@@ -1,0 +1,32 @@
+<nav class="problem-nav">
+    {% for item in site.navigation %}
+    {% if page.url contains item.url %}
+      {% if item.subnav %}
+        <div class="subpnav">
+          {% for subitem in item.subnav %}
+            <a href="{{ subitem.url | relative_url }}"
+              {% if page.url == subitem.url or page.url contains subitem.url %}class="active"{% endif %}>
+              {{ subitem.title }}
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+  {% for item in site.navigation %}
+    {%- if item.subnav and page.url contains item.url -%}
+      {%- for subitem in item.subnav -%}
+        {%- if subitem.subnav and page.url contains subitem.url -%}
+          <div class="subsubpnav">
+          {%- for subsubitem in subitem.subnav -%}
+            <a href="{{ subsubitem.url | relative_url }}"
+               {% if page.url == subsubitem.url or page.url contains subsubitem.url %}class="active"{% endif %}>
+              {{ subsubitem.title }}
+            </a>
+          {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
+</nav>

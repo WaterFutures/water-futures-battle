@@ -1,5 +1,5 @@
 ---
-layout: level_two
+layout: default
 title: Scenario Drivers
 parent: /problem/
 parent_title: Problem
