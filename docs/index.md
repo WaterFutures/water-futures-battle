@@ -1,7 +1,9 @@
 ---
 layout: default
-title: Home 🚰
-authors:
+website_title: Home 🚰
+prev_page_url: /
+next_page_url: /motivation.html
+website_page_authors:
   - D. Zanutto
 ---
 ## Designing the next generation of urban water systems

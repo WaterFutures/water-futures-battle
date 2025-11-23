@@ -15,7 +15,7 @@ For each province:
 
 ---
 
-### Phase 2: **Source Integration and Infrastructure Tracking (Year 2000 & 2025)** 💧
+### Phase 2: **Source Integration and Infrastructure Tracking (Year 2000 & 2025)** 
 
 3.  **Source-to-Network Connection (Year 2000)**
     * **Service Area Delineation:** Create a **Weighted Voronoi Tesselation** where source weights are proportional to their **permit/physical capacity**.

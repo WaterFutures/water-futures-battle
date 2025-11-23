@@ -1,7 +1,9 @@
 ---
 layout: default
-title: "Participate 🎯"
-authors:
+website_title: "Participate 🎯"
+prev_page_url: /motivation.html
+next_page_url: /problem/
+website_page_authors:
   - D. Zanutto
 ---
 

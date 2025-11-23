@@ -27,6 +27,9 @@
       {{ content }}
 
       <footer class="site-footer">
+        <div>
+          {% include end_of_page_navigation.html %}
+        </div>
         <div class="erc-ack">
           <img src="{{ '/assets/img/erc-logo.png' | relative_url }}" alt="ERC Logo" class="erc-logo">
           <span>
@@ -35,6 +38,7 @@
         </div>
       </footer>
       <span class="site-footer-credits">© {{ site.time | date: '%Y' }} {{ site.title }}</span>
+      
     </main>
   </body>
 </html>

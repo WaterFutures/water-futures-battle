@@ -1,8 +1,12 @@
 ---
 layout: default
-title: Pipes
+website_title: Pipes
 parent: /problem/system-description/
 parent_title: System Description
+prev_page_url: /problem/system-description/pumping-stations.html
+next_page_url: /problem/system-requirements/
+website_page_authors:
+  - D. Zanutto
 ---
 
 # Pipes
@@ -15,7 +19,7 @@ The Darcy friction factor of a new pipe is provided for every option. However, t
 
 Pipe installation costs (in €/m) are provided for the year 2025. Any adjustments to costs or discount rates are specified in Section.
 
-Associated carbon emissions (in kg CO₂-eq per meter of pipe installed) are also given. These emission factors may change over time and can be recalculated as described in Section. 
+Associated carbon emissions (in kg CO2-eq per meter of pipe installed) are also given. These emission factors may change over time and can be recalculated as described in Section. 
 
 
 **Table 1:** possible pipe locations

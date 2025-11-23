@@ -1,8 +1,12 @@
 ---
 layout: default
-title: Sources
+website_title: Sources
 parent: /problem/system-description/
 parent_title: System Description
+prev_page_url: /problem/system-description/municipalities/nrw.html
+next_page_url: /problem/system-description/pumping-stations.html
+website_page_authors:
+  - D. Zanutto
 ---
 
 # Water supplies (Sources)

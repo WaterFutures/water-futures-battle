@@ -1,8 +1,12 @@
 ---
 layout: default
-title: Pumps
+website_title: Pumps
 parent: /problem/system-description/
 parent_title: System Description
+prev_page_url: /problem/system-description/sources.html
+next_page_url: /problem/system-description/pipes.html
+website_page_authors:
+  - D. Zanutto
 ---
 
 # Pumps

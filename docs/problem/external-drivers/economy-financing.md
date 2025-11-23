@@ -1,10 +1,14 @@
 ---
 layout: default
-title: Economy and financing
+website_title: Economy and financing
 parent: /problem/external-drivers/
 parent_title: External drivers
+prev_page_url: /
+next_page_url: /
+website_page_authors:
+  - D. Zanutto
 ---
-# 💧 Financing Options and Budget Rules
+#  Financing Options and Budget Rules
 
 ## 1. Overview
 
@@ -60,7 +64,7 @@ If a team needs additional funds beyond its allocated budget, it may issue a **b
 | Risk-free rate | $r_f$ | 3 % ($<u>PARAMETER</u>$) | Long-term government yield |
 | Base credit spread | $cs$ | 1 % ($<u>PARAMETER</u>$) | Typical spread under normal conditions |
 | Spread slope | $a$ | 2 % ($<u>PARAMETER</u>$) | Sensitivity of spread to investor demand |
-| Demand factor | $d$ | Random ∈ [0.8, 1.2] ($<u>PARAMETER</u>$) | Randomly selected |
+| Demand factor | $d$ | Random $\in$ [0.8, 1.2] ($<u>PARAMETER</u>$) | Randomly selected |
 
 ---
 

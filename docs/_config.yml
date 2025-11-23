@@ -41,10 +41,10 @@ navigation:
               url: /problem/system-description/municipalities/nrw.html
           - title: Sources
             url: /problem/system-description/sources.html
-          - title: Pipes
-            url: /problem/system-description/pipes.html
           - title: Pumping Stations
             url: /problem/system-description/pumping-stations.html
+          - title: Pipes
+            url: /problem/system-description/pipes.html
       - title: System Requirements
         url: /problem/system-requirements/
       - title: System Interventions

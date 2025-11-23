@@ -1,9 +1,11 @@
 ---
 layout: default
-title: Energy System
+website_title: Energy System
 parent: /problem/external-drivers/
 parent_title: External drivers
-authors:
+prev_page_url: /
+next_page_url: /
+website_page_authors:
   - J. Brandt
   - D. Zanutto
 ---

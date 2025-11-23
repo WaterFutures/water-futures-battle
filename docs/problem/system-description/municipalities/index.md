@@ -1,8 +1,12 @@
 ---
 layout: default
-title: Municipalities
+website_title: Municipalities
 parent: /problem/system-description/
 parent_title: problem
+prev_page_url: /problem/system-description/water-utilities.html
+next_page_url: /problem/system-description/municipalities/water-demand.html
+website_page_authors:
+  - D. Zanutto
 ---
 
 # Demand Nodes

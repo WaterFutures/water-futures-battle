@@ -45,6 +45,98 @@
   }
 }
 
+/* --- Problem Navigation Styles --- */
+.problem-nav {
+  margin-top: 1.5rem;
+  /* Use Flexbox to align buttons and sub-nav horizontally */
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- New Narrow and Tall Arrow Buttons --- */
+.nav-arrow {
+  /* Inherit colors for consistency */
+  color: #019344 !important;
+  background: rgba(1, 147, 68, 0.05) !important;
+  border: 1px solid #019344 !important;
+  
+  /* Make them narrow and tall */
+  width: 40px;      /* Narrower width */
+  height: 60px;     /* Taller height */
+  line-height: 44px;/* Vertically center the arrow symbol */
+  text-align: center;
+  
+  /* Adjust margin to push them to the sides */
+  margin: 0 10px;
+  
+  /* Ensure the text size is appropriate for the arrow symbol */
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Hover effects for the arrow buttons */
+.nav-arrow:hover {
+  background: rgba(1, 147, 68, 0.1) !important;
+  transform: scale(1.05); /* Slight enlargement on hover */
+}
+
+/* Style the central buttons container */
+.subsubpnav {
+  /* Allow the central links to wrap if necessary */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.problem-nav a {
+  /* Green Text */
+  color: #019344;
+  
+  /* Whitish/Light Background (slightly darker than pure white for contrast) */
+  background: rgba(1, 147, 68, 0.05); /* Very faint green tint */
+
+  margin: 8px 10px;
+  padding: 8px 16px;
+  
+  /* Green Border */
+  border: 1px solid #019344; 
+  
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.problem-nav a:hover {
+  /* Darker background on hover */
+  background: rgba(1, 147, 68, 0.1); 
+  transform: translateY(-2px);
+}
+
+.problem-nav a.active {
+  /* Stronger background for the active link */
+  background: rgba(1, 147, 68, 0.2); 
+  font-weight: bold;
+}
+
+/* --- Responsive Problem Navigation --- */
+@media screen and (max-width: 768px) {
+  .problem-nav {
+    /* Use Flexbox for vertical stacking on small screens */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .problem-nav a {
+    width: 200px;
+    margin: 0;
+  }
+}
+
 .erc-ack {
   display: flex;
   align-items: center;

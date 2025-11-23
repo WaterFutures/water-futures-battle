@@ -12,9 +12,21 @@ OUT_DIR="${SCRIPT_DIR}/.."
 INPUT_FILES=(
   "motivation.md"
   "problem/index.md"
-  #"problem/external-drivers/index.md"
-  #"solution/index.md" 
-  #"conclusion/summary.md"
+  "problem/system-description/index.md"
+  "problem/system-description/water-utilities.md"
+  "problem/system-description/municipalities/index.md"
+  "problem/system-description/municipalities/water-demand.md"
+  "problem/system-description/municipalities/nrw.md"
+  "problem/system-description/sources.md"
+  "problem/system-description/pumping-stations.md"
+  "problem/system-description/pipes.md"
+  "problem/system-requirements/index.md"
+  "problem/system-interventions/index.md"
+  "problem/external-drivers/index.md"
+  "problem/external-drivers/climate.md"
+  "problem/external-drivers/energy-system.md"
+  "problem/external-drivers/economy-financing.md"
+  "paper/acknowledgement.md"
 )
 
 FILES_FULLPATH=()
@@ -28,6 +40,7 @@ PANDOC_ARGS=(
   "--pdf-engine" "pdflatex"     # Use pdflatex for better PDF quality
   "--toc"                       # Generate a Table of Contents
   "--number-sections"           # Automatically number headings
+  "--metadata-file" "$DOCS_DIR/paper/metadata.yaml"
   "-o" "$OUT_DIR/$OUTPUT_PDF"            # Output to the defined PDF file
 )
 
@@ -43,9 +56,8 @@ pandoc "${FILES_FULLPATH[@]}" "${PANDOC_ARGS[@]}"
 # Check the exit status of the previous command (Pandoc)
 if [ $? -eq 0 ]; then
   echo ""
-  echo "✅ Success! The PDF has been created at: ${OUT_DIR}$OUTPUT_PDF"
+  echo "✅ Success! The PDF has been created at: $OUT_DIR/$OUTPUT_PDF"
 else
   echo ""
   echo "❌ Error: Pandoc failed to generate the PDF."
 fi
-

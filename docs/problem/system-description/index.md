@@ -1,10 +1,13 @@
 ---
 layout: default
-title: System Description
+website_title: System Description
 parent: /problem/
 parent_title: Problem
+prev_page_url: /problem/
+next_page_url: /problem/system-description/water-utilities.html
+website_page_authors:
+  - D. Zanutto
 ---
-
 
 # System
 

@@ -1,6 +1,10 @@
 ---
 layout: default
-title: Motivation
+website_title: Motivation
+prev_page_url: /
+next_page_url: /participating.html
+website_page_authors:
+  - D. Zanutto
 ---
 
 # Introduction and work motivation

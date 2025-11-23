@@ -1,6 +1,10 @@
 ---
 layout: default
-title: The BWF Problem
+website_title: The BWF Problem
+prev_page_url: /participating.html
+next_page_url: /problem/system-description/
+website_page_authors:
+  - D. Zanutto
 ---
 
 # Problem description and objective

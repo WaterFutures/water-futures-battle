@@ -1,7 +1,9 @@
 ---
 layout: default
-title: Contact 📧
-authors:
+website_title: Contact 📧
+prev_page_url: /team.html
+next_page_url: /contact.html
+website_page_authors:
   - D. Zanutto
 ---
 

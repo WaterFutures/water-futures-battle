@@ -1,7 +1,9 @@
 ---
 layout: default
-title: Team 🧠
-authors:
+website_title: Team 🧠
+prev_page_url: /problem/external-drivers/climate.html
+next_page_url: /contact.html
+website_page_authors:
   - D. Zanutto
 ---
 
