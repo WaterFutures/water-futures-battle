@@ -2,9 +2,67 @@ cff-version: 1.2.0
 message: "If you use this work, please cite the paper below. If you specifically use the code, data, or software package, please also cite the Zenodo repository."
 title: "The Battle of the Water Futures"
 authors:
-- family-names: "Zanutto"
-  given-names: "Dennis"
-  orcid: "https://orcid.org/0000-0002-1997-3350"
+  - family-names: Zanutto
+    given-names: Dennis
+    name-suffix: Corresponding author
+    affiliation: KWR Water Research Institute, Politecnico di Milano
+    orcid: "https://orcid.org/0000-0002-1997-3350"
+  - family-names: Michalopoulos
+    given-names: Christos
+    affiliation: KWR Water Research Institute, National Technical University of Athens
+    orcid: "https://orcid.org/0009-0004-5322-1509"
+  - family-names: Tsiami
+    given-names: Lydia
+    affiliation: KWR Water Research Institute, National Technical University of Athens
+    orcid: "https://orcid.org/0000-0001-5859-8197"
+  - family-names: Artelt
+    given-names: Andre
+    affiliation: Bielefeld University
+    orcid: "https://orcid.org/0000-0002-2426-3126"
+  - family-names: Brandt
+    given-names: Jasmin
+    affiliation: Bielefeld University
+    orcid: 
+  - family-names: Eliades
+    given-names: Demetrios
+    affiliation: KIOS Research and Innovation Center of Excellence at the University of Cyprus
+    orcid: "https://orcid.org/0000-0001-6184-6366"
+  - family-names: Vrachimis
+    given-names: Stelios
+    affiliation: KIOS Research and Innovation Center of Excellence at the University of Cyprus
+    orcid: "https://orcid.org/0000-0001-8862-5205"
+  - family-names: Alvisi
+    given-names: Stefano
+    affiliation: Università di Ferrara
+    orcid: "https://orcid.org/0000-0002-5690-2092"
+  - family-names: Marsili
+    given-names: Valentina
+    affiliation: Università di Ferrara
+    orcid: "https://orcid.org/0000-0002-2672-781X"
+  - family-names: Mazzoni
+    given-names: Filippo
+    affiliation: Università di Ferrara
+    orcid: "https://orcid.org/0000-0002-4114-6829"
+  - family-names: Samartzis
+    given-names: Panagiotis
+    affiliation: University of Macedonia
+    orcid: "https://orcid.org/0000-0002-7890-0776"
+  - family-names: Savić
+    given-names: Dragan
+    affiliation: KWR Water Research Institute, Centre for Water Systems at University of Exeter
+    orcid: "https://orcid.org/0000-0001-9567-9041"
+  - family-names: Polycarpou
+    given-names: Marios
+    affiliation: KIOS Research and Innovation Center of Excellence at the University of Cyprus
+    orcid: "https://orcid.org/0000-0001-6495-9171"
+  - family-names: Hammer
+    given-names: Barbara
+    affiliation: Bielefeld University
+    orcid: "https://orcid.org/0000-0002-0935-5591"
+  - family-names: Koundouri
+    given-names: Phoebe
+    affiliation: Athens University of Economics and Business, ATHENA RC, Cambridge University
+    orcid: "https://orcid.org/0000-0001-5979-6128"
 type: software
 license: MIT
 repository-code: "https://github.com/waterfutures/water-futures-battle"
@@ -16,8 +74,36 @@ preferred-citation:
   type: article
   title: "The Battle of the Water Futures"
   authors:
-    - family-names: "Zanutto"
-      given-names: "Dennis"
+    - family-names: Zanutto
+      given-names: Dennis
+    - family-names: Michalopoulos
+      given-names: Christos
+    - family-names: Tsiami
+      given-names: Lydia
+    - family-names: Artelt
+      given-names: Andre
+    - family-names: Brandt
+      given-names: Jasmin
+    - family-names: Eliades
+      given-names: Demetrios
+    - family-names: Vrachimis
+      given-names: Stelios
+    - family-names: Alvisi
+      given-names: Stefano
+    - family-names: Marsili
+      given-names: Valentina
+    - family-names: Mazzoni
+      given-names: Filippo
+    - family-names: Samartzis
+      given-names: Panagiotis
+    - family-names: Savić
+      given-names: Dragan
+    - family-names: Polycarpou
+      given-names: Marios
+    - family-names: Hammer
+      given-names: Barbara
+    - family-names: Koundouri
+      given-names: Phoebe
   year: 2025
   journal: "arXiv preprint"
   url: "https://arxiv.org/abs/XXXX.XXXXX"
@@ -27,8 +113,20 @@ references:
   - type: software
     title: "Water Futures Battle - Software and Data Repository"
     authors:
-      - family-names: "Zanutto"
-        given-names: "Dennis"
+      - family-names: Zanutto
+        given-names: Dennis
+      - family-names: Michalopoulos
+        given-names: Christos
+      - family-names: Artelt
+        given-names: Andre
+      - family-names: Alvisi
+        given-names: Stefano
+      - family-names: Marsili
+        given-names: Valentina
+      - family-names: Mazzoni
+        given-names: Filippo
+      - family-names: Samartzis
+        given-names: Panagiotis
     year: 2025
     doi: "10.5281/zenodo.17698299"
     repository-code: "https://github.com/waterfutures/water-futures-battle"
