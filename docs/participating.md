@@ -25,18 +25,18 @@ More information about the conference and the regular paper submission are avail
 > Subscribe for updates and let us know if you are interested in participating!
 
 **Stage 1**
-- **24th November 2025** Competition begins: Instructions and first batch of data available
-- **19th December 2025** ___Abstract submission deadline___
-- **9th January 2026** _Abstract acceptance notifications_
-- **27th February 2026** First stage solution submission deadline
+- ~~24th November 2025~~*Early December* - Competition begins: Instructions and first batch of data available
+- ~~19th December 2025~~*Early January* - ___Abstract submission deadline___
+- ~~9th January 2026~~*Late January* - _Abstract acceptance notifications_
+- ~~27th February 2026~~*Late February* - First stage solution submission deadline
 
 **Stage 2**
-- __2nd March 2026__ Second batch of data available
-- **20th March 2026** Second stage solution submission deadline
+- _Mid March 2026_ - Second batch of data available
+- *Late March 2026* - Second stage solution submission deadline
 
 **Stage 3**
-- __23rd March 2026__ Third batch of data available.
-- **10th April 2026** Final deadline for submission of:
+- _Late March 2026_ - Third batch of data available.
+- *Early April 2026* - Final deadline for submission of:
     - Third stage solution
     - ___Short paper___
 
