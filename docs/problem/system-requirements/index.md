@@ -3,8 +3,8 @@ layout: default
 website_title: System Requirements
 parent: /problem/
 parent_title: Problem
-prev_page_url: /
-next_page_url: /
+prev_page_url: /problem/system-description/pipes.html
+next_page_url: /problem/system-interventions/
 website_page_authors:
   - D. Zanutto
 ---

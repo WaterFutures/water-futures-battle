@@ -1,7 +1,7 @@
 ---
 layout: default
 website_title: Team 🧠
-prev_page_url: /problem/external-drivers/climate.html
+prev_page_url: /problem/external-drivers/economy-financing.html
 next_page_url: /contact.html
 website_page_authors:
   - D. Zanutto

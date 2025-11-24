@@ -50,7 +50,7 @@
   margin-top: 1.5rem;
   /* Use Flexbox to align buttons and sub-nav horizontally */
   display: flex; 
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -73,6 +73,14 @@
   /* Ensure the text size is appropriate for the arrow symbol */
   font-size: 1.2rem;
   font-weight: bold;
+}
+
+.nav-arrow.prev-page {
+  margin-right: auto;
+}
+
+.nav-arrow.next-page {
+  margin-left: auto;
 }
 
 /* Hover effects for the arrow buttons */

@@ -52,12 +52,12 @@ navigation:
       - title: External Drivers
         url: /problem/external-drivers/
         subnav:
-          - title: Economy and Financing
-            url: /problem/external-drivers/economy-financing.html
-          - title: Energy System
-            url: /problem/external-drivers/energy-system.html
           - title: Climate
             url: /problem/external-drivers/climate.html
+          - title: Energy System
+            url: /problem/external-drivers/energy-system.html
+          - title: Economy and Financing
+            url: /problem/external-drivers/economy-financing.html
   - title: Team
     url: /team.html
   - title: Contact Us

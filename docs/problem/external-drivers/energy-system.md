@@ -3,8 +3,8 @@ layout: default
 website_title: Energy System
 parent: /problem/external-drivers/
 parent_title: External drivers
-prev_page_url: /
-next_page_url: /
+prev_page_url: /problem/external-drivers/climate.html
+next_page_url: /problem/external-drivers/economy-financing.html
 website_page_authors:
   - J. Brandt
   - D. Zanutto

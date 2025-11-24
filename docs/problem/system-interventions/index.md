@@ -3,8 +3,8 @@ layout: default
 website_title: System Interventions
 parent: /problem/
 parent_title: Problem
-prev_page_url: /
-next_page_url: /
+prev_page_url: /problem/system-requirements/
+next_page_url: /problem/external-drivers/
 website_page_authors:
   - D. Zanutto
 ---
