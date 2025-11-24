@@ -21,6 +21,18 @@ The solutions will be assessed using a transparent and inspectable **open-source
 
 ## Get ahead of everyone! 🥇
 
+**Are you looking for the data? The most up-to-date information are available through multiple channels:**
+
+> 🌐 **[Official Competition Website](https://waterfutures.github.io/water-futures-battle/)** - Full documentation and resources
+>
+> 📚 **[Zenodo Repository](https://doi.org/10.5281/zenodo.17698299)** - Archived releases and datasets
+>
+> [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17698299.svg)](https://doi.org/10.5281/zenodo.17698299)
+>
+> 📄 **[Problem Description (arXiv)](https://arxiv.org/abs/XXXX.XXXXX)** - Technical paper with problem formulation
+> 
+> [![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg)](https://arxiv.org/abs/1234.56789)
+
 **Want to be notified at every update?**
 
 Send an email to <a href="mailto:battlewaterfutures@kwrwater.nl?subject=Competition Updates">battlewaterfutures@kwrwater.nl</a> with the subject "Competition Updates".

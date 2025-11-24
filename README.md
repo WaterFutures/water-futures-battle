@@ -6,11 +6,15 @@ The objective is to **design and operate** a water distribution system over a lo
 
 # Read the Full Details 🔎
 
-> **The most up-to-date information, the full index, and all competition details are hosted on our official website.**
+**The most up-to-date information, the full index, and all competition details are hosted on our official website and the Zenodo repository.**
 >
-> ➡️ Visit **[the official competition website](https://waterfutures.github.io/water-futures-battle/)** ⬅️ 
-> 
-> </br>
+> ➡️ Visit **[the official competition website](https://waterfutures.github.io/water-futures-battle/)** ⬅️ </br>
+>
+> ➡️ Visit **[the official competition website](https://waterfutures.github.io/water-futures-battle/)** ⬅️ </br>
+> [![DOI](https://zenodo.org/badge/1043183086.svg)](https://doi.org/10.5281/zenodo.17698299)
+>
+> ➡️ Read the **[problem description on (arXiv)](https://arxiv.org/abs/XXXX.XXXXX)** ⬅️
+>
 </br>
 
 **Do you have questions?**

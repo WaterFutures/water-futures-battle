@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the paper below. If you specifically use the code, data, or software package, please also cite the Zenodo repository."
+title: "The Battle of the Water Futures"
+authors:
+- family-names: "Zanutto"
+  given-names: "Dennis"
+  orcid: "https://orcid.org/0000-0002-1997-3350"
+type: software
+license: MIT
+repository-code: "https://github.com/waterfutures/water-futures-battle"
+url: "https://waterfutures.github.io/water-futures-battle/"
+version: 0.1.0-alpha
+date-released: 2025-11-24
+
+preferred-citation:
+  type: article
+  title: "The Battle of the Water Futures"
+  authors:
+    - family-names: "Zanutto"
+      given-names: "Dennis"
+  year: 2025
+  journal: "arXiv preprint"
+  url: "https://arxiv.org/abs/XXXX.XXXXX"
+  notes: "Preprint"
+
+references:
+  - type: software
+    title: "Water Futures Battle - Software and Data Repository"
+    authors:
+      - family-names: "Zanutto"
+        given-names: "Dennis"
+    year: 2025
+    doi: "10.5281/zenodo.17698299"
+    repository-code: "https://github.com/waterfutures/water-futures-battle"
+    url: "https://doi.org/10.5281/zenodo.17698299"
+    notes: "Use this DOI when citing the software package, code, or datasets"
