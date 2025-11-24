@@ -2,6 +2,7 @@
 
 # Output filename
 OUTPUT_PDF := Zanutto_et_al-2025-battle_water_futures-preprint.pdf
+OUTPUT_WEBSITE := water_futures_battle-website.zip
 
 # Define directories relative to the Makefile location (the 'scripts' directory)
 # The parent directory (..)
@@ -11,6 +12,7 @@ DOCS_DIR := ../docs
 
 # Full path to the final output PDF
 TARGET_PDF := $(OUT_DIR)/$(OUTPUT_PDF)
+TARGET_WEBSITE := $(OUT_DIR)/$(OUTPUT_WEBSITE)
 
 # --- Input Files ---
 
@@ -56,12 +58,13 @@ PANDOC_ARGS := \
 
 # --- Build Targets ---
 
-.PHONY: all pdf html clean
+.PHONY: all pdf website clean
 
-all: pdf html
+all: pdf website
 
-html:
+website:
 	@cd $(DOCS_DIR) && bundle exec jekyll build
+	zip -r $(TARGET_WEBSITE) ../docs/_site/
 
 pdf: $(TARGET_PDF)
 
@@ -71,5 +74,5 @@ $(TARGET_PDF): $(DEPENDENCIES)
 	
 # Target to remove built files
 clean:
-	-rm -f $(TARGET_PDF)
-	@cd $(DOCS_DIR) && rm -rf _site
+	-rm -f $(TARGET_PDF) $(TARGET_WEBSITE)
+	-rm -rf ../docs/_site/
