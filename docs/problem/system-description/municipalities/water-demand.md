@@ -12,6 +12,8 @@ website_page_authors:
   - D. Zanutto
 ---
 
+#### Water Demand Model
+
 The methodology developed to generate water consumption time series builds on historical data from the Dutch Drinking Water Statistics (Vewin, 2022), which provide nationwide trends in total drinking water production, sectoral water use, and non-revenue water over the period 2000–2024. Specifically, water-consumption time series generation is structured into three phases.
 
 Phase I. The first phase estimates the annual water volume supplied to each municipality using information on households, and businesses, complemented by projected data where required. These annual volumes are calibrated to match national totals reported in official statistics and then randomized around the calibrated value to introduce variability among municipalities.

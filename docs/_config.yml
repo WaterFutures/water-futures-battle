@@ -69,3 +69,5 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
+  - trash
+  - paper

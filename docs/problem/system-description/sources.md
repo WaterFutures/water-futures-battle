@@ -6,14 +6,13 @@ parent_title: System Description
 prev_page_url: /problem/system-description/municipalities/nrw.html
 next_page_url: /problem/system-description/pumping-stations.html
 website_page_authors:
+  - C. Michalopoulos
   - D. Zanutto
 ---
 
-# Water supplies (Sources)
+### Water Sources
 
-Part of [network options](./network-options).
-
-## Groundwater
+#### Groundwater
 - Geographical
     - Name [??]
     - Coordinates [??]
@@ -23,7 +22,7 @@ Part of [network options](./network-options).
 - time to implementation (min-max)
 - capital cost of implementation (min-max)
 
-## Surface water 
+#### Surface water 
 - Geographical
     - Name [--]
     - Coordinates [??]
@@ -33,7 +32,7 @@ Part of [network options](./network-options).
 - time to implementation (min-max)
 - capital cost of implementation (min-max)
 
-## Desalination
+#### Desalination
 - Geographical
     - Name [--]
     - Coordinates [??]

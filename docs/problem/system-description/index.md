@@ -9,23 +9,12 @@ website_page_authors:
   - D. Zanutto
 ---
 
-# System
+## System Decription
 
-## Nodes
 
-- [Demand Nodes](./demand-nodes)
+Finances
 
-- [Sources](./sources)
-
-## Links
-
-- [Pipes](./pipes)
-
-- [Pumps](./pumps)
-
-## Finances
-
-### Income
+Income
 
 There is a national budget every year for investments coming from the central government (basically free money).
 This budget is shared between the utilities and together with the revenue (money that comes from selling water only) makes up the total utility budget.
@@ -45,9 +34,9 @@ For example, every Euro invested on leak localisation and detection will bring a
 same for improving the current system 
 
 
-## Expenses
+Expenses
 
-### Direct
+Direct
 
 Infrastructure interventions [(see options)](#Options).
 Energy costs.
@@ -55,16 +44,16 @@ Fixed management cost
 --> how ? function of population and age fo the system? we must use this to balance out all the costs and revenues
 It can't be changed (not a decision variable).
 
-### Indirect
+Indirect
 
 Water leaks (non revenue water).
 
 
-# Options
+Options
 
 Here a recap of what are the possible options and what is necessary
 
-## Network
+Network
 
 - open sources
     - date (start of construction)
@@ -80,7 +69,7 @@ Here a recap of what are the possible options and what is necessary
     - option id (where)
     - option args
     
-## Financial
+Financial
 
 - allocation from national budget:
     - share for each water utility. (between 0 and 1)

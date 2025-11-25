@@ -9,7 +9,9 @@ website_page_authors:
   - D. Zanutto
 ---
 
-# Budget for reducing non-revenue water
+## System Interventions
+
+### Non-Revenue Water Interventions 
 
 Participants can decide how much (as a percentage) of each water utility's yearly budget should be spent on improving pipe infrastructure to reduce non-revenue water. Improving the pipe infrastructure means decreasing its average age, which is linked to the different leak classes and implies the amount of non-revenue water.
 There exist two policies that distribute a utility's budget across its municipalities:

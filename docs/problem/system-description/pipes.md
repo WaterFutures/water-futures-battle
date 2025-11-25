@@ -6,12 +6,11 @@ parent_title: System Description
 prev_page_url: /problem/system-description/pumping-stations.html
 next_page_url: /problem/system-requirements/
 website_page_authors:
+  - L. Tsiami
   - D. Zanutto
 ---
 
-# Pipes
-
-Part of [network options](./network-options).
+### Pipes
 
 Participants may select from a predefined set of pipe installation options listed in Table X in appendix A. A total of 10 pipe diameters is available. Each option is characterized by its material, hydraulic properties, installation cost, and associated carbon emissions.
 
