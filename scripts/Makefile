@@ -64,12 +64,12 @@ all: pdf website
 
 website:
 	@cd $(DOCS_DIR) && bundle exec jekyll build
-	zip -r $(TARGET_WEBSITE) ../docs/_site/
+	@cd $(DOCS_DIR) && zip -r $(TARGET_WEBSITE) ./_site
 
 pdf: $(TARGET_PDF)
 
 # Primary target: Build the PDF
-$(TARGET_PDF): $(DEPENDENCIES)
+$(TARGET_PDF): $(MARKDOWN_FILES)
 	pandoc -o $@ $(PANDOC_ARGS) $^
 	
 # Target to remove built files
