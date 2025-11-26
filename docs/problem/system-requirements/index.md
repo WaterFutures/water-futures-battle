@@ -32,7 +32,7 @@ Each metric combines outputs from:
 
 ### Service Reliability
 
-- **Formula:** R^{\text{service}} = 1 - \dfrac{\sum_{i,t} U_{i,t}}{\sum_{i,t} D_{i,t}}$
+- **Formula:** $R^{\text{service}} = 1 - \dfrac{\sum_{i,t} U_{i,t}}{\sum_{i,t} D_{i,t}}$
 -  Calculated over all dimensions (municipality, household class, and time). Participants will be ranked based on **one specific combination** of these dimensions, which is kept uncertain and can change between stages.
 - unit: dimensionless between 0 and 1 (higher is better)
 
