@@ -25,10 +25,13 @@ Our modelling of non-revenue water (NRW) relies on the average age of the pipe i
 | > 60         | E     | (55, inf)                                      |
 
 Each class is associated with a distribution of non-revenue water (NRW)demands (e.g., leakages), from which we sample to generate the total demand, consisting of the normal demand + NRW demand. Notably, the NRW demand is different for each class -- i.e., older systems suffer from more leaks and therefore have a higher NRW demand. The distribution of NRW demands per class and km of pipes is illustrated in the following figure.
+
 ![leak-demands](../../../assets/img/leak_demand.png)
 
 The total number of km of pipes in a given municipality is linked to its population size. Here, we use a linear relationship between the population size and the km of pipes, also illustrated in the following Figure:
+
 $$
 km\_pipes = 57.7 * population\_in\_10k
 $$
+
 ![pop-pipes](../../../assets/img/pop_to_km.png)
