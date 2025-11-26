@@ -44,7 +44,8 @@ PANDOC_ARGS := \
 	--pdf-engine=pdflatex \
 	--toc \
 	--number-sections \
-	--metadata-file=paper/metadata.yaml
+	--metadata-file=paper/metadata.yaml \
+	--resource-path=problem/system-description/municipalities
 
 # --- Build Targets ---
 
