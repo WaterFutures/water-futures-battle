@@ -69,7 +69,7 @@ This section defines all variables and notation used in the KPI formulas.
 | **Demand Variables** |||
 | $D_{i,t}$ | m³/h | Water demand at node *i* and time *t* |
 | $Q{i,t}$ | m³/h | Delivered volume at node *i* and time *t* |
-| $U_{i,t} = \max\{D_{i,t} - Q_{i,t}, 0\}$ | m$^{3}$/h | Undelivered demand at node $i$, time $t$ | 
+| $U_{i,t} = \max(D_{i,t} - Q_{i,t}, 0)$ | m$^{3}$/h | Undelivered demand at node $i$, time $t$ | 
 | **Financial Variables** |||
 | $K_j$ | € | Capital expenditure (CAPEX) for intervention *j* |
 | $L_j$ | yr | Asset lifetime of intervention *j* |
