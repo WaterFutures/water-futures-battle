@@ -44,18 +44,6 @@ Each metric combines outputs from:
 
 ---
 
-
-Organizers will provide or link to the following open datasets:
-
-| Category | Description | Example Source |
-|-----------|--------------|----------------|
-| **Energy & Carbon** | Electricity price & emission factor (kg CO2/kWh) | IEA Emissions Factors 2024 |
-| **Materials & Construction** | Embedded CO2 of pipes, tanks, pumps | Ecoinvent, World Bank WSS |
-| **Demographics & Income** | Population, income percentiles (p20, median, p80) per municipality | CBS StatLine (NL) |
-| **Water Tariffs** | Fixed & volumetric price per m³ | ??? |
-| **Leakage & NRW Benchmarks** | Reference values for NRW reduction cost and baseline loss | ??? |
-| **Renewable Energy Factors** | Solar/wind/biogas capacity factors | IEA |
-
 This section defines all variables and notation used in the KPI formulas.
 
 | Symbol | Units | Description |
