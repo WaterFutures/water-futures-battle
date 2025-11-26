@@ -47,14 +47,6 @@ authors:
     given-names: Panagiotis
     affiliation: University of Macedonia
     orcid: "https://orcid.org/0000-0002-7890-0776"
-  - family-names: Savić
-    given-names: Dragan
-    affiliation: KWR Water Research Institute, Centre for Water Systems at University of Exeter
-    orcid: "https://orcid.org/0000-0001-9567-9041"
-  - family-names: Polycarpou
-    given-names: Marios
-    affiliation: KIOS Research and Innovation Center of Excellence at the University of Cyprus
-    orcid: "https://orcid.org/0000-0001-6495-9171"
   - family-names: Hammer
     given-names: Barbara
     affiliation: Bielefeld University
@@ -63,6 +55,14 @@ authors:
     given-names: Phoebe
     affiliation: Athens University of Economics and Business, ATHENA RC, Cambridge University
     orcid: "https://orcid.org/0000-0001-5979-6128"
+  - family-names: Polycarpou
+    given-names: Marios
+    affiliation: KIOS Research and Innovation Center of Excellence at the University of Cyprus
+    orcid: "https://orcid.org/0000-0001-6495-9171"
+  - family-names: Savić
+    given-names: Dragan
+    affiliation: KWR Water Research Institute, Centre for Water Systems at University of Exeter
+    orcid: "https://orcid.org/0000-0001-9567-9041"
 type: software
 license: MIT
 repository-code: "https://github.com/waterfutures/water-futures-battle"
@@ -96,14 +96,14 @@ preferred-citation:
       given-names: Filippo
     - family-names: Samartzis
       given-names: Panagiotis
-    - family-names: Savić
-      given-names: Dragan
-    - family-names: Polycarpou
-      given-names: Marios
     - family-names: Hammer
       given-names: Barbara
     - family-names: Koundouri
       given-names: Phoebe
+    - family-names: Polycarpou
+      given-names: Marios
+    - family-names: Savić
+      given-names: Dragan
   year: 2025
   journal: "arXiv preprint"
   url: "https://arxiv.org/abs/XXXX.XXXXX"
