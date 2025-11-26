@@ -35,3 +35,16 @@ km\_pipes = 57.7 * population\_in\_10k
 $$
 
 ![pop-pipes](../../../assets/img/pop_to_km.png)
+
+#### Implementing Variables
+
+The implementation of the NRW model involves several variables, which are described in the following table.
+
+| Variable | Variable Type | Presented by |
+| -------- | ------------- | ------------ |
+| NRW demand bounds [m^3/day] | Static | National |
+| Population size to pipe km [km/10k-pop] | Static | National |
+| Avg network age [years] | Dynamic Endogenous | Municipality ID |
+| Unit cost for intervention [€/avg-net-year] | Dynamic Endogenous | NRWClass, Municipality Size Class, national |
+| Intervention budget [€/year] | Option |  |
+| Intervention policy | Option |  |
