@@ -1,7 +1,7 @@
 ---
 title: "The Battle of the Water Futures"
 author:
-  - Dennis Zanutto^*
+  - Dennis Zanutto*
   - Christos Michalopoulos
   - Lydia Tsiami
   - Andre Artelt
@@ -26,4 +26,6 @@ tblPrefix:
 secPrefix:
   - "Section"
   - "Sections"
+bibliography: paper/references.bib
+cs: paper/apa.csl
 ---

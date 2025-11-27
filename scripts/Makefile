@@ -29,6 +29,7 @@ MARKDOWN_FILES = \
 	problem/system-requirements/index.md \
 	paper/acknowledgement.md \
 	paper/data-availability-statement.md \
+	paper/references.md \
 	paper/appendix.md
 
 # --- Dependencies ---
@@ -46,7 +47,8 @@ PANDOC_ARGS := \
 	--number-sections \
 	--metadata-file=paper/metadata.yaml \
 	--resource-path=problem/system-description \
-	--filter bin/pandoc-crossref
+	--filter bin/pandoc-crossref \
+	--citeproc # Careful: pandoc crossref must go before citeproc
 
 # --- Build Targets ---
 
