@@ -20,4 +20,10 @@ author:
 date: November 2025
 keywords: [water, future, conflict, climate]
 geometry: margin=1in
+tblPrefix:
+  - "Table"
+  - "Tables"
+secPrefix:
+  - "Section"
+  - "Sections"
 ---

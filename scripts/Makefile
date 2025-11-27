@@ -45,7 +45,8 @@ PANDOC_ARGS := \
 	--toc \
 	--number-sections \
 	--metadata-file=paper/metadata.yaml \
-	--resource-path=problem/system-description/municipalities
+	--resource-path=problem/system-description/municipalities \
+	--filter bin/pandoc-crossref
 
 # --- Build Targets ---
 
