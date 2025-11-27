@@ -17,18 +17,16 @@ MARKDOWN_FILES = \
 	problem/index.md \
 	problem/system-description/index.md \
 	problem/system-description/water-utilities.md \
-	problem/system-description/municipalities/index.md \
-	problem/system-description/municipalities/water-demand.md \
-	problem/system-description/municipalities/nrw.md \
+	problem/system-description/municipalities.md \
 	problem/system-description/sources.md \
 	problem/system-description/pumping-stations.md \
 	problem/system-description/pipes.md \
-	problem/system-requirements/index.md \
-	problem/system-interventions/index.md \
 	problem/external-drivers/index.md \
 	problem/external-drivers/climate.md \
 	problem/external-drivers/energy-system.md \
 	problem/external-drivers/economy-financing.md \
+	problem/system-interventions/index.md \
+	problem/system-requirements/index.md \
 	paper/acknowledgement.md \
 	paper/data-availability-statement.md \
 	paper/appendix.md
@@ -47,7 +45,7 @@ PANDOC_ARGS := \
 	--toc \
 	--number-sections \
 	--metadata-file=paper/metadata.yaml \
-	--resource-path=problem/system-description/municipalities \
+	--resource-path=problem/system-description \
 	--filter bin/pandoc-crossref
 
 # --- Build Targets ---

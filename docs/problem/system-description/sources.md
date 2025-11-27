@@ -3,7 +3,7 @@ layout: default
 website_title: Sources
 parent: /problem/system-description/
 parent_title: System Description
-prev_page_url: /problem/system-description/municipalities/nrw.html
+prev_page_url: /problem/system-description/municipalities.html
 next_page_url: /problem/system-description/pumping-stations.html
 website_page_authors:
   - C. Michalopoulos

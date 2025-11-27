@@ -33,22 +33,13 @@ navigation:
           - title: Water Utilities
             url: /problem/system-description/water-utilities.html
           - title: Municipalities
-            url: /problem/system-description/municipalities/
-            subnav:
-            - title: Water Demand Model
-              url: /problem/system-description/municipalities/water-demand.html
-            - title: Non Revenue Water Model
-              url: /problem/system-description/municipalities/nrw.html
+            url: /problem/system-description/municipalities.html
           - title: Sources
             url: /problem/system-description/sources.html
           - title: Pumping Stations
             url: /problem/system-description/pumping-stations.html
           - title: Pipes
             url: /problem/system-description/pipes.html
-      - title: System Requirements
-        url: /problem/system-requirements/
-      - title: System Interventions
-        url: /problem/system-interventions/     
       - title: External Drivers
         url: /problem/external-drivers/
         subnav:
@@ -58,6 +49,10 @@ navigation:
             url: /problem/external-drivers/energy-system.html
           - title: Economy and Financing
             url: /problem/external-drivers/economy-financing.html
+      - title: System Interventions
+        url: /problem/system-interventions/
+      - title: System Requirements
+        url: /problem/system-requirements/
   - title: Team
     url: /team.html
   - title: Contact Us
