@@ -12,7 +12,7 @@ website_page_authors:
   - D. Zanutto
 ---
 
-#### Non-Revenue Water Model
+#### Non-Revenue Water Model {#sec:nrw}
 
 Our modelling of non-revenue water (NRW) relies on the average age of the pipe infrastructure in a municipality. Based on this average age, the municipality gets assigned to one of five possible classes (A - E) as follows:
 

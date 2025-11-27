@@ -11,38 +11,62 @@ website_page_authors:
 
 ### Municipalities
 
-Every muncipality is represent as a unique entity in the system.
-The demand is the cumulative demand for all type of activities within the municipalities.
-The idea is that the transport network delivers all the demand to a single delivery point and that then it is up to the city wate distirbution system to deliver it to the consumers. 
-Which is not our concern.
-See demand-model.
+Each municipality (gemeente) is represented as a single junction point with positive demand, abstracting the entire secondary and tertiary distribution network within that jurisdiction.
+This node serves as the sole supply point for all water within the municipality's boundaries, with characteristics such as population, land area, and housing stock consolidated at this level.
 
-On top of demand, each urban system will have a leak associated.
-Given the pipe distribution by age, diameter, pressure at the delivery point, and length of the urban system, we generate an additional leak.
-Perhaps the first 3 params will genrate m3/km which gets multiplied by the length of the urban systems
+The system presents two main challenges.
+First, municipal parameters evolve over time as cities grow and change.
+Second, the network topology itself is dynamic: municipalities can merge or be absorbed by larger neighbors, causing the number of nodes to vary throughout the planning horizon.
 
-Each municipality has the following properties
-- Geographical
-    - Name [CBS]
-    - Coordinates [??]x\\
-    - elevation [??]
-    - CBS code [CBS]
-    - province where it belongs
-    - land area [CBS]
-    - water area [CBS]
-    - more ?
-- All the properties necessary to generate the demands
-    - TO be decided based on the demand-model
-        - population (by age)
-- Hydraulic characteristics
-    - pipe distribution by diameter
-    - pipe distribution by age
-    - pipe distribution by length
-- Economic data on population for fairness assessment
-    - Disposable income (gemiddeld inkomen)
-See all [CBS Interesting properties](./cbs-interesting).
+---
 
-Optionally, we can think about modelling farmers.
-Meeting demand for agricutlure and deciding not to fullfill it could be a policy option too. 
-What should we use?
-DO we pay simply pay them back?
+**Excursus on the Modelling Approach**
+
+To model this administrative restructuring, municipalities can only open or close on January 1st of each year.
+When a municipality closes, its delivery point disappears from the network.
+
+*Absorption by existing municipalities*: When a municipality is absorbed by a larger neighbor that already exists, all attributes of the closing municipality (population, land area, housing stock, etc.) transfer to the destination municipality.
+Any pipe that previously connected these two entities becomes hidden, as it formally becomes part of the destination municipality's internal distribution network.
+
+*Clustering into new municipalities*: When multiple municipalities close and cluster together to form a new entity, all their delivery points disappear and a new supply point emerges at the location of the newly formed municipality.
+The new municipality inherits all pipeline connections and attributes from the closing municipalities.
+This modelling approach mirrors real-world dynamics in densely populated countries like the Netherlands.
+When a new municipality forms through clustering, typically a new city center is established while former city centers become secondary neighborhoods.
+These moments of urban reorganization present natural opportunities for water utilities to lay new connections and redesign substantial portions of the distribution system.
+
+---
+
+Municipalities have many attributes that influence the other modules of the system.
+The full list can be seen in @tbl:muni-properties, while the actual values for these variables can be inspected within the data files, which are mapped in Appendix A.
+
+| Property | Type | Scope | Unit |
+| :--- | :--- | :--- | :--- |
+| Name | Static | Municipality |
+| Identifier | Static | Municipality |
+| Latitude | Static | Municipality | degrees
+| Longitude | Static | Municipality | degrees
+| Elevation | Static | Municipality | m
+| Province | Static | Municipality |
+| Begin date | Static | Municipality | date
+| End date | Static [Optional] | Municipality | date 
+| End reason and destination | Static [Optional] | Municipality |
+| Population | Dynamic Exogenous | Municipality | inhabitants
+| Surface land | Dynamic Exogenous | Municipality | $km^2$ |
+| Surface water (inland) | Dynamic Exogenous | Municipality | $km^2$ |
+| Surface water (open water) | Dynamic Exogenous | Municipality | $km^2$ |
+| Number of houses | Dynamic Exogenous | Municipality | units
+| Average age distribution network | Dynamic Endogenous | Municipality | years
+
+: Municipalities' properties review. {#tbl:muni-properties}
+
+Along with these attributes, the only observable quantity for each municipality is the total water demand divided in its two components: consumption (delivered demand) and the quota of undelivered demand.
+
+More precisely, the total water demand comprises two volumetric quantities, though this breakdown is not observable to participants:
+
+- billable water demand (the sum of household and business water demands) described in @sec:water-dem, and
+- non-revenue water (accounting for leaks, flushing, measurement errors and other losses), described in @sec:nrw.
+
+Instead, only two outputs are observable: actual consumption and undelivered demand.
+These two variables are extracted from an EPANET simulation of the network run in pressure-driven analysis (PDA) mode with a minimum pressure threshold of 30 m.
+This threshold accounts for the requirement to deliver 20 m of pressure at the consumer tap, plus an allowance of 5 m pressure drop in the secondary network and 5 m in the tertiary portion.
+
