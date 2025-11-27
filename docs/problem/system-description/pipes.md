@@ -10,29 +10,47 @@ website_page_authors:
   - D. Zanutto
 ---
 
-### Pipes
+### Connections (Pipes)
 
-Participants may select from a predefined set of pipe installation options listed in Table X in appendix A. A total of 10 pipe diameters is available. Each option is characterized by its material, hydraulic properties, installation cost, and associated carbon emissions.
+Within the BWF, there is a distinction between connections and pipes.
+Connections are the entities that define the possible links between the network's nodes, while pipes are the actual physical elements installed to transport water.
+This distinction models the fact that different pipes can be installed on the same connection at different points in time.
+However, duplicate pipes are not allowed on the same connection.
 
-The Darcy friction factor of a new pipe is provided for every option. However, the rate at which the friction factor increases over time (decay rate) is uncertain and is defined by a minimum and maximum value.
+Similarly to pumps, participants can install new pipes on any unused connection, or replace existing pipes on connections that already have one.
+Selection must occur from a predefined set of pipe options.
+Pipe options are characterized by material, hydraulic properties, installation cost, and associated carbon emissions, with a detailed overview available in @tbl:pi-properties and actual values provided in the data files mapped in Appendix A.
 
-Pipe installation costs (in €/m) are provided for the year 2025. Any adjustments to costs or discount rates are specified in Section.
+The Darcy friction factor of a new pipe is provided for every option.
+However, the rate at which the friction factor increases over time (decay rate) is uncertain and is bounded between minimum and maximum values.
 
-Associated carbon emissions (in kg CO2-eq per meter of pipe installed) are also given. These emission factors may change over time and can be recalculated as described in Section. 
+Associated carbon emissions (in kg CO2-eq per meter of pipe installed) are also provided.
+These emission factors may change over time due to technological advancements.
 
+Connections are either completely within a province (intra-province) or shared between provinces (inter-province).
+The complete lists of intra-province and inter-province connections are included in the data files mapped in Appendix A.
 
-**Table 1:** possible pipe locations
+| Property | Type | Scope | Unit |
+| :--- | :--- | :--- | :--- |
+| Identifier | Static | Connection |
+| Node A | Static | Connection |
+| Node B | Static | Connection | 
+| Type | Static | Connection |
+| Distance | Static | Connection | m
+| (Minor loss coefficient)  | set to 0 | 
 
-| id | from | to | length | duplicate |
-| --- | --- | --- | --- | --- |
-| 12443 | Utrecht | Amsterdam | 45 | true |
+: Connections' properties review. {#tbl:cn-properties}
 
-**Table 2:** possible pipe options
+| Property | Type | Scope | Unit |
+| :--- | :--- | :--- | :--- |
+| Identifier | Static | Pipe option |
+| Diameter | Static | Pipe option |
+| Material | Static | Pipe option | 
+| Darcy friction factor - new pipe | Static | Pipe option | 
+| Darcy friction factor - decay rate | Static [Uncertain] | Pipe option | 
+| Darcy friction factor - existing pipe | Dynamic endogenous | Pipe option | 
+| Cost (new pipe) | Dynamic endogenous | Pipe option | €/m
+| Equivalent emissions (new pipe) | Dynamic exogenous | Pipe option | tCO2eq/m 
 
-| id | diameter | material | cost | cost duplicate | ? |
-| --- | --- | --- | --- | --- | --- |
-| 2453a | 200 | pvc | 1000 | 1200 | ? |
-| 2453b | 200 | iron | 1000 | 1200 | ? |
-| 2454a | 400 | pvc | 1150 | 1200 | ? |
-| 2454b | 400 | iron | 1170 | 1200 | ? |
+: Pipes' properties review. {#tbl:pi-properties}
 
