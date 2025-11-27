@@ -13,15 +13,15 @@ website_page_authors:
 ### Pumping stations
 
 Pumping stations are the infrastructure connecting water sources to municipalities and are responsible for distributing the water produced by each source into the network.
-Each pumping station contains a variable number of identical pumps operating in parallel.
+Each pumping station contains one or more identical pumps operating in parallel.
 
 Whenever a new source is opened, participants must define which pump option (selected exclusively from a pre-defined list of available pumps) and how many units are installed at that source's pumping station.
 Similarly, participants can decide to replace pumps at existing locations.
 
-While a water source's daily outflow is constrained by its nominal capacity, the pumping station's configuration limits the source's peak outflow rate.
+While a water source's daily outflow is constrained by its nominal capacity, the pumping station's configuration limits the source's peak outflow rate ($m^3/hour$).
 
 The only operational cost component of a pumping station is its energy expenditure, calculated during the network hydraulic simulation based on the energy consumption and tariffs.
-Peak demand charges are not included, as we assume utilities have fixed-rate agreements in place with electrical grid providers (see more details in @sec:energy-model).
+Peak demand charges are not included, as we assume utilities have agreements in place with electrical grid providers (see more details in @sec:energy-model).
 Maintenance costs and other fixed yearly operational costs are included in the initial construction cost of each pump.
 
 Pumps performances remain constant over time (no degradation in efficiency or similar wear effects).
