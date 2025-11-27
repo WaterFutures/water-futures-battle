@@ -85,6 +85,17 @@ Phase II. In the second phase, representative hourly consumption profiles are as
 
 Phase III. The third phase produces the final hourly time series by applying a Fourier series-based approach which combines seasonal modulation, climate-related adjustments, and random perturbations to capture temporal variability. The two residential profiles associated with each municipality are aggregated through weighted combinations, and both residential and non-residential profiles are scaled to match the previously estimated yearly volumes. The outcome is a set of 8,760-point hourly water consumption series for each municipality. 
 
+| Property | Type | Scope | Unit |
+| :--- | :--- | :--- | :--- |
+Population | Dynamic Exogenous | Municipality | inhabitants
+Number of houses | Dynamic Exogenous | Municipality | units
+Number of businesses | Dynamic Exogenous | Municipality | units
+Daily per household demand | Dynamic Exogenous | Municipality | L/house/day
+Daily per business demand | Dynamic Exogenous | Municipality | L/business/day
+Max yearly temperature | Dynamic Exogenous | National | [°C]
+
+: Water demand model's properties review. {#tbl:wd-properties}
+
 #### Non-Revenue Water Model {#sec:nrw}
 
 Our modelling of non-revenue water (NRW) relies on the average age of the pipe infrastructure in a municipality. Based on this average age, the municipality gets assigned to one of five possible classes (A - E) as follows:
