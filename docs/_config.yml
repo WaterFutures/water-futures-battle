@@ -71,3 +71,4 @@ exclude:
   - vendor
   - trash
   - paper
+  - bin
