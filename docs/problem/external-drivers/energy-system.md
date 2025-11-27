@@ -12,12 +12,16 @@ website_page_authors:
 
 ### Energy System
 
-We will model three different parameters for the evaluation of the water distribution networks:
+We will model the following three different parameters for the evaluation of the water distribution networks.
 
-- electricity price in €/kWh
-- greenhouse gas emissions by electricity production in kgCO2/kWh
-- unit costs for a solar pv panel in €/kW
 
-We assume yearly changes in electricity price roughly influenced by inflation but with a high uncertainty. Due to different electricity demands during the day, the electricity price will change hourly following a daily pattern with peaks during the working hours and lows during the night. For each kWh obtained from the power suppliers we will estimated the produced greenhouse gas emissions from generating the energy. This value may change yearly due to different compositions of the electricity generation. The alternative to buying electricity from a power supplier is to generate it from solar pv panels that also come with specific costs. These costs may change yearly due to more efficiency and different climate conditions. 
+| Variable                  | Variable Type      | Presented By                |
+|---------------------------| ------------------ |-----------------------------|
+| Elecricity price in €/kWh | Dynamic Exogenous  | National (Simulation model) |
+| Greenhouse gas emission by electricity production in kgCO2/kWh    | Dynamic Exogenous | National (Simulation model) |
+| Unit costs for solar pv panel in €/kW | Dynamic Exogenous | National (Simulation model) |
+
+We assume yearly changes in electricity price roughly influenced by inflation but with a high uncertainty. Due to different electricity demands during the day, the electricity price will change hourly following a daily pattern with peaks during the working hours and lows during the night. For each kWh obtained from the power suppliers we will estimate the produced greenhouse gas emissions from generating the energy. This value may change yearly due to different compositions of the electricity generation. The alternative to buying electricity from a power supplier is to generate it from solar pv panels that also come with specific costs. These costs may change yearly due to more efficiency and different climate conditions. 
 
 The action the participants can do is to install solar pv panels on pump stations at any time, that will have a lifespan of 25 years. The main objective is to achieve low electricity costs in the water distribution network. As a secondary objective the greenhouse gas emissions produced by the water distribution network should be minimized.
+
