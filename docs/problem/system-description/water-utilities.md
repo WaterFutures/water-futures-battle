@@ -11,9 +11,21 @@ website_page_authors:
 
 ### Water Utilities
 
-The system has multiple water utilities which is responsible to manage the system of one or more provinces.
+Within the BWF, Water Utilities (WUs) act as the entities responsible for managing the assets and delivering drinking water across their assigned provinces.
 
-Water utilities can and must take interventions within their own system (e.g., deciding the budget for non revenue water actions or replacing inter province pipes).
-Water utilities can also take interventions in a collaborative approach, for example, the cost of a common pipe connecting two water utilities can be shared between the two utilities.
+WUs must chose the policies to apply to their own system (e.g, setting the budget for non-revenue water reduction) and decide the interventions to take on their system (e.g., replacing a pipe).
 
-Water utilities number and responsabilities (assigned provinces) will not change during the competition.
+Water utilities can also join their efforts to pursue a common interventions, for example, the cost of placing a pipe connecting two water utilities will be shared between the two utilities.
+
+The structure of the system is static.
+The number of WUs and their specific geographic responsabilities (assigned provinces) will not change through the competition.
+
+The key parameters and decision variables governing the Water Utility Module are detailed in @tbl:wu-properties.
+The actual values for these variables can be inspected within the data files, which are mapped in Appendix A.
+
+| Property | Type | Scope | Unit |
+| :--- | :--- | :--- |
+| Identifier | Static | Water Utility |
+| Assigned province | Static | Water Utility |
+
+: Water utilities' properties review. {#tbl:wu-properties}
