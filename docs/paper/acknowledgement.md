@@ -1,3 +1,3 @@
-# Acknowledgements
+# Acknowledgements {.unnumbered}
 
 Thanks to everyone.

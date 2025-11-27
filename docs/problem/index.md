@@ -7,7 +7,7 @@ website_page_authors:
   - D. Zanutto
 ---
 
-# The Battle of the Water Futures Problem Description
+# Problem Description
 
 The Battle of the Water Futures takes place in a not so ficticious world, with a blend of real data and assumptions.
 The BWF is concerned with the optimal planning and operation of multiple regional water distribution systems in a national landscape.
