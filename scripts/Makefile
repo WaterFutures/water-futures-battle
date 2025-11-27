@@ -29,7 +29,9 @@ MARKDOWN_FILES = \
 	problem/external-drivers/climate.md \
 	problem/external-drivers/energy-system.md \
 	problem/external-drivers/economy-financing.md \
-	paper/acknowledgement.md
+	paper/acknowledgement.md \
+	paper/data-availability-statement.md \
+	paper/appendix.md
 
 # --- Dependencies ---
 
