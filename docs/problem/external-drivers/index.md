@@ -9,4 +9,12 @@ website_page_authors:
   - D. Zanutto
 ---
 
-## System External Drivers
+## System External Drivers {#sec:ext-drivers}
+
+This chapter describes the external drivers that influence the water distribution system and how they have been modelled in the BWF competition.
+The key external systems modelled are:
+- the climate,
+- the energy system, and
+- the economic context.
+
+These systems are beyond the direct control of the participants and introduce the main exogenous factors shaping the environment in which the transport network operates.

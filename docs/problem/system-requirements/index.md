@@ -11,12 +11,11 @@ website_page_authors:
 
 ## System Requirements
 
-Each team’s plan will be evaluated using a set of **hydraulic, economic, environmental, and fairness metrics**.  
-Each metric combines outputs from:
-- **Hydraulic simulations** (EPANET): pressures, flows, energy 
-- **Financial simulations**: CAPEX, OPEX, bond costs, and tariffs.  
-- **Socioeconomic data**: income distribution, population, node classifications.
-
+This chapter describes the metrics used to evaluate each solution (masterplan) and the overall system performance in the BWF competition.
+These metrics define the many-objective space that participants must navigate, covering the main aspects of economic performance, environmental impact, reliability, and fairness.
+Importantly, these are evaluation metrics rather than explicit objectives: the competition ranking formula will not be disclosed to participants.
+The ranking may use weighted aggregation (with weights potentially changing over time to reflect shifting social priorities) or custom multi-criteria evaluation methods (e.g., selecting only solutions above a reliability threshold before ranking by other criteria). 
+However, participants may choose to treat these metrics as objectives in their own optimization processes when developing their masterplans.
 
 ### Total Annualized Cost
 
