@@ -33,8 +33,8 @@ Participants do not need to communicate this decision, as replacements will be a
 | :--- | :--- | :--- |
 | Identifier | Static | Pumping station |
 | Assigned source | Static | Pumping station |
-| Pump option | Static [Decision]| Pumping station |
-| Number of pumps | Static [Decision] | Pumping station | unit
+| Pump option | Decision| Pumping station |
+| Number of pumps | Decision | Pumping station | unit
 
 : Pumping stations' properties review. {#tbl:ps-properties}
 

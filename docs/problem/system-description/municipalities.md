@@ -73,7 +73,6 @@ More precisely, the total water demand comprises two volumetric quantities, thou
 
 Instead, only two outputs are observable: actual consumption and undelivered demand.
 These two variables are extracted from an EPANET simulation of the network run in pressure-driven analysis (PDA) mode with a minimum pressure threshold of 30 m.
-This threshold accounts for the requirement to deliver 20 m of pressure at the consumer tap, plus an allowance of 5 m pressure drop in the secondary network and 5 m in the tertiary portion.
 
 #### Water Demand Model {#sec:water-dem}
 
@@ -102,11 +101,11 @@ Our modelling of non-revenue water (NRW) relies on the average age of the pipe i
 
 | Age in years | Class | Lower and upper bound of NRW demand in m^3/day |
 | ------------ | ------| ---------------------------------------------- |
-| 0 - 25       | A     | (0, 12)                                        |
-| 25 - 43      | B     | (12, 20)                                       |
-| 43 - 54      | C     | (20, 35)                                       |
-| 54 - 60      | D     | (35, 55)                                       |
-| > 60         | E     | (55, inf)                                      |
+| 0 - 25       | A     | [0, 12)                                        |
+| 25 - 43      | B     | [12, 20)                                       |
+| 43 - 54      | C     | [20, 35)                                       |
+| 54 - 60      | D     | [35, 55)                                       |
+| > 60         | E     | [55, inf)                                      |
 
 Each class is associated with a distribution of non-revenue water (NRW)demands (e.g., leakages), from which we sample to generate the total demand, consisting of the normal demand + NRW demand. Notably, the NRW demand is different for each class -- i.e., older systems suffer from more leaks and therefore have a higher NRW demand. The distribution of NRW demands per class and km of pipes is illustrated in the following figure.
 

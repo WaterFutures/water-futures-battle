@@ -37,6 +37,7 @@ The complete lists of intra-province and inter-province connections are included
 | Node B | Static | Connection | 
 | Type | Static | Connection |
 | Distance | Static | Connection | m
+| Pipe option | Decision | Connection |
 | (Minor loss coefficient)  | set to 0 | 
 
 : Connections' properties review. {#tbl:cn-properties}
