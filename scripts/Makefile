@@ -3,11 +3,17 @@
 
 
 # Output filenames (in project root)
-OUTPUT_PDF := ../Zanutto_et_al-2025-battle_water_futures-preprint.pdf
+OUTPUT_PDF := ../water_futures_battle-preprint.pdf
+OUTPUT_LATEX := ../water_futures_battle-source.tex
+OUTPUT_LATEX_CLEANED := ../water_futures_battle-source_cleaned.tex
+OUTPUT_SUBMISSION := ../water_futures_battle-arxiv_submission.zip
 OUTPUT_WEBSITE := ../water_futures_battle-website.zip
 
 # Documentation source directory (current working dir for builds)
 DOCS_DIR := ../docs
+
+MATCH_STR="../../assets/img/"
+REPL_STR="./"
 
 # --- Input Files ---
 
@@ -40,9 +46,8 @@ DEPENDENCIES := \
 
 # --- Pandoc Arguments ---
 
-PANDOC_ARGS := \
+PANDOC_COMMON_ARGS := \
 	--from markdown \
-	--pdf-engine=pdflatex \
 	--toc \
 	--number-sections \
 	--metadata-file=paper/metadata.yaml \
@@ -50,21 +55,33 @@ PANDOC_ARGS := \
 	--filter bin/pandoc-crossref \
 	--citeproc # Careful: pandoc crossref must go before citeproc
 
+PANDOC_LATEX_ARGS := \
+	--to=latex \
+	--standalone
+
+PANDOC_PDF_ARGS := \
+	--pdf-engine=pdflatex
+
 # --- Build Targets ---
 
-.PHONY: all pdf website clean
+.PHONY: all latex pdf website clean
 
-all: pdf website
+all: latex pdf website
+
+latex:
+	cd $(DOCS_DIR) && pandoc -o $(OUTPUT_LATEX) $(PANDOC_COMMON_ARGS) $(PANDOC_LATEX_ARGS) $(MARKDOWN_FILES)
+	cp $(OUTPUT_LATEX) $(OUTPUT_LATEX_CLEANED)
+	sed -i "s|$(MATCH_STR)|$(REPL_STR)|g" $(OUTPUT_LATEX_CLEANED)
+	cd $(DOCS_DIR) && zip -j $(OUTPUT_SUBMISSION) $(OUTPUT_LATEX_CLEANED) assets/img/*
+
+pdf:
+	cd $(DOCS_DIR) && pandoc -o $(OUTPUT_PDF) $(PANDOC_COMMON_ARGS) $(PANDOC_PDF_ARGS) $(MARKDOWN_FILES)
 
 website:
 	cd $(DOCS_DIR) && bundle exec jekyll build
 	cd $(DOCS_DIR) && zip -r $(OUTPUT_WEBSITE) ./_site
 
 
-pdf:
-	cd $(DOCS_DIR) && pandoc -o $(OUTPUT_PDF) $(PANDOC_ARGS) $(MARKDOWN_FILES)
-
-
 clean:
-	rm -f $(OUTPUT_PDF) $(OUTPUT_WEBSITE)
+	rm -f $(OUTPUT_LATEX) $(OUTPUT_PDF) $(OUTPUT_WEBSITE)
 	cd $(DOCS_DIR) && rm -rf ./_site/

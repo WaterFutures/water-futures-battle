@@ -10,7 +10,7 @@ website_page_authors:
   - D. Zanutto
 ---
 
-### Energy System
+### Energy System {#sec:energy-model}
 
 We will model the following three different parameters for the evaluation of the water distribution networks.
 
