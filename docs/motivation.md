@@ -10,8 +10,8 @@ website_page_authors:
 # Introduction
 
 ## Disclaimer
-The networks and problem presented in this competition are synthetic and do not represent any real-world situation.
-While we utilize real data from trusted sources where possible (e.g., CBS for municipal data, KNMI for wheater observations), other aspects rely on assumptions based on expert knowledge.
+The networks and problem presented in this competition are synthetic and, despite being based on the Netherlands, do not represent any real-world situation.
+While we utilize real data from trusted sources where possible (e.g., CBS for municipal data, KNMI for wheather observations, Vewin for statistics about water utilities), other aspects rely on assumptions based on expert knowledge.
 
 We are committed to the model's integrity and, based on competitor feedback, we will continuously test and refine the model (e.g., balancing electricity and infrastructure costs) to ensure it remains physically sound and balanced.
 If you identify any significant inconsistencies, please inform us and we will review them promptly.

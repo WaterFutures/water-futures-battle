@@ -60,29 +60,35 @@ The full list can be seen in @tbl:muni-properties, while the actual values for t
 | Surface water (inland) | Dynamic Exogenous | Municipality | $km^2$ |
 | Surface water (open water) | Dynamic Exogenous | Municipality | $km^2$ |
 | Number of houses | Dynamic Exogenous | Municipality | units
+| Number of businesses | Dynamic Exogenous | Municipality | units
 | Average age distribution network | Dynamic Endogenous | Municipality | years
 
 : Municipalities' properties review. {#tbl:muni-properties}
 
-Along with these attributes, the only observable quantity for each municipality is the total water demand divided in its two components: consumption (delivered demand) and the quota of undelivered demand.
-
-More precisely, the total water demand comprises two volumetric quantities, though this breakdown is not observable to participants:
+The total municipality water demand comprises two volumetric quantities:
 
 - billable water demand (the sum of household and business water demands) described in @sec:water-dem, and
 - non-revenue water (accounting for leaks, flushing, measurement errors and other losses), described in @sec:nrw.
 
-Instead, only two outputs are observable: actual consumption and undelivered demand.
+However, this breakdown is not observable to participants, which will be able to observe only total water demand divided in its two components: consumption (delivered outflow) and undelivered demand.
 These two variables are extracted from an EPANET simulation of the network run in pressure-driven analysis (PDA) mode with a minimum pressure threshold of 30 m.
+
+[comment]: <> (PDA analysis applied to a transmission system?Trasmission mains and WDN are often connected through tanks (for daily volume compensation). Water energy upstream and downstream the storage element is not equal, often you have pumping systems to pressurize the WDN. How can we justify the absence of tank representation?)
 
 #### Water Demand Model {#sec:water-dem}
 
-The methodology developed to generate water consumption time series builds on historical data from the Dutch Drinking Water Statistics[@vewin_homepage] , which provide nationwide trends in total drinking water production, sectoral water use, and non-revenue water over the period 2000–2024. Specifically, water-consumption time series generation is structured into three phases.
+The methodology developed to generate water consumption time series builds on historical data from the Dutch Drinking Water Statistics[@Vewin_2025], which provide nationwide trends in total drinking water production, sectoral water use, and non-revenue water over the period 2000–2024.
+Specifically, water-consumption time series generation is structured into three phases.
 
-Phase I. The first phase estimates the annual water volume supplied to each municipality using information on households, and businesses, complemented by projected data where required. These annual volumes are calibrated to match national totals reported in official statistics and then randomized around the calibrated value to introduce variability among municipalities.
+Phase I. The first phase estimates the annual water volume supplied to each municipality using information on households, and businesses, complemented by projected data where required.
+These annual volumes are calibrated to match national totals reported in official statistics [@CBS_2025] and then randomized around the calibrated value to introduce variability among municipalities.
 
-Phase II. In the second phase, representative hourly consumption profiles are assigned to each municipality using a library of year-long, normalized profiles derived from district-metered areas and pre-processed to remove leakage effects. In greater detail, for each municipality, two residential profiles are selected from the library according to municipality population class, while a single non-residential profile is drawn from a dedicated set.
+Phase II. In the second phase, representative hourly consumption profiles are assigned to each municipality using a library of year-long, normalized profiles derived from district-metered areas and pre-processed to remove leakage effects.
+In greater detail, for each municipality, two residential profiles are selected from the library according to municipality population class, while a single non-residential profile is drawn from a dedicated set.
 
-Phase III. The third phase produces the final hourly time series by applying a Fourier series-based approach which combines seasonal modulation, climate-related adjustments, and random perturbations to capture temporal variability. The two residential profiles associated with each municipality are aggregated through weighted combinations, and both residential and non-residential profiles are scaled to match the previously estimated yearly volumes. The outcome is a set of 8,760-point hourly water consumption series for each municipality. 
+Phase III. The third phase produces the final hourly time series by applying a Fourier series-based approach which combines seasonal modulation, climate-related adjustments (accounting for the maximum yearly temperature), and random perturbations to capture temporal variability.
+The two residential profiles associated with each municipality are aggregated through weighted combinations, and both residential and non-residential profiles are scaled to match the previously estimated yearly volumes.
+The outcome is a set of 8,760-point hourly water consumption series for each municipality and year. 
 
 | Property | Type | Scope | Unit |
 | :--- | :--- | :--- | :--- |
@@ -97,7 +103,8 @@ Max yearly temperature | Dynamic Exogenous | National | [°C]
 
 #### Non-Revenue Water Model {#sec:nrw}
 
-Our modelling of non-revenue water (NRW) relies on the average age of the pipe infrastructure in a municipality. Based on this average age, the municipality gets assigned to one of five possible classes (A - E) as follows:
+Our modelling of non-revenue water (NRW) relies on the average age of the pipe infrastructure in a municipality.
+Based on this average age, the municipality gets assigned to one of five possible classes (A - E) as follows:
 
 | Age in years | Class | Lower and upper bound of NRW demand in m^3/day |
 | ------------ | ------| ---------------------------------------------- |
@@ -107,11 +114,14 @@ Our modelling of non-revenue water (NRW) relies on the average age of the pipe i
 | 54 - 60      | D     | [35, 55)                                       |
 | > 60         | E     | [55, inf)                                      |
 
-Each class is associated with a distribution of non-revenue water (NRW)demands (e.g., leakages), from which we sample to generate the total demand, consisting of the normal demand + NRW demand. Notably, the NRW demand is different for each class -- i.e., older systems suffer from more leaks and therefore have a higher NRW demand. The distribution of NRW demands per class and km of pipes is illustrated in the following figure.
+Each class is associated with a distribution of NRW demands, from which we sample to generate the volumetric NRW demand.
+Notably, the NRW demand is different for each class -- i.e., older systems suffer from more leaks and therefore have a higher NRW demand.
+The distribution of NRW demands per class and km of pipes is illustrated in the following figure.
 
 ![leak-demands](../../assets/img/leak_demand.png)
 
-The total number of km of pipes in a given municipality is linked to its population size. Here, we use a linear relationship between the population size and the km of pipes, also illustrated in the following Figure:
+The total number of km of pipes in a given municipality is linked to its population size.
+Here, we use a linear relationship between the population size and the km of pipes, also illustrated in the following Figure:
 
 $$
 km\_pipes = 57.7 * population\_in\_10k

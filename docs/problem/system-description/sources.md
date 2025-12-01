@@ -13,7 +13,7 @@ website_page_authors:
 ### Water Sources
 
 Water sources represent the entire process of water abstraction and treatment consolidated at a single location.
-Each source has a nominal production capacity which represents a hard limit on the amount of water that can be delivered in any 24-hour window.
+Each source has a nominal production capacity which represents a hard limit on the amount of water that can be delivered throughout any consecutive 24-hour window.
 
 In the BWF, three macro-types of water sources are modelled: groundwater, surface water, and desalination.
 The main trade-off is that groundwater sources are generally smaller (< 30 $Mm^3/year$) and cheaper to operate, as the water has higher quality and requires less treatment.
@@ -26,10 +26,11 @@ The fine amount is set by law and can therefore change at any time based on poli
 
 The cost of water production at every source is a combination of four components:
 
-- Fixed costs (personnel, taxes, planned maintenance, etc.)
-- Volumetric costs for energy
+- Fixed costs (personnel, taxes, planned maintenance, etc.),
+- Volumetric costs for energy,
 - Volumetric costs for non-energy related expenditures (chemicals, filters, etc.)
-- Extra volumetric costs for non-energy related expenditures
+- Extra volumetric costs for non-energy related expenditures.
+
 This final component is an additional cost paid when the source operates above its planned production capacity, i.e., nominal capacity multiplied by its capacity target factor (which can be interpreted as the ideal efficiency point).
 
 Similarly to municipalities, sources can also open and close over time.
