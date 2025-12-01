@@ -215,6 +215,9 @@ _site/
 vendor/
 Gemfile.lock
 
+# Pandoc
+bin/
+
 # Project
 internal-docs
 water_futures_battle-preprint.pdf
