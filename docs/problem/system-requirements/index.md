@@ -25,7 +25,7 @@ However, participants may choose to treat these metrics as objectives in their o
 
 ### Total Annualized GHG Emissions
 
-- **Formula:** $\text{GHG} = \sum_j \frac{K_j \times EF^{\text{emb}}_j}{L_j} + \sum_t \frac{E_t \times EF}{1000}$
+- **Formula:** $\text{GHG} = \sum_j K_j \times EF^{\text{emb}}_j + \sum_t E_t \times EF$
 - Calculated over all dimensions (utility, time). Ranked based on cumulative amount across time and utilities.
 - unit: tCO2eq
 
@@ -69,7 +69,7 @@ This section defines all variables and notation used in the KPI formulas.
 | $P_{\text{issue}}$ | € | Principal amount of issued bond |
 | **Environmental Variables** |||
 | $E_t$ | kWh | Pumping energy at time *t* |
-| $EF$ | kg CO2/kWh | Electricity emission factor |
+| $EF$ | t CO2/kWh | Electricity emission factor |
 | $EF^{emb}_j$ | t CO2 / € or unit | Embedded emission factor for intervention *j* |
 | **Socio-Economic Variables** |||
 | $p_v$ | €/m³ | Volumetric tariff |

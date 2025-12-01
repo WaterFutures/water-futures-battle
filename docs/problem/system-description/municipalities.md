@@ -118,7 +118,7 @@ Each class is associated with a distribution of NRW demands, from which we sampl
 Notably, the NRW demand is different for each class -- i.e., older systems suffer from more leaks and therefore have a higher NRW demand.
 The distribution of NRW demands per class and km of pipes is illustrated in the following figure.
 
-![leak-demands](../../assets/img/leak_demand.png)
+![Non-revenue water demand per class](../../assets/img/leak_demand.png)
 
 The total number of km of pipes in a given municipality is linked to its population size.
 Here, we use a linear relationship between the population size and the km of pipes, also illustrated in the following Figure:
@@ -127,7 +127,7 @@ $$
 km\_pipes = 57.7 * population\_in\_10k
 $$
 
-![pop-pipes](../../assets/img/pop_to_km.png)
+![Population size vs. km of pipes](../../assets/img/pop_to_km.png)
 
 | Property | Type | Scope | Unit |
 | :--- | :--- | :--- | :--- |
