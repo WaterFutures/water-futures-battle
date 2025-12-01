@@ -16,8 +16,8 @@ While we utilize real data from trusted sources where possible (e.g., CBS for mu
 We are committed to the model's integrity and, based on competitor feedback, we will continuously test and refine the model (e.g., balancing electricity and infrastructure costs) to ensure it remains physically sound and balanced.
 If you identify any significant inconsistencies, please inform us and we will review them promptly.
 
-All versions are archived on Zenodo, with the latest version establishing the official standard.
-An open-source evaluator will also be released in the WaterBenchmarkHub (Artelt, 2025), allowing competitors to test their solutions before the final submission.
+All versions are archived on Zenodo, with the latest version establishing the official standard [@battle_zenodo].
+An open-source evaluator will also be released in the WaterBenchmarkHub [@wbhub], allowing competitors to test their solutions before the final submission.
 
 ## Background and motivation
 
@@ -27,15 +27,15 @@ This part of the system is extremely critical as failures here can propogate and
 Beyond system reliability and deep uncertainties, the complex governance requirements, such as the coordination between national, regional, and local administrations, present a major obstacle to integrated policy-making and long-term planning of these systems.
 
 Over the past decade, the field has steadily refined and built upon several approaches that address WDS planning under uncertainties.
-To begin, the introduction of staged design, where interventions are modeled in phases rather then in as single batch representing the target network, provided a tool to represent long-term plans with more realism (for an example on WDS see Creaco et al., 2014).
-Next, this modeling framework was extended to include uncertainty, either through a robust approach that accounts for uncertainty (e.g., Creaco et al., 2015), or through a flexible approach where one plan with multiple pathways (in its simplest form: a decision tree) is devised, but only one branch is implemented based on the uncertainties realisation (e.g., Basupi and Kapelan, 2015).
+To begin, the introduction of staged design, where interventions are modeled in phases rather then in as single batch representing the target network, provided a tool to represent long-term plans with more realism [for an example on WDS see @Creaco_Franchini_Walski_2014].
+Next, this modeling framework was extended to include uncertainty, either through a robust approach that accounts for uncertainty [e.g., @Creaco_Franchini_Walski_2015], or through a flexible approach where one plan with multiple pathways (in its simplest form: a decision tree) is devised, but only one branch is implemented based on the uncertainties realisation [e.g., @Basupi_Kapelan_2015].
 
 An inherent limitation of robust and flexible plans is that they require accounting for all possible future system interventions and scenarios at the initial planning stage.
 Therefore, when uncertainties move away from the accounted values or new opportunities emerge (i.e., under deep uncertainties), these approaches fall short: the water utilities must adapt to the changes in their environment.
 
 An adaptive plan would typically feature at least one of two components.
-The first is a periodic re-evaluation and adjustment of the plan based on uncertainty evolution to incorporate new opportunities and information (see, for an example, Beh et al., (2017) on water supply systems, and Skerker et al., (2023) on "the value of learning" in flexible planning for water reservoirs).
-The second is the ability to shift between pathways and avoiding locking-up to one (see dynamic adaptive policy pathways for the Rhine Delta, Haasnoot et al., 2013).
+The first is a periodic re-evaluation and adjustment of the plan based on uncertainty evolution to incorporate new opportunities and information [see, for an example, @Beh_Maier_Dandy_2015 on water supply systems, and @Skerker_Zaniolo_Willebrand_Lickley_Fletcher_2023 on "the value of learning" in flexible planning for water reservoirs].
+The second is the ability to shift between pathways and avoiding locking-up to one [see dynamic adaptive policy pathways for the Rhine Delta, @Haasnoot_Kwakkel_Walker_ter_Maat_2013].
 
 Regardless of definitions and classifications, the field also lacks coherence in benchmark definition, as none of these approaches have been systematically tested against each other.
 At best, works introducing different methodologies may have used the same benchmark networks (e.g., Anytown or New York Tunnels), but the overall problem descriptions—and thus the assumptions and scenarios surrounding these networks—differ substantially.
