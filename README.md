@@ -13,7 +13,7 @@ The objective is to **design and operate** a water distribution system over a lo
 > ➡️ Visit **[the official competition website](https://waterfutures.github.io/water-futures-battle/)** ⬅️ </br>
 > [![DOI](https://zenodo.org/badge/1043183086.svg)](https://doi.org/10.5281/zenodo.17698299)
 >
-> ➡️ Read the **[problem description on (arXiv)](https://arxiv.org/abs/XXXX.XXXXX)** ⬅️
+> ➡️ Read the **[problem description on (arXiv)](http://arxiv.org/abs/2511.22986)** ⬅️
 >
 </br>
 
