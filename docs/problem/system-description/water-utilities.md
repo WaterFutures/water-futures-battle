@@ -20,13 +20,13 @@ Water utilities can also join their efforts to pursue a common interventions, fo
 The structure of the system is static.
 The number of WUs and their specific geographic responsabilities (assigned provinces) will not change through the competition.
 
-# TODO: COST OF WATER
+==TODO: COST OF WATER==
 
 The key parameters and decision variables governing the Water Utility Module are detailed in @tbl:wu-properties.
 The actual values for these variables can be inspected within the data files, which are mapped in Appendix A.
 
 | Property | Type | Scope | Unit |
-| :--- | :--- | :--- |
+| :--- | :--- | :--- | :---
 | Identifier | Static | Water Utility |
 | Assigned province | Static | Water Utility |
 

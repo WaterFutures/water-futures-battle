@@ -19,7 +19,7 @@ Individuals who contributed directly to the development, design, implementation,
 - Dennis Zanutto, **Corresponding author**, KWR Water Research Insitute, Politecnico di Milano
 - Christos Michalopoulos, KWR Water Research Institute, National Technical University of Athens
 - Lydia Tsiami, KWR Water Research Institute, National Technical University of Athens
-- Andre Artelt, Bielefeld University,
+- André Artelt, Bielefeld University,
 - Jasmin Brandt, Bielefeld University
 - Demetrios Eliades, KIOS Research and Innovation Center of Excellence at the University of Cyprus
 - Stelios Vrachimis, KIOS Research and Innovation Center of Excellence at the University of Cyprus

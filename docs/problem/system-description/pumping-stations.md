@@ -30,7 +30,7 @@ The actual lifetime is randomized, and when a pump reaches its end of life, it m
 Participants do not need to communicate this decision, as replacements will be automatically implemented, but they must account for this "unexpected" cost in their planning.
 
 | Property | Type | Scope | Unit |
-| :--- | :--- | :--- |
+| :--- | :--- | :--- | :--- |
 | Identifier | Static | Pumping station |
 | Assigned source | Static | Pumping station |
 | Pump option | Decision| Pumping station |
@@ -39,7 +39,7 @@ Participants do not need to communicate this decision, as replacements will be a
 : Pumping stations' properties review. {#tbl:ps-properties}
 
 | Property | Type | Scope | Unit |
-| :--- | :--- | :--- |
+| :--- | :--- | :--- | :--- |
 | Identifier | Static | Pump option |
 | Pump curve | Static | Pump option |
 | Efficiency curve | Static | Pump option |

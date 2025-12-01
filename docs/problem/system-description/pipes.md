@@ -48,7 +48,7 @@ The complete lists of intra-province and inter-province connections are included
 | Diameter | Static | Pipe option |
 | Material | Static | Pipe option | 
 | Darcy friction factor - new pipe | Static | Pipe option | 
-| Darcy friction factor - decay rate | Static [Uncertain] | Pipe option | 
+| Darcy friction factor - decay rate | Static [Uncertain] | Pipe option | $years^-1$
 | Darcy friction factor - existing pipe | Dynamic endogenous | Pipe option | 
 | Cost (new pipe) | Dynamic endogenous | Pipe option | €/m
 | Equivalent emissions (new pipe) | Dynamic exogenous | Pipe option | tCO2eq/m 

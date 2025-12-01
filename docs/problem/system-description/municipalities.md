@@ -120,7 +120,7 @@ $$
 ![pop-pipes](../../assets/img/pop_to_km.png)
 
 | Property | Type | Scope | Unit |
-| -------- | ------------- | ------------ |
+| :--- | :--- | :--- | :--- |
 | NRW demand | Static [Uncertain] | National | $m^3/day$
 | Inner distribution network - length to population ratio | Static | National | $km/(10k inhabitants)$
 | Inner distribution network - length | Dynamic endogenous| Municipality | km

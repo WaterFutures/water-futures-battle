@@ -15,11 +15,13 @@ website_page_authors:
 We will model the following three different parameters for the evaluation of the water distribution networks.
 
 
-| Variable                  | Variable Type      | Presented By                |
-|---------------------------| ------------------ |-----------------------------|
-| Elecricity price in €/kWh | Dynamic Exogenous  | National (Simulation model) |
-| Greenhouse gas emission by electricity production in kgCO2/kWh    | Dynamic Exogenous | National (Simulation model) |
-| Unit costs for solar pv panel in €/kW | Dynamic Exogenous | National (Simulation model) |
+| Property | Type | Scope | Unit |
+| :--- | :--- | :--- | :--- |
+| Elecricity price | Dynamic Exogenous  | National | €/kWh
+| Greenhouse gas emission by electricity production | Dynamic Exogenous | National | tCO2eq/kWh
+| Unit costs for solar pv panel | Dynamic Endogenous | National | €/kW 
+
+: Energy system model's properties review. {#tbl:es-properties}
 
 We assume yearly changes in electricity price roughly influenced by inflation but with a high uncertainty. Due to different electricity demands during the day, the electricity price will change hourly following a daily pattern with peaks during the working hours and lows during the night. For each kWh obtained from the power suppliers we will estimate the produced greenhouse gas emissions from generating the energy. This value may change yearly due to different compositions of the electricity generation. The alternative to buying electricity from a power supplier is to generate it from solar pv panels that also come with specific costs. These costs may change yearly due to more efficiency and different climate conditions. 
 
