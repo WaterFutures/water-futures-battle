@@ -56,7 +56,7 @@ Interventions on inflation are limited, as inflation is an exogenous macroeconom
 
 : Inflation's properties review. {#tbl:ei-properties}
 
-#### Water Tariffs 
+#### Water Tariffs {#sec:water-tariff}
 The water tariffs module models how utilities generate revenue through a pricing scheme commonly used in real-world systems: a fixed component (e.g., service charge) combined with a volumetric component (per-m³ charge). Both components evolve annually according to the prevailing inflation rate, ensuring that real revenue tracks changes in general price levels. 
 Both the fixed and volumetric tariff components are exogenously given and evolve solely according to the uncertain inflation dynamics defined in the scenario generator. Participants must therefore design plans that remain financially robust under tariff paths they cannot control. This constraint emphasizes the importance of planning under deep uncertainty: utilities must cope with potential revenue volatility driven by inflation.
 

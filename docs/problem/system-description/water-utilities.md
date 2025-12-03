@@ -16,11 +16,11 @@ Within the BWF, Water Utilities (WUs) act as the entities responsible for managi
 WUs must choose the policies to apply to their own system (e.g, setting the budget for non-revenue water reduction) and decide the interventions to take on their system (e.g., replacing a pipe).
 
 Multiple WUs can also join their efforts to pursue a common interventions, for example, the cost of placing a pipe connecting two water utilities will be shared between the two utilities.
+If WU are connected with each other and there is an exchange of water, the receiving utility pays a volumetric fee to the supplying utility.
+More detailed information about the water tariff scheme are available in @sec:water-tariff.
 
 The structure of the system is static.
 The number of WUs and their specific geographic responsibilities (assigned provinces) will not change through the competition.
-
-If WU are connected with each other, the water that arrives from a different water utility must be charged. The participants must select the tariff for this transaction between the water utilities. For more information check the Water Tariff section.
 
 The key parameters and decision variables governing the Water Utility Module are detailed in @tbl:wu-properties.
 The actual values for these variables can be inspected within the data files, which are mapped in Appendix A.
