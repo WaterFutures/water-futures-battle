@@ -4,7 +4,6 @@ title: "The Battle of the Water Futures"
 authors:
   - family-names: Zanutto
     given-names: Dennis
-    name-suffix: Corresponding author
     affiliation: KWR Water Research Institute, Politecnico di Milano
     orcid: "https://orcid.org/0000-0002-1997-3350"
   - family-names: Michalopoulos
@@ -111,7 +110,7 @@ preferred-citation:
 
 references:
   - type: software
-    title: "Water Futures Battle - Software and Data Repository"
+    title: "The Battle of the Water Futures [Data and Software]"
     authors:
       - family-names: Zanutto
         given-names: Dennis
@@ -129,6 +128,7 @@ references:
         given-names: Panagiotis
     year: 2025
     doi: "10.5281/zenodo.17698299"
+    version: "Concept (all versions)"
     repository-code: "https://github.com/waterfutures/water-futures-battle"
     url: "https://doi.org/10.5281/zenodo.17698299"
     notes: "Use this DOI when citing the software package, code, or datasets"
