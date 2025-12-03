@@ -35,6 +35,7 @@ MARKDOWN_FILES = \
 	problem/system-requirements/index.md \
 	paper/acknowledgement.md \
 	paper/data-availability-statement.md \
+	paper/notation.md \
 	paper/references.md \
 	paper/appendix.md
 
