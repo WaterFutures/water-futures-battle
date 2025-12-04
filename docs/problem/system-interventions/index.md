@@ -79,8 +79,16 @@ YEAR: 2025
 ```
 
 #### Tariffs (water utility)
+his field is responsible for water pricing. Participants have two options: increase the water price according to inflation or define their custom policies.
+```YAML
+TARIFF:
+  POLICY: INFLATION_ADJUSTED       # Options: INFLATION_ADJUSTED or CUSTOM
+  POLICY_SETTINGS:                 # This field is mandatory only if POLICY is set to CUSTOM
+    FIXED_COMPONENT: 0.03          # Price cost increase for the FIXED TARIFF.
+    VARIABLE_COMPONENT: 0.02       # Price cost increase for the VARIABLE TARIFF.
+    SELLING_PRICE: 0.05            # The price of selling water to other provinces.    
+```
 
-ADD.
 
 ### Interventions
 
@@ -159,5 +167,12 @@ YEAR: 2025
 ```
 
 #### Install solar (water utility)
+The final intervention available is the installation of solar panels. Solar panels are installed at selected sources and serve solely to reduce the electricity costs of pumping stations. They can only decrease electricity consumption and cannot be used as a profit-generating investment. The solar panels have a lifespan of 20 years. This command can be utilized multiple times at different timestamps.
 
-ADD.
+```YAML
+INSTALL_SOLAR:
+  - SOURCE_ID: SG0158              # The source where solar panels are installed.
+    CAPACITY: 20                   # Capacity in KW (must be an integer).
+  - SOURCE_ID: SG0159              # Multiple sources can be registered like this.
+    CAPACITY: 20
+```
