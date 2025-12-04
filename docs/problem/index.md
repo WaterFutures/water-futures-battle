@@ -9,40 +9,32 @@ website_page_authors:
 
 # Problem Description
 
-The Battle of the Water Futures takes place in a not so ficticious world, with a blend of real data and assumptions.
-The BWF is concerned with the optimal planning and operation of multiple regional water distribution systems in a national landscape.
-It is based on The Netherlands where KWR is located and instead of the current water ulitities division, one independent water utility is assumed for every province. 
-Each water utility will need to prepare a masterplan for at least the **next 25 years** and run the operations of their systems.
-Competitors will also make some decision regarding national and regional policies, like budget allocation and price increase.
-Various information about the current status of the system (network model, prices, demands, population, etc) are made available, consult DATA AVAILABLE page.
-Together wit hthe current status, future projections of the relevant drivers (e.g., population, electtricity shares) can be used to formulate the plan. 
-The masterplan consist of a series of interventions, policy decisions and operations that can be applied over the years of the planning horizon, this effectively requires staged design and applied phased interventions.
+The Battle of the Water Futures (BWF) problem focuses on a hypothetical national drinking water grid of the Netherlands.
+The system structure (demand nodes, sources, and links), available interventions (e.g., pipes, treatment plants), and exogenous drivers (e.g., population, climate) are based on publicly available data about the Dutch context, supplemented by assumptions or insights from other regions as needed.
 
-Once the masterplan is completed, the utilities will start following it and operate and mantain the system accordingly to the specifications.
-The world will evolve, uncertainties will be realized (shown) and, hopefully, they will be able to fullfill their primary objective: satisfying the consumers water demand with adequate level of service.
+The main objective of the BWF is to keep the system operational until the end of the century, thereby preventing bankruptcy while fulfilling the required service requirements in each water utility.
+Secondary objectives include reducing emissions toward climate neutrality and ensuring fairness across regions and generations.
+To achieve these goals, the country's water utilities come together to develop a national masterplan, which they agree to update every 25 years.
 
-During the time when the masterplan is being executed, several key performance indicator are extracted, from the main finance health and reliability (level of service), to secondary objectives like GHG emissions and fairness.
-The water utilities will also have access to data about their networks, such as pressures, demands, power consumptions etc
+The masterplan specifies the interventions to be applied each year, both at the national level (e.g., connecting independent water utilities) and at the individual utility level (e.g., opening new sources).
+The masterplan does not need to include the replacement of ageing components (pipes and pumps), as these are automatically replaced when they reach their end of life.
+However, to manage this uncertainty, utilities can either schedule replacements in advance or allow components to age naturally and account for replacement costs in the budget.
+The masterplan also defines the national and regional policies and whether they are revised during the planning period (note: while interventions must be specified annually, policies can be set initially and remain as they are until amended in the plan).
 
-After **25 years**, the utilities will have a chance to update their masterplan, adapting it based on the new acquired informaiton (now history), and the cycle will repeat (plan, execute, observe).
+To prepare the masterplan, information on the current system status is made available, including network models, prices, demands, population, and other relevant parameters.
+Future projections of key drivers (e.g., population growth, climate trends) are also provided to complement system knowledge.
+However, these scenarios are based on current expert knowledge and should not be treated as precise forecasts as these variables are generally deep uncertainties of the system.
 
-Both interventions and input parameters can be assumed to be deep uncertaintites, meaning that only approximate definition of their future evolution are provided and that no probability (or wrong ones) are associated with the realisation of each scenario. Everything should be regarded only as an indication, to the best of the current knowledge, made by some experts.
-Take these as an example:
-- the time to construct a desalination plant: it can be defined between 5 and 10 years. Once construction starts its actual implementation time can be anything between those bounds
-- population evolution: projections of population in the country wille be provided with a mean value and upper and lower bounds with various uncertainty level. However, how this parameter will evolve no one can know
-Behind the scenes we blend experts opinions with a dynamic model with tunable parameters to to generate the synthetic time serieses that will be the input of this system.
+Examples of deep uncertainties include:
 
-Planning horizon: free, but at least 25 years 
-Interventions resolution (masterplan intervnetions timestep): year/quarter
-Stage horizon/masterplan update period: 25 years
-Hydraulic simulation timestep: 1 hour
-Every other parameter will have its own resolution as defined in the input files.
-Simulation approach: every day for the whole stage
-> if too computationally demanding (>20 minute per solution), we reduce the number of days mantaining the same timestep, i.e., 1 week representative of each month or 1 week representative of each quarter/season. 
+- Desalination plant construction time: Planners are confident it can be built in 5 years, but acknowledge that delays could extend completion to 10 years.
+- Population evolution: Population is expected to follow the mean values or remain within the upper and lower bounds described by the national statistics agency. However, major external events, such as war or mass migration driven by climate catastrophes, could push evolution beyond these ranges.
 
-Definitions
-Deep uncertainties
-Staged Design
-Robust planning 
-Flexible planning 
-Adpative planning
+Behind the scenes, expert opinions are combined with dynamic models to generate the synthetic time series that drive system evolution.
+At each timestep, EPANET hydraulic simulations verify the network's physical capability to transfer water and meet demands under the proposed interventions and operating conditions.
+
+Once the masterplan is defined, utilities begin following it, operating and maintaining their systems according to its specifications.
+Around them, the world evolves and uncertainties unfold.
+After 25 years, utilities reconvene to update their plan.
+All system information is updated, and the performance over the past 25 years along with observed variables can be used to revise or completely redraw the masterplan.
+This cycle—plan, execute, observe, adapt—repeats for three rounds, testing the utilities' ability to manage both short-term operations and long-term strategic planning under deep uncertainty.
