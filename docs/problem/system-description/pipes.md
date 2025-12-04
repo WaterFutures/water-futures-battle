@@ -38,6 +38,7 @@ The complete lists of intra-province and inter-province connections are included
 | Type | Static | Connection |
 | Distance | Static | Connection | m
 | Pipe option | Decision | Connection |
+| Pipe installation date | Decision | Connection |
 | (Minor loss coefficient)  | set to 0 | 
 
 : Connections' properties review. {#tbl:cn-properties}
@@ -50,6 +51,7 @@ The complete lists of intra-province and inter-province connections are included
 | Darcy friction factor - new pipe | Static | Pipe option | 
 | Darcy friction factor - decay rate | Static [Uncertain] | Pipe option | $years^-1$
 | Darcy friction factor - existing pipe | Dynamic endogenous | Pipe option | 
+| Lifetime | Static [Uncertain] | Pipe option | years
 | Cost (new pipe) | Dynamic endogenous | Pipe option | €/m
 | Equivalent emissions (new pipe) | Dynamic exogenous | Pipe option | tCO2eq/m 
 

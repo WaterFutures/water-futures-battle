@@ -43,7 +43,7 @@ Participants do not need to communicate this decision, as replacements will be a
 | Identifier | Static | Pump option |
 | Pump curve | Static | Pump option |
 | Efficiency curve | Static | Pump option |
-| Expected lifetime | Static [Uncertain] | Pump option | years
+| Lifetime | Static [Uncertain] | Pump option | years
 
 : Pumps' properties review. {#tbl:pu-properties}
 
