@@ -16,7 +16,7 @@ Pumping stations are the infrastructure connecting water sources to municipaliti
 Each pumping station contains one or more identical pumps operating in parallel.
 
 Whenever a new source is opened, participants must define which pump option (selected exclusively from a pre-defined list of available pumps) and how many units are installed at that source's pumping station.
-Similarly, participants can decide to replace pumps at existing locations.
+Similarly, participants can decide to replace pumps at existing locations or add new ones of the same type as installed.
 
 While a water source's daily outflow is constrained by its nominal capacity, the pumping station's configuration limits the source's peak outflow rate ($m^3/hour$).
 

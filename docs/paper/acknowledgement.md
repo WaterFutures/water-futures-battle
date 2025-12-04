@@ -12,5 +12,7 @@ Dennis, Lydia and Christos would like to thank their academic supervisors Andrea
 We would like to thank David Gold for his insights on decision making under deep uncertainty and his help in reviewing the battle.
 
 D. Zanutto, C. Michalopoulos, L. Tsiami, A. Artelt, J. Brandt, D. Eliades, S. Vrachimis, P. Samartzis, B. Hammer, P. Koundouri, M. Polycarpou, and D. Savić have received funding from the European Research Council (ERC) under the ERC Synergy Grant Water-Futures (Grant agreement No. 951424).
+
 A. Artelt is also supported by the Ministry of Culture and Science NRW (Germany) as part of the Lamarr Fellow Network.
+
 This publication reflects the views of the authors only.

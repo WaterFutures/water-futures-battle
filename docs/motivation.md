@@ -28,7 +28,7 @@ This part of the system is extremely critical as failures here can propagate and
 Beyond system reliability and deep uncertainties, the complex governance requirements, such as the coordination between national, regional, and local administrations, present a major obstacle to integrated policy-making and long-term planning of these systems.
 
 Over the past decade, the field has steadily refined and built upon several approaches that address WDS planning under uncertainties.
-To begin, the introduction of staged design, where interventions are modelled in phases rather then in a single batch representing the target network, provided a tool to represent masterplans with more realism [e.g.,, @Creaco_Franchini_Walski_2014].
+To begin, the introduction of staged design, where interventions are modelled in phases rather then in a single batch representing the target network, provided a tool to represent masterplans with more realism [e.g., @Creaco_Franchini_Walski_2014].
 Next, this modelling framework was extended to include uncertainty, either through a robust approach that accounts for it [e.g., @Creaco_Franchini_Walski_2015], or through a flexible approach that develops a single plan with multiple pathways.
 In its simplest form, this takes the shape of a decision tree, where only one branch is implemented based on how uncertainties unfold [e.g., @Basupi_Kapelan_2015].
 
@@ -55,6 +55,7 @@ Competitors must embrace uncertainty and decide for themselves what to model and
 
 The decision to place participants in a situation of deep uncertainty is deliberate.
 The BWF will unfold over three competition stages, each spanning 25 years, to realistically emulate the long-term challenges faced by planners. 
-While some parameters are uncertain and the evolution of these uncertainty bounds in the future will not be disclosed (e.g., the annual cost of operating a production facility, which varies between minimum and maximum values), past observations will be made available at the end of each competition stage, enabling participants to implement adaptive strategies and learn from accumulated evidence.
+This means that some parameters are uncertain and their uncertainty bounds evolution will be provided only through approximate expert-based scenarios (e.g., population projections vary between minimum and maximum values, though actual outcomes may fall outside these bounds).
+At the end of each competition stage, past observations will be made available, enabling participants to implement adaptive strategies and learn from accumulated evidence.
 Similarly, the competition ranking process has been deliberately left undisclosed; only the system requirements, namely, the metrics under which the system is evaluated, are outlined in this document.
 This approach is more akin to realistic situations and compels participants to identify their own compromise solutions within this many-objective context.

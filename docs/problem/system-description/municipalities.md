@@ -77,11 +77,11 @@ These two variables are extracted from an EPANET simulation of the network run i
 
 #### Water Demand Model {#sec:water-dem}
 
-The methodology developed to generate water consumption time series builds on historical data from the Dutch Drinking Water Statistics[@Vewin_2025], which provide nationwide trends in total drinking water production, sectoral water use, and non-revenue water over the period 2000–2024.
+The methodology developed to generate water consumption time series builds on historical data from the Dutch association of water companies [@Vewin_2025], which provide nationwide trends in total drinking water production, sectoral water use, and non-revenue water over the period 2000–2024.
 Specifically, water-consumption time series generation is structured into three phases.
 
-Phase I. The first phase estimates the annual water volume supplied to each municipality using information on households, and businesses, complemented by projected data where required.
-These annual volumes are calibrated to match national totals reported in official statistics [@CBS_2025] and then randomized around the calibrated value to introduce variability among municipalities.
+Phase I. The first phase estimates the annual water volume supplied to each municipality using information on households and businesses [@CBS_2025], complemented by projected data where required.
+These annual volumes are calibrated to match national totals reported in official statistics [@Vewin_2025] and then randomized around the calibrated value to introduce variability among municipalities.
 
 Phase II. In the second phase, representative hourly consumption profiles are assigned to each municipality using a library of year-long, normalized profiles derived from district-metered areas and pre-processed to remove leakage effects.
 In greater detail, for each municipality, two residential profiles are selected from the library according to municipality population class, while a single non-residential profile is drawn from a dedicated set.
@@ -115,7 +115,7 @@ Based on this average age, the municipality gets assigned to one of five possibl
 | > 60         | E     | [55, inf)                                      |
 
 Each class is associated with a distribution of NRW demands, from which we sample to generate the volumetric NRW demand.
-Notably, the NRW demand is different for each class -- i.e., older systems suffer from more leaks and therefore have a higher NRW demand.
+Notably, the NRW demand is different for each class, i.e., older systems suffer from more leaks and therefore have a higher NRW demand.
 The distribution of NRW demands per class and km of pipes is illustrated in the following figure.
 
 ![Non-revenue water demand per class](../../assets/img/leak_demand.png)
@@ -124,7 +124,7 @@ The total number of km of pipes in a given municipality is linked to its populat
 Here, we use a linear relationship between the population size and the km of pipes, also illustrated in the following Figure:
 
 $$
-km\_pipes = 57.7 * population\_in\_10k
+L^\text{IDN}_{m,y} = 57.7*10^{-4} * \text{inhabitants}_{m,y} 
 $$
 
 ![Population size vs. km of pipes](../../assets/img/pop_to_km.png)

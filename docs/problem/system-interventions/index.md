@@ -17,85 +17,147 @@ Here, we consolidate this information to give participants a complete overview o
 
 ### Policies
 
+ADD: policies set in a given year remain in place until amended.
+
 #### Budget allocation (national)
-Participants can decide the strategy for the funding allocation across all Water Utilities. Budget distribution can follow certain strategies.
 
-  - *POPULATION_BASED*: Allocating the funds according to the population  of each province.
+Participants must decide the strategy to allocate the national budget across the water utilities.
+The policy can be a predefined one or follow a custom allocation of the funds:
 
-  - *INVERSE_POPULATION_BASED*: Allocating the funds to the areas with low  population.
+  - *by_population*: Allocate the funds according to each province population.
 
-  - *INCOME BASED*: Allocating the funds to areas with higher economic activity.
+  - *by_inverse_population*: Allocate the funds to provinces with less population (less revenue).
+
+  - *by_income*: Allocate the funds according to each province economic activity.
+
+  - *by_inverse_income*: Allocate the funds to provinces with less economic activity (less revenue).
+
+  - *custom*: Explicitly allocated the budget based on some other pre-defined rule by the participants. Note that the shares must sum to 1.
 
   ```YAML
-  NATIONAL_POLICY:                               
-        BUDGET_ALLOCATION: POPULATION_BASED <OR> INVERSE_POPULATION BASED <OR> INCOME BASED     #This is the national budget allocation policy. If EQUAL is selected the budget will be equally distributed among the provinces. If POPULATION_BASED is selected the budget will be distributed based on the population of each province.
+  YEAR: 2025
+    NATIONAL_POLICIES:                               
+      BUDGET_ALLOCATION: BY_POPULATION <OR> BY_INCOME <OR> ...
   ```
-
+  ```YAML
+  YEAR: 2025
+    NATIONAL_POLICIES:                               
+      BUDGET_ALLOCATION: CUSTOM
+      POLICY_ARGS:
+        WU01: 0.12
+        WU02: 0.25 # and so on... 
+  ```
 
 #### Non-Revenue Water Interventions (water utility)
 
-Participants can decide how much (as a percentage) of each water utility's yearly budget should be spent on improving pipe infrastructure to reduce non-revenue water. Improving the pipe infrastructure means decreasing its average age, which is linked to the different leak classes and implies the amount of non-revenue water.
-There exist two policies that distribute a utility's budget across its municipalities:
+Participants must decide each water utility's yearly budget used to reduce non-revenue water (NRW).
+This budget is used to improve the municipalities innner distribution network (IDN).
+More precisely, this budget descreases the municipalities IDN's average age, which in turn improves the NRW class of the municipality, leading to a reduction of the NRW component.
+The policy can be a predefined one or follow a custom allocation of the funds:
 
-  - *by_leak_class* Uses the budget to improve the leak class (by one) of each municipality in a greedy way (worst cases first) until no budget is left.
-  - *by_population* Distributes the budget proportionally to the municipalities' population size.
+  - *by_leak_class*: Allocated the budget to improve by one leak class each municipality in a greedy way (worst cases first) until no budget is left in that year.
+  - *by_population*: Allocate the budget according to each municipality population.
 
 ```YAML
-NRW_ACTION:                 #Actions for the NRW of each municipality.
-  BUDGET: 30000             #The allocated budget.
-  POLICY: BY_POPULATION
+YEAR: 2025
+  WATER_UTILITY: WU01
+    POLICIES:
+      NRW_REDUCTION:
+        BUDGET: 30000
+        POLICY: BY_LEAK_CLASS <OR> BY_POPULATION 
+```
+```YAML
+YEAR: 2025
+  WATER_UTILITY: WU01
+    POLICIES:
+      NRW_REDUCTION::
+        BUDGET: 30000
+        POLICY: CUSTOM
+        POLICY_ARGS:
+          GM0001: 0.02
+          GM0002: 0.02 # and so on...
 ```
 
 #### Tariffs (water utility)
 
+ADD.
+
 ### Interventions
 
-#### Open source (water utility)
+ADD: interventions are specified for each year. All interventions are takend and if the utility contracts debt a bond will be issued automatically to cover the unbudgetted expenses.
+
+#### Open a new source (water utility)
+
 Participants can open new water sources to meet potential increases in demand. These sources must be chosen from a predefined list of available locations and capacities.
 
 ```YAML
-OPEN_SOURCE:                                      
-  -SOURCE_ID: SG0158        #Source name.
-    SOURCE_CAPACITY: 100    #Capacity of the source.
+YEAR: 2025
+  WATER_UTILITY: WU01
+    INTERVENTIONS:
+      OPEN_SOURCE: # Provide source identifier and capacity
+        - SOURCE_ID: SG0158
+          SOURCE_CAPACITY: 100
 
-  -SOURCE_ID: SG0159        #Multiple sources can be added like this.
-    SOURCE_CAPACITY: 50
+          # Multiple sources can be added like this
+        - SOURCE_ID: SG0159
+          SOURCE_CAPACITY: 50
 ```
 
-#### Close source (water utility)
-Similar for opening sources participants can close selected sources if the network has sufficient water.
+#### Close a source (water utility)
+
+Similarly, participants can close selected sources to improve the overall system efficiency.
+
 ```YAML
-CLOSE_SOURCE:
-  - SOURCE_ID: SG0173    #Source name.   
+YEAR: 2025
+  WATER_UTILITY: WU01
+    INTERVENTIONS:
+      CLOSE_SOURCE: # Provide only the source identifier
+        - SOURCE_ID: SG0173    
 
-  - SOURCE_ID: SG0174    #Multiple sources can be removed like this.
+          #Multiple sources can be removed like this.
+        - SOURCE_ID: SG0174
 ```
 
-#### Install pipe (national or water utility)
-To install new pipes in the system, participants must select connections from a predefined list of available options.
+#### Install a pipe (national or water utility)
+
+To install new pipes in the system or replace existing ones, participants must communicate the connection identifier and select the pipe option from a predefined list of available options.
 ```YAML
-INSTALL_PIPE:       
-  - CONNECTION_ID: CS0112  #Link ID name.
-    PIPE_ID: 1             #Selected pipe id                                
+YEAR: 2025
+  WATER_UTILITY: WU01
+    INTERVENTIONS:
+      INSTALL_PIPE: # Provide connection identifier and pipe option
+        - CONNECTION_ID: CS0112
+          PIPE_ID: PI001
 
-  - CONNECTION_ID: CS0113  #Multiple pipes can be add like this.             
-    PIPE_ID: 1 
+          #Multiple pipes can be add like this.             
+        - CONNECTION_ID: CS0113
+          PIPE_ID: PI008
 ```
 
-#### Install pumps (water utility)
-The participants called to change the pumps that provide water to the network. The pumping stations are location in every source. Every pumping station has to have the same type of pump and all pumps are connected in parallel. The participants must use **only** the pumps that are given. The Behaviour parameter indicates if the listing is about to replace all the pumps that already installed in the system or if a new pumps will be added in the existing configuration. 
+#### Install a pump(s) (water utility)
+
+Participants can also install or replace pumps in the pumping stations, calibrating the peak outflow of the sources.
+Every source is associated with one and only one pumping station, which has multiple identical pumps in parallel.
+The pump option must be selected from a predefined list of available options.
+If the competitors intend to install one or more pumps in an already open pumping station, they must specify wheter they replace or add to the current pool of pumps at that location.
+If the selected pump option differs from that already in place, the latter will automatically replace all of those installed as only one type of pump is allowed.
+
 ```YAML
-INSTALL_PUMPS:                                            
-  - SOURCE_ID: SG0158             #Source of reference.
-    PUMP_ID: 3                    #The ID of the pumps that we would like to install.
-    NUM_PUMPS: 3                  #The number of pumps that are installed.                                           
-    Behaviour: REPLACE <OR> NEW                                                     
+YEAR: 2025
+  WATER_UTILITY: WU01
+    INTERVENTIONS:
+      INSTALL_PUMPS: # Provide source identifier, pump option and quantity for a new pumping station                                       
+        - SOURCE_ID: SG0158
+          PUMP_ID: PU002
+          NUM_PUMPS: 3
 
-  - SOURCE_ID: SG0159             # Multiple pumping stations can be registered like this. Careful use a unique ID
-    PUMP_ID: 3                                                                     
-    NUM_PUMPS: 3                                                                  
-    Behaviour: REPLACE <OR> NEW 
+          # Provide source identifier, pump option, quantity, AND BEHAVIOUR for an already open station
+        - SOURCE_ID: SG0159
+          PUMP_ID: PU003                                                             
+          NUM_PUMPS: 3
+          BEHAVIOUR: REPLACE <OR> NEW 
 ```
-
 
 #### Install solar (water utility)
+
+ADD.
