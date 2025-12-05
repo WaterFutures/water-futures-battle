@@ -66,7 +66,7 @@ This section defines all variables and notation used in the KPI formulas.
 | cs | — | Base credit spread (e.g., 0.01 = 1 %) |
 | a | — | Spread sensitivity to demand (e.g., 0.02 = 2 %) |
 | d | — | Random investor demand factor $\in$ [0.8, 1.2] |
-| $\text{coupon_k}$ | — | Coupon rate of k-th issued bond = $r_f + cs + a(1 - d)$ |
+| $\text{coupon}_k$ | — | Coupon rate of k-th issued bond = $r_f + cs + a(1 - d)$ |
 | $P_{k}$ | € | Principal amount of k-th issued bond |
 | **Environmental Variables** |||
 | $E_t$ | kWh | Pumping energy at time *t* |
