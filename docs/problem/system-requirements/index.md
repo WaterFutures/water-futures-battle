@@ -19,7 +19,7 @@ However, participants may choose to treat these metrics as objectives in their o
 
 ### Total Annualized Cost
 
-- **Formula:** $TAC = \sum_j \frac{K_j}{L_j} + \frac{\sum_t OPEX}{T}_t + \frac{\sum_k (coupon_k \times P_{issue}^k)}{T}$
+- **Formula:** $TAC = \sum_j \frac{K_j}{L_j} + \frac{1}{T}\sum_t OPEX_t + \frac{1}{T}\sum_k (coupon_k \times P_{k})$
 - Calculated over all dimensions (utility, time). Ranked based on cumulative amount across time and utilities.
 - unit: €
 
@@ -67,7 +67,7 @@ This section defines all variables and notation used in the KPI formulas.
 | a | — | Spread sensitivity to demand (e.g., 0.02 = 2 %) |
 | d | — | Random investor demand factor $\in$ [0.8, 1.2] |
 | $\text{coupon_k}$ | — | Coupon rate of k-th issued bond = $r_f + cs + a(1 - d)$ |
-| $P_{\text{issue}}^k$ | € | Principal amount of k-th issued bond |
+| $P_{k}$ | € | Principal amount of k-th issued bond |
 | **Environmental Variables** |||
 | $E_t$ | kWh | Pumping energy at time *t* |
 | $EF$ | t CO2/kWh | Electricity emission factor |
