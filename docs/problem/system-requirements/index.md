@@ -19,7 +19,7 @@ However, participants may choose to treat these metrics as objectives in their o
 
 ### Total Annualized Cost
 
-- **Formula:** $TAC = \sum_j \frac{K_j}{L_j} + OPEX + (coupon \times P_{issue})$
+- **Formula:** $TAC = \sum_j \frac{K_j}{L_j} + \frac{\sum_t OPEX}{T}_t + \frac{\sum_k (coupon_k \times P_{issue}^k)}{T}$
 - Calculated over all dimensions (utility, time). Ranked based on cumulative amount across time and utilities.
 - unit: €
 
@@ -51,8 +51,9 @@ This section defines all variables and notation used in the KPI formulas.
 | i | — | Index of node or municipality |
 | t | — | Time index (e.g., hourly step) |
 | j | — | Index of intervention |
+| k | — | Index of issued bond |
 | N | - | Total number of nodes |
-| T | hours | Total number of simulation hours in the evaluation period |
+| T | years | Total number of simulation years in the evaluation period |
 | **Demand Variables** |||
 | $D_{i,t}$ | m³/h | Water demand at node *i* and time *t* |
 | $Q{i,t}$ | m³/h | Delivered volume at node *i* and time *t* |
@@ -60,13 +61,13 @@ This section defines all variables and notation used in the KPI formulas.
 | **Financial Variables** |||
 | $K_j$ | € | Capital expenditure (CAPEX) for intervention *j* |
 | $L_j$ | yr | Asset lifetime of intervention *j* |
-| OPEX | €/yr | Operating expenditures (energy, maintenance, etc) |
+| OPEX_t | € | Operating expenditures (energy, maintenance, etc) |
 | $r_f$ | — | Risk-free rate (e.g., 0.03 = 3 %) |
 | cs | — | Base credit spread (e.g., 0.01 = 1 %) |
 | a | — | Spread sensitivity to demand (e.g., 0.02 = 2 %) |
 | d | — | Random investor demand factor $\in$ [0.8, 1.2] |
-| $\text{coupon}$ | — | Coupon rate of issued bond = $r_f + cs + a(1 - d)$ |
-| $P_{\text{issue}}$ | € | Principal amount of issued bond |
+| $\text{coupon_k}$ | — | Coupon rate of k-th issued bond = $r_f + cs + a(1 - d)$ |
+| $P_{\text{issue}}^k$ | € | Principal amount of k-th issued bond |
 | **Environmental Variables** |||
 | $E_t$ | kWh | Pumping energy at time *t* |
 | $EF$ | t CO2/kWh | Electricity emission factor |
@@ -74,6 +75,6 @@ This section defines all variables and notation used in the KPI formulas.
 | **Socio-Economic Variables** |||
 | $p_v$ | €/m³ | Volumetric tariff |
 | $F_{\text{fixed}}$ | €/month | Fixed charge per household |
-| $V_{\text{lifeline}}$ | m³/month | Lifeline volume (e.g., 1.5 m³/person/month) |
+| $V_{\text{lifeline}}$ | m³/person/month | Lifeline volume (e.g., 1.5 m³/person/month) |
 | $I_{p20}$ | €/month | 20th-percentile monthly income across nodes |
 
