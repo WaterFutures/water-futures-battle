@@ -52,7 +52,7 @@ This section defines all variables and notation used in the KPI formulas.
 | t | — | Time index (e.g., hourly step) |
 | j | — | Index of intervention |
 | k | — | Index of issued bond |
-| N | - | Total number of nodes |
+| N | — | Total number of nodes |
 | T | years | Total number of simulation years in the evaluation period |
 | **Demand Variables** |||
 | $D_{i,t}$ | m³/h | Water demand at node *i* and time *t* |
