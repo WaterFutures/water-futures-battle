@@ -19,11 +19,11 @@ However, participants may choose to treat these metrics as objectives in their o
 
 ### Total Annualized Cost
 
-- **Formula:** $TAC = \sum_j \frac{K_j}{L_j} + OPEX + (coupon × P_{issue})$
+- **Formula:** $TAC = \sum_j \frac{K_j}{L_j} + OPEX + (coupon \times P_{issue})$
 - Calculated over all dimensions (utility, time). Ranked based on cumulative amount across time and utilities.
 - unit: €
 
-### Total Annualized GHG Emissions
+### Total GHG Emissions
 
 - **Formula:** $\text{GHG} = \sum_j K_j \times EF^{\text{emb}}_j + \sum_t E_t \times EF$
 - Calculated over all dimensions (utility, time). Ranked based on cumulative amount across time and utilities.
@@ -37,7 +37,7 @@ However, participants may choose to treat these metrics as objectives in their o
 
 ### Affordability Fairness
 
-- **Formula:** $AF = \frac{p_v × V_{lifeline} + F_{fixed}}{I_{p20}} × 100$
+- **Formula:** $AF = \frac{p_v × V_{lifeline} + F_{fixed}}{I_{p20}} \times 100$
 -  Calculated over all dimensions (municipality, household class, and time). Participants will be ranked based on **one specific combination** of these dimensions, which is kept uncertain and can change between stages.
 - unit: % (lower is better)
 
@@ -65,7 +65,7 @@ This section defines all variables and notation used in the KPI formulas.
 | cs | — | Base credit spread (e.g., 0.01 = 1 %) |
 | a | — | Spread sensitivity to demand (e.g., 0.02 = 2 %) |
 | d | — | Random investor demand factor $\in$ [0.8, 1.2] |
-| $\text{coupon}$ | — | Coupon rate of issued bond = $r_f + cs + a(1 – d)$ |
+| $\text{coupon}$ | — | Coupon rate of issued bond = $r_f + cs + a(1 - d)$ |
 | $P_{\text{issue}}$ | € | Principal amount of issued bond |
 | **Environmental Variables** |||
 | $E_t$ | kWh | Pumping energy at time *t* |
