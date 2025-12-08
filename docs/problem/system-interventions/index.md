@@ -9,17 +9,20 @@ website_page_authors:
   - D. Zanutto
 ---
 
-## System Interventions
+## System Levers
 
-This chapter provides a summary of all possible interventions available to participants in the BWF competition.
-All interventions have been introduced in previous sections.
-Here, we consolidate this information to give participants a complete overview of the decision space they can navigate when developing their strategies.
+Participants make two types of strategic decisions: policies and interventions.
+
+This chapter provides a summary of all the options available to participants in the BWF competition (they have all been introduced in previous sections already).
+
+Here, we consolidate this information to give participants a complete overview of the decision space they can navigate when developing their masterplan.
 
 ### Policies
 
-ADD: policies set in a given year remain in place until amended.
+Policies encompass regulatory and operational rules, such as pricing structures, budget allocations, and maintenance protocols.
+Once set, policies remain in effect until explicitly amended.
 
-#### Budget allocation (national)
+#### National Budget Allocation (National)
 
 Participants must decide the strategy to allocate the national budget across the water utilities.
 The policy can be a predefined one or follow a custom allocation of the funds:
@@ -32,31 +35,34 @@ The policy can be a predefined one or follow a custom allocation of the funds:
 
   - *by_inverse_income*: Allocate the funds to provinces with less economic activity (less revenue).
 
-  - *custom*: Explicitly allocated the budget based on some other pre-defined rule by the participants. Note that the shares must sum to 1.
+  - *custom*: Allocate the budget according to the specified share for each water utility. Shares must sum to 1.
 
   ```YAML
   YEAR: 2025
     NATIONAL_POLICIES:                               
-      BUDGET_ALLOCATION: BY_POPULATION <OR> BY_INCOME <OR> ...
+      BUDGET_ALLOCATION:
+        POLICY: BY_POPULATION <OR> BY_INCOME <OR> ...
   ```
   ```YAML
   YEAR: 2025
     NATIONAL_POLICIES:                               
-      BUDGET_ALLOCATION: CUSTOM
-      POLICY_ARGS:
-        WU01: 0.12
-        WU02: 0.25 # and so on... 
+      BUDGET_ALLOCATION:
+        POLICY: CUSTOM
+        POLICY_ARGS:
+          WU01: 0.12
+          WU02: 0.25 # and so on... 
   ```
 
-#### Non-Revenue Water Interventions (water utility)
+#### Non-Revenue Water Reduction Budget (Utility)
 
 Participants must decide each water utility's yearly budget used to reduce non-revenue water (NRW).
 This budget is used to improve the municipalities innner distribution network (IDN).
 More precisely, this budget descreases the municipalities IDN's average age, which in turn improves the NRW class of the municipality, leading to a reduction of the NRW component.
 The policy can be a predefined one or follow a custom allocation of the funds:
 
-  - *by_leak_class*: Allocated the budget to improve by one leak class each municipality in a greedy way (worst cases first) until no budget is left in that year.
+  - *by_leak_class*: Allocate the budget to improve by one leak class each municipality in a greedy way (worst cases first) until no budget is left in that year.
   - *by_population*: Allocate the budget according to each municipality population.
+  - *custom*: Allocate the budget according to the specified share for each municipality. Shares must sum to 1.
 
 ```YAML
 YEAR: 2025
@@ -70,7 +76,7 @@ YEAR: 2025
 YEAR: 2025
   WATER_UTILITY: WU01
     POLICIES:
-      NRW_REDUCTION::
+      NRW_REDUCTION:
         BUDGET: 30000
         POLICY: CUSTOM
         POLICY_ARGS:
@@ -78,25 +84,42 @@ YEAR: 2025
           GM0002: 0.02 # and so on...
 ```
 
-#### Tariffs (water utility)
-his field is responsible for water pricing. Participants have two options: increase the water price according to inflation or define their custom policies.
+#### Water Pricing (Utility)
+
+Participants must decide the water pricing increase strategy for each year.
+They have two options: increase all water price components according to inflation, or define a custom policy by specifying the percentage increase for each component (e.g., 2%).
+
 ```YAML
-TARIFF:
-  POLICY: INFLATION_ADJUSTED       # Options: INFLATION_ADJUSTED or CUSTOM
-  POLICY_SETTINGS:                 # This field is mandatory only if POLICY is set to CUSTOM
-    FIXED_COMPONENT: 0.03          # Price cost increase for the FIXED TARIFF.
-    VARIABLE_COMPONENT: 0.02       # Price cost increase for the VARIABLE TARIFF.
-    SELLING_PRICE: 0.05            # The price of selling water to other provinces.    
+YEAR: 2025
+  WATER_UTILITY: WU01
+    POLICIES:
+      PRICING:
+        POLICY: BY_INFLATION
 ```
 
+```YAML
+YEAR: 2025
+  WATER_UTILITY: WU01
+    POLICIES:
+      PRICING:
+        POLICY: CUSTOM
+        # Specify the percentage increase for each pricing component
+        POLICY_ARGS:
+          FIXED_COMPONENT: 0.03      # Annual increase for fixed costs (3%)
+          VARIABLE_COMPONENT: 0.02   # Annual increase for variable costs (2%)
+          SELLING_PRICE: 0.05        # Annual increase for water sales to other provinces (5%) 
+```
 
 ### Interventions
 
-ADD: interventions are specified for each year. All interventions are takend and if the utility contracts debt a bond will be issued automatically to cover the unbudgetted expenses.
+Interventions are physical modifications to the system, such as infrastructure upgrades or new installations.
+Interventions are specified annually and are always implemented.
+Note that if a utility contracts debt, a bond is issued automatically to cover the unbudgeted expenses.
 
-#### Open a new source (water utility)
+#### Opening New Sources (Utility)
 
-Participants can open new water sources to meet potential increases in demand. These sources must be chosen from a predefined list of available locations and capacities.
+Participants can open new water sources to meet potential increases in demand.
+Available sources are predefined by location, and participants must specify a capacity within the allowable bounds.
 
 ```YAML
 YEAR: 2025
@@ -111,7 +134,7 @@ YEAR: 2025
           SOURCE_CAPACITY: 50
 ```
 
-#### Close a source (water utility)
+#### Closing Sources (Utility)
 
 Similarly, participants can close selected sources to improve the overall system efficiency.
 
@@ -122,13 +145,15 @@ YEAR: 2025
       CLOSE_SOURCE: # Provide only the source identifier
         - SOURCE_ID: SG0173    
 
-          #Multiple sources can be removed like this.
+          # Multiple sources can be removed like this.
         - SOURCE_ID: SG0174
 ```
 
-#### Install a pipe (national or water utility)
+#### Installing Pipes (National or Utility)
 
-To install new pipes in the system or replace existing ones, participants must communicate the connection identifier and select the pipe option from a predefined list of available options.
+Participants can decide to install new pipes or replace existing ones in the system.
+Each installation requires specifying the connection identifier and selecting a pipe option from a predefined list.
+
 ```YAML
 YEAR: 2025
   WATER_UTILITY: WU01
@@ -137,18 +162,18 @@ YEAR: 2025
         - CONNECTION_ID: CS0112
           PIPE_ID: PI001
 
-          #Multiple pipes can be add like this.             
+          # Multiple pipes can be added like this.             
         - CONNECTION_ID: CS0113
           PIPE_ID: PI008
 ```
 
-#### Install a pump(s) (water utility)
+#### Installing Pumps (Utility)
 
-Participants can also install or replace pumps in the pumping stations, calibrating the peak outflow of the sources.
-Every source is associated with one and only one pumping station, which has multiple identical pumps in parallel.
-The pump option must be selected from a predefined list of available options.
-If the competitors intend to install one or more pumps in an already open pumping station, they must specify wheter they replace or add to the current pool of pumps at that location.
-If the selected pump option differs from that already in place, the latter will automatically replace all of those installed as only one type of pump is allowed.
+Participants can decide to install or replace pumps in pumping stations to calibrate the peak outflow of water sources.
+Each source is associated with one pumping station, which contains multiple identical pumps operating in parallel.
+Pump options must be selected from a predefined list.
+When installing pumps at an already-open pumping station, participants must specify whether to replace or add to the existing pumps.
+If the selected pump option differs from those already installed, all existing pumps will be automatically replaced, as only one pump type is allowed per station.
 
 ```YAML
 YEAR: 2025
@@ -166,13 +191,22 @@ YEAR: 2025
           BEHAVIOUR: REPLACE <OR> NEW 
 ```
 
-#### Install solar (water utility)
-The final intervention available is the installation of solar panels. Solar panels are installed at selected sources and serve solely to reduce the electricity costs of pumping stations. They can only decrease electricity consumption and cannot be used as a profit-generating investment. The solar panels have a lifespan of 20 years. This command can be utilized multiple times at different timestamps.
+#### Installing Solar (water utility)
+
+Participants can decide to install behind-the-meter solar panels at water sources to reduce electricity costs and emissions for pumping stations.
+The solar panels offset electricity consumption and emissions but cannot be used as a profit-generating investment.
+Panels can be installed multiple times at different points in time.
+*Note: Solar panels have a given lifespan (see @sec:energy-model); participants must decide whether to replace them upon expiration.*
 
 ```YAML
-INSTALL_SOLAR:
-  - SOURCE_ID: SG0158              # The source where solar panels are installed.
-    CAPACITY: 20                   # Capacity in KW (must be an integer).
-  - SOURCE_ID: SG0159              # Multiple sources can be registered like this.
-    CAPACITY: 20
+YEAR: 2025
+  WATER_UTILITY: WU01
+    INTERVENTIONS:
+      INSTALL_SOLAR: # Provide location and capacity
+        - SOURCE_ID: SG0158
+          CAPACITY: 20
+
+          # Multiple sources can be added like this
+        - SOURCE_ID: SG0159              
+          CAPACITY: 20
 ```
