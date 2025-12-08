@@ -1,0 +1,34 @@
+---
+title: "The Battle of the Water Futures"
+author:
+  - Dennis Zanutto*
+  - Christos Michalopoulos
+  - Lydia Tsiami
+  - André Artelt
+  - Jasmin Brandt
+  - Demetrios Eliades
+  - Stelios Vrachimis
+  - Stefano Alvisi
+  - Valentina Marsili
+  - Filippo Mazzoni
+  - Panagiotis Samartzis
+  - Barbara Hammer
+  - Phoebe Koundouri
+  - Marios Polycarpou
+  - Dragan Savić
+    
+date: November 2025
+keywords: [water, future, conflict, climate]
+geometry: margin=1in
+tblPrefix:
+  - "Table"
+  - "Tables"
+secPrefix:
+  - "Section"
+  - "Sections"
+figPrefix:
+  - "Figure"
+  - "Figures"
+bibliography: paper/references.bib
+cs: paper/apa.csl
+---

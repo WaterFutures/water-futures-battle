@@ -1,12 +1,17 @@
 ---
 layout: default
-title: "Participate 🎯"
+website_title: "Participate 🎯"
+prev_page_url: /motivation.html
+next_page_url: /problem/
+website_page_authors:
+  - D. Zanutto
 ---
 
 # How to participate
-## Rules, deadlines, and ranking procedure
 
-### Participation rules 🚷
+On this page you can find the [rules](#participation-rules-), [deadlines](#important-dates-️), [submission](#submitting-a-solution-) and [ranking](#ranking-) procedures.
+
+## Participation rules 🚷
 
 The competition is organized as an __invited session__ at the WDSA/CCWI 2026 conference.
 The process and timeline for the battle are __independent of the standard conference submission workflow__.
@@ -25,10 +30,10 @@ More information about the conference and the regular paper submission are avail
 > Subscribe for updates and let us know if you are interested in participating!
 
 **Stage 1**
-- ~~24th November 2025~~*Early December* - Competition begins: Instructions and first batch of data available
-- ~~19th December 2025~~*Early January* - ___Abstract submission deadline___
-- ~~9th January 2026~~*Late January* - _Abstract acceptance notifications_
-- ~~27th February 2026~~*Late February* - First stage solution submission deadline
+- **8th December 2025** - Competition begins: Instructions and first batch of data available
+- **14th January 2026** - ___Abstract submission deadline___
+- **26th January 2026** - _Abstract acceptance notifications_
+- **6th March 2026** - First stage solution submission deadline
 
 **Stage 2**
 - _Mid March 2026_ - Second batch of data available
@@ -42,9 +47,16 @@ More information about the conference and the regular paper submission are avail
 
 - __18th May 2026__ Conference starts! 🎉
 
+## Submitting a solution 📩
+
+We'll provide a solution template shortly.
+We understand that addressing the problem is challenging enough, so the template will be designed to make submissions easy.
+You'll be able to check the compliance of your solution through our open-source evaluator before submitting it.
+
 ## Ranking 📊
 
 The exact ranking criteria for determining the winner are still being finalized and will be announced after the competition begins, along with further details about the problem.
 
-For now, be aware that we will evaluate submissions using multiple metrics—such as cost, reliability, GHG emissions (as in previous competitions), and possibly new ones like fairness. The final ranking will reflect the social importance of these dimensions.
+For now, be aware that we will evaluate submissions using multiple metrics—such as cost, reliability, GHG emissions (as in previous competitions), and possibly new ones like fairness.
+The final ranking will reflect the social importance of these dimensions.
 Despite the multi-objective nature of the challenge, each team must submit a single solution.
