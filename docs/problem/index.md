@@ -28,7 +28,7 @@ However, these scenarios are based on current expert knowledge and should not be
 Examples of deep uncertainties include:
 
 - Desalination plant construction time: Planners are confident it can be built in 5 years, but acknowledge that delays could extend completion to 10 years.
-- Population evolution: Population is expected to follow the mean values or remain within the upper and lower bounds described by the national statistics agency. However, major external events, such as war or mass migration driven by climate catastrophes, could push evolution beyond these ranges.
+- Population evolution: Population is expected to follow the mean values or remain within the upper and lower bounds described by the national statistics agency. However, major external events, such as conflicts or mass migration driven by climate catastrophes, could push evolution beyond these ranges.
 
 Behind the scenes, expert opinions are combined with dynamic models to generate the synthetic time series that drive system evolution.
 At each timestep, EPANET hydraulic simulations verify the network's physical capability to transfer water and meet demands under the proposed interventions and operating conditions.

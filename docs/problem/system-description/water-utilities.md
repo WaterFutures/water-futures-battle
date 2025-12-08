@@ -15,7 +15,7 @@ Within the BWF, Water Utilities (WUs) act as the entities responsible for managi
 
 WUs must choose the policies to apply to their own system (e.g, setting the budget for non-revenue water reduction) and decide the interventions to take on their system (e.g., replacing a pipe).
 
-Multiple WUs can also join their efforts to pursue a common interventions, for example, the cost of placing a pipe connecting two water utilities will be shared between the two utilities.
+Multiple WUs can also join their efforts to pursue common interventions, for example, the cost of placing a pipe connecting two water utilities will be shared between the two utilities.
 If WU are connected with each other and there is an exchange of water, the receiving utility pays a volumetric fee to the supplying utility.
 More detailed information about the water tariff scheme are available in @sec:water-tariff.
 
