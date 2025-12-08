@@ -21,21 +21,21 @@ Specifically we listing the variables included in each file along their unit and
 
 - File: `jurisdictions/jurisdictions-static_properties.xlsx`
 
- Variables:
- - var 1 () []: file, sheet
-
   Sheet: `regions`
+
     Variables:
     - Region name (`name`) [ - ]
     - Region ID (`cbs_id`) [ - ]      #I DID NOT INCLUDE STATE
 
   Sheet: `provinces`
+
     Variables:
     - Province name (`name`) [ - ]
     - Province ID (`cbs-id`) [ - ]
     - Region (`region`) [ - ]
 
   Sheet: `municipalities`
+
     Variables:
     - Municipality name (`name`) [ - ]
     - Municipality ID (`cbs_id`) [ - ]
@@ -44,49 +44,64 @@ Specifically we listing the variables included in each file along their unit and
 - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   
   Sheet: `population`
+
   Variables:
+
   - Municipality ID  [ - ] 
-  - Population [ habitants ]
+  - Population [ inhabitants ]
   
   Sheet: `surface-land`
+
   Variables:
+  
   - Municipality ID  [ - ] 
-  - Land Area [ km<sup>2</sup> ]
+  - Land Area [ $km^2$ ]
 
   Sheet: `surface-water-inland`
+  
   Variables:
+  
   - Municipality ID  [ - ] 
-  - Water Area [ km<sup>2</sup> ]
+  - Water Area [ $km^2$ ]
 
   Sheet: `surface-water-open`
+  
   Variables:
+  
   - Municipality ID  [ - ] 
-  - Water Area [ km<sup>2</sup> ]
+  - Water Area [ $km^2$ ]
 
   Sheet: `n_houses`
+  
   Variables:
+  
   - Municipality ID  [ - ] 
   - Number Houses [ houses ]
 
   Sheet: `n_businesses`
+  
   Variables:
+  
   - Municipality ID  [ - ] 
   - Number businesses [ businesses ]
 
   Sheet: `dist_network-age-avg`
+  
   Variables:
+  
   - Municipality ID  [ - ] 
   - Network Age [ years ]
-
 
 ### Water Sources {.unnumbered .unlisted}
 
 - File: `sources\sources-static_properties.xlsx`
+  
   Sheet: `groundwater`
 
     Variables:
+  
     - Source ID (`source_id`) [ - ]
-    - Source elevation (`elevation`) [ meter ]
+    - Source elevation (`elevation`) [ m ]
     - Province (`province`) [ - ]
     - Closest municipality (`closest_municipality`)
     - Source nominal capacity (`capacity-nominal`) [ meters<sup>3</sup> ]
@@ -95,63 +110,80 @@ Specifically we listing the variables included in each file along their unit and
   Sheet: `surface_water`
 
     Variables:
+  
     - Source ID (`source_id`) [ - ]
-    - Source elevation (`elevation`) [ meter ]
+    - Source elevation (`elevation`) [ m ]
     - Province (`province`) [ - ]
     - Closest municipality (`closest_municipality`)
-    - Source nominal capacity (`capacity-nominal`) [ meter<sup>3</sup> ]
+    - Source nominal capacity (`capacity-nominal`) [ m<sup>3</sup> ]
 
   Sheet: `desalination`
 
     Variables:
+  
     - Source ID (`source_id`) [ - ]
-    - Source elevation (`elevation`) [ meter ]
+    - Source elevation (`elevation`) [ m ]
     - Province (`province`) [ - ]
     - Closest municipality (`closest_municipality`)
 
-- File: `sources\groundwater-dynamic_properties.xlsx,surface-dynamic_properties.xlsx,desalination-dynamic_properties.xlsx`
+- File: `sources\groundwater-dynamic_properties.xlsx`, `surface-dynamic_properties.xlsx`, `desalination-dynamic_properties.xlsx`
 
-  Sheet: `new_source-unit_cost
+  Sheet: `new_source-unit_cost`
+  
   Variables:
+  
   - Source Size [ - ]
-  - Cost [ euros / meter<sup>3</sup>]
+  - Cost [ $\text{€}/m^3$]
 
   Sheet: `opex-fixed`
+  
   Variables:
+  
   - Source Size [ - ]
-  - Cost [ euros / meter<sup>3</sup> ]
+  - Cost [ $\text{€}/m^3$ ]
 
   Sheet: `opex-volum-other`
+  
   Variables:
+  
   - Source Size [ - ]
-  - Cost [ euros / meter<sup>3</sup> ]
+  - Cost [ $\text{€}/m^3$ ]
 
   Sheet: `availability_factor`
+  
   Variables:
+  
   - Source  [ - ]
   - Availability [ - ]
 
-
-### Pumping Stations {.unnumbered .unlisted}
+### Pumping Stations {.unnumbered .unlisted}
 
   - File: `pumps\pump_options-static_properties.xlsx`
+
   Sheet: `options`
-    Variables:
+  
+  Variables:
+  
     - Pump ID (`option_id`) [ - ]
-    - Nominal Flowrate (`flow_rate-nominal`) [ meter<sup>3</sup> / hour ]
+    - Nominal Flowrate (`flow_rate-nominal`) [ $m^3/hour$ ]
     - Lifespan (`lifespan-min`) [ years ]
 
   Sheet: `PU01`, `PU02`, `PU03`, `PU04`
-    Variables:
-    - Flowrate (`flowrate`) [ meter<sup>3</sup> / hour ]
-    - Head (`head`) [ meter ]
+  
+  Variables:
+  
+    - Flowrate (`flowrate`) [ $m^3/hour$ ]
+    - Head (`head`) [ m ]
     - Efficiency (`efficiency`) [ - ]
   
 ### Connections {.unnumbered .unlisted}
 
   - File: `connections\connections-static_properties.xlsx`
+  
   Sheet: `provincial`
-    Variables:
+
+  Variables:
+
     - Connection ID (`connection_id`) [ - ]  
     - Starting Node (`from_node`) [ - ]
     - Ending Node (`to_node`) [ - ]
@@ -159,7 +191,9 @@ Specifically we listing the variables included in each file along their unit and
     - Pipe Type (`pipes-options_ids`) [ - ]
 
   Sheet: `sources`
-    Variables:
+
+  Variables:
+
     - Connection ID (`connection_id`) [ - ]  
     - Starting Node (`from_node`) [ - ]
     - Ending Node (`to_node`) [ - ]
@@ -167,13 +201,18 @@ Specifically we listing the variables included in each file along their unit and
     - Pipe Type (`pipes-options_ids`) [ - ]
 
   Sheet: `cross-provincial`
-    Variables:
+
+  Variables:
+
     - Connection ID (`connection_id`) [ - ]  
     - Starting Node (`from_node`) [ - ]
     - Ending Node (`to_node`) [ - ]
     - Distance (`distance`) [ meters ]
 
 ## System External Drivers {.unnumbered .unlisted}
+
+These data has not been released in a formatted way yet.
+Have a look at the `raw-data` folder.
 
 ### Climate {.unnumbered .unlisted}
 
@@ -186,5 +225,7 @@ Specifically we listing the variables included in each file along their unit and
 - File: `configuration.yaml`
 
   Variables:
+
   - Start year (`start_year`) [ - ]
   - End year (`end_year`) [ - ]
+  - National budget (`national_budget`) [€]
