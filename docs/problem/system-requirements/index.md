@@ -17,64 +17,85 @@ Importantly, these are evaluation metrics rather than explicit objectives: the c
 The ranking may use weighted aggregation (with weights potentially changing over time to reflect shifting social priorities) or custom multi-criteria evaluation methods (e.g., selecting only solutions above a reliability threshold before ranking by other criteria). 
 However, participants may choose to treat these metrics as objectives in their own optimization processes when developing their masterplans.
 
-### Total Annualized Cost
+### Maintain Financial Viability
 
-- **Formula:** $TAC = \sum_j \frac{K_j}{L_j} + \frac{1}{T}\sum_t OPEX_t + \frac{25}{T} \sum_k (coupon_k \times P_{k})$
-- Calculated over all dimensions (utility, time). Ranked based on cumulative amount across time and utilities. Properly discounted.
-- unit: €
+Participants must seek to maintain all water utilities in a financially viable state throughout the planning horizon.
+While utilities should not pursue profit, they must avoid insolvency.
 
-### Total GHG Emissions
+Each year, the financial balance $F_w$ of every water utility $w$ is updated based on the following equation:
 
-- **Formula:** $\text{GHG} = \sum_j K_j \times EF^{\text{emb}}_j + \sum_t E_t \times EF$
-- Calculated over all dimensions (utility, time). Ranked based on cumulative amount across time and utilities.
-- unit: tCO2eq
+$$
+F_{w}(y+1) = F_{w}(y) + B(y) \cdot \alpha_w(y) - \text{CAPEX}_w(y) - \text{OPEX}_w(y) - \text{INT}_w(y) + REV_{w}(y)
+$$
 
-### Service Reliability
+where $B(y)$ is the national investment budget in year $y$, $\alpha_w(y)$ is the share of budget allocated for the water utility $w$, $\text{CAPEX}_w$ all the utility's interventions capital costs, $\text{OPEX}_w$ all the utility's operational costs, and $REV_w$ the water utility's revenue from the billable water demand.
 
-- **Formula:** $R^{\text{service}} = 1 - \dfrac{\sum_{i,t} U_{i,t}}{\sum_{i,t} D_{i,t}}$
--  Calculated over all dimensions (municipality, household class, and time). Participants will be ranked based on **one specific combination** of these dimensions, which is kept uncertain and can change between stages.
-- unit: dimensionless between 0 and 1 (higher is better)
+Note that while surpluses are carried forward, deficits are financed through bond issuance as described in @sec:bonds.
 
-### Affordability Fairness
+Evaluation will focus only on the remaining debt at the end of the planning period.
 
-- **Formula:** $AF = \frac{p_v × V_{lifeline} + F_{fixed}}{I_{p20}} \times 100$
--  Calculated over all dimensions (municipality, household class, and time). Participants will be ranked based on **one specific combination** of these dimensions, which is kept uncertain and can change between stages.
-- unit: % (lower is better)
+### Minimize GHG Emissions
 
----
+Participants must keep the masterplan Greenhouse Gas (GHG) emissions to the lowest feasible level.
 
-This section defines all variables and notation used in the KPI formulas.
+The GHG emissions for water utility $w$ in year $y$ are:
 
-| Symbol | Units | Description |
-|:-------|:-------|:------------|
-| **General / Indices** |||
-| i | — | Index of node or municipality |
-| t | — | Time index (e.g., hourly step) |
-| j | — | Index of intervention |
-| k | — | Index of issued bond |
-| N | — | Total number of nodes |
-| T | years | Total number of simulation years in the evaluation period |
-| **Demand Variables** |||
-| $D_{i,t}$ | m³/h | Water demand at node *i* and time *t* |
-| $Q{i,t}$ | m³/h | Delivered volume at node *i* and time *t* |
-| $U_{i,t} = \max(D_{i,t} - Q_{i,t}, 0)$ | m³/h | Undelivered demand at node $i$, time $t$ | 
-| **Financial Variables** |||
-| $K_j$ | € | Capital expenditure (CAPEX) for intervention *j* |
-| $L_j$ | yr | Asset lifetime of intervention *j* |
-| $\text{OPEX}_t$ | $\text{€}/year$ | Operating expenditures (energy, maintenance, etc) |
-| $r_f$ | — | Risk-free rate (e.g., 0.03 = 3 %) |
-| cs | — | Base credit spread (e.g., 0.01 = 1 %) |
-| a | — | Spread sensitivity to demand (e.g., 0.02 = 2 %) |
-| d | — | Random investor demand factor $\in$ [0.8, 1.2] |
-| $\text{coupon}_k$ | % | Coupon rate of k-th issued bond = $r_f + cs + a(1 - d)$ |
-| $P_{k}$ | € | Principal amount of k-th issued bond |
-| **Environmental Variables** |||
-| $E_t$ | kWh | Pumping energy at time *t* |
-| $EF$ | t CO2/kWh | Electricity emission factor |
-| $EF^{emb}_j$ | t CO2 / € or unit | Embedded emission factor for intervention *j* |
-| **Socio-Economic Variables** |||
-| $p_v$ | $\text{€}/m^3$ | Volumetric tariff |
-| $F_{\text{fixed}}$ | $\text{€}/month$ | Fixed charge per household |
-| $V_{\text{lifeline}}$ | $m^3/person/month$ | Lifeline volume (e.g., 1.5 m³/person/month) |
-| $I_{p20}$ | $\text{€}/month$ | 20th-percentile monthly income across nodes |
+$$
+\mathrm{GHG}_w(y) = \mathrm{GHG}_w^{\text{emb}}(y)
++ \mathrm{GHG}_w^{\text{op}}(y)
+$$
 
+where $\mathrm{GHG}_w^{\text{emb}}(y)$ the embedded (construction) emissions, and $\mathrm{GHG}_w^{\text{op}}(y)$ the operational emissions from electricity use.
+
+Only new pipes have embedded GHG emissions.
+The embedded emissions in year $y$ are:
+
+$$
+\mathrm{GHG}_w^{\text{emb}}(y)
+=  \sum_{c \in \mathcal{C}_w}
+\mathbf{1}_{c\text{ activated in }y} \cdot
+EF_{p_c}(y) \cdot L_c
+$$
+
+
+where $\mathcal{C}_w$ is the set of connections of water utility $w$^[as described in @sec:connections, we distinguish between connections and pipes], $\mathbf{1}_{c\text{ activated in }y}$ is 1 if connection $c$ installs a new pipe in year $y$, 0 otherwise, $EF_{p_c}(y)$ is the unit emission factor of the connection's selected pipe option $p_c$, and $L_c$ is the connection lenght.
+
+The unit emission factor $EF_{p}$ for pipe option $p$ depends on the pipe option diameter $Diam_p$ and material $Mat_p$, i.e., $EF_{p}(y) = EF(Diam_p, Mat_p, y)$.
+
+The operational emissions are calculated based on the total electricity purchased from the grid, covering both water treatment (sources) and transport (pumping).
+
+$$
+\mathrm{GHG}_w^{\text{op}}(y) = \sum_{t \in \mathcal{Y}} \bigl[ \sum_{s \in \mathcal{S_w}} E_s(t) \cdot EF_s(t) + \sum_{p \in \mathcal{P}_w} E_p(t) \cdot EF_p(t) \bigr]
+$$
+where for each timestep $t$ of a year $y$^[$y$ represent the year, while $\mathcal{Y}$ is the collection of timesteps], $E_s(t)$ and $EF_s(t)$ are the energy consumption and the emission factor of source $s$, while $E_p(t)$ and $EF_p(t)$ represent the same quantities for pump $p$.
+
+Pumps energy consumption is retrieved via the EPANET simulations, while the water sources energy consumption is calculated as $E_s(t) = c_s^E(t) \cdot V_s(t)$, i.e., the combination of the source unit energy consumption $c_s^E(t)$ and the volume of water produced by the source $V_s(t)$.
+
+The emission factors of both entities (pumping stations $EF_p(t)$ and sources $EF_s(t)$) are dynamic and depend on the size and time of production of the behind-the-meter solar panels installation at that location (if no solar is installed, this variable reduces to the constant electricity grid emission factor in year $y$, i.e., $EF^\text{el}(y)$ ).
+
+### Maximize Service Reliability
+
+Participants must ensure high service reliability by minimizing unmet water demand.
+
+Service reliability for municipality $m$ in year $y$ is:
+
+$Rel_m(y) = 1 - \dfrac{U_m(y)}{D_m(y)}$
+
+where $U_m(y)$ is the underlivered demand and ${D_m(y)}$ is the billable water demand.
+
+Evaluation will focus on maintaining adequate service levels across all municipalities of each water utility throughout the entire planning horizon.
+
+### Promote Affordability and Equity
+
+Participants must ensure water remains affordable, particularly for lower-income households, while maintaining equitable pricing across municipalities.
+
+The affordability fairness metric represents the fraction of income that lower-income households spend on essential water consumption.
+Affordability fairness (lower is better) for water utility $w$ in year $y$ is:
+
+$$
+AF_w(y) = \frac{P_w^\text{fixed}(y) + P_w^\text{variable}(y) \cdot D^\text{life}}{DI_w^{p20}(y)}
+$$
+
+where $P_w^\text{fixed}(y)$ and $P_w^\text{variable}(y)$ are the fixed and variable components of water price, $D^\text{life}$ is lifeline volume (minimum water required per person), and $DI_w^{p20}(y)$ is the 20th percentile of disposable income.
+
+Evaluation will focus on minimizing affordability while maintaining reasonable equity across utilities.

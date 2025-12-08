@@ -191,7 +191,7 @@ YEAR: 2025
           BEHAVIOUR: REPLACE <OR> NEW 
 ```
 
-#### Installing Solar (water utility)
+#### Installing Solar (Utility)
 
 Participants can decide to install behind-the-meter solar panels at water sources to reduce electricity costs and emissions for pumping stations.
 The solar panels offset electricity consumption and emissions but cannot be used as a profit-generating investment.

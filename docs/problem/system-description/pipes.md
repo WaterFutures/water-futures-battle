@@ -10,7 +10,7 @@ website_page_authors:
   - D. Zanutto
 ---
 
-### Connections (Pipes)
+### Connections (Pipes) {#sec:connections}
 
 Within the BWF, there is a distinction between connections and pipes.
 Connections are the entities that define the possible links between the network's nodes, while pipes are the actual physical elements installed to transport water.

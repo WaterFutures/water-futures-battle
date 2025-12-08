@@ -12,7 +12,8 @@ website_page_authors:
 
 ###  Economy
 
-#### Bond Issuance
+#### Bond Issuance {#sec:bonds}
+
 The bond issuance governs how additional capital is raised when a utility exhausts its allocated budget for a period. When the available budget is fully utilized, a bond is automatically issued to cover the costs of planned interventions. The price and yield of this bond are determined by the modeled bond demand and market conditions specific to the issuance year. These bonds introduce future repayment obligations, and all associated interest payments accumulate as part of the total financial cost of the interventions.
 While utilities cannot directly control bond yields, they can anticipate debt accumulation through scenario analysis and adopt strategies that maintain financial sustainability. For instance, utilities may design pacing of interventions to minimize borrowing, or evaluate alternative interventions that reduce the likelihood of large bond issuances during periods with unfavorable yield conditions.
 
