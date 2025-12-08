@@ -15,31 +15,30 @@
       
       <!-- Navigation -->
       {% if site.navigation %}
-      <nav class="site-nav">
-        {% for item in site.navigation %}
-          {% if item.subnav %}
-            <div class="nav-item dropdown">
-              <a href="{{ item.url | relative_url }}" class="nav-link">{{ item.title }}</a>
-              <div class="dropdown-content">
-                {% for subitem in item.subnav %}
-                  <a href="{{ subitem.url | relative_url }}">{{ subitem.title }}</a>
-                {% endfor %}
-              </div>
-            </div>
-          {% else %}
-            <a href="{{ item.url | relative_url }}" class="nav-link">{{ item.title }}</a>
-          {% endif %}
-        {% endfor %}
-      </nav>
+      {% include navigation.html %}
       {% endif %}
     </header>
 
     <main id="content" class="main-content" role="main">
+      <div>
+        {% include subnavigation.html %}
+      </div>
+
       {{ content }}
 
       <footer class="site-footer">
-        <span class="site-footer-credits">© {{ site.time | date: '%Y' }} {{ site.title }}</span>
+        <div>
+          {% include end_of_page_navigation.html %}
+        </div>
+        <div class="erc-ack">
+          <img src="{{ '/assets/img/erc-logo.png' | relative_url }}" alt="ERC Logo" class="erc-logo">
+          <span>
+            Water-Futures has received funding from the European Research Council (ERC) under a Synergy Grant (Grant Agreement No. 951424).
+          </span>
+        </div>
       </footer>
+      <span class="site-footer-credits">© {{ site.time | date: '%Y' }} {{ site.title }}</span>
+      
     </main>
   </body>
 </html>

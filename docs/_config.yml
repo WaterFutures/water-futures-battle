@@ -8,24 +8,56 @@ theme: jekyll-theme-cayman
 
 remote_theme: pages-themes/cayman@v0.2.0
 plugins:
-- jekyll-remote-theme # add this line to the plugins list if you already have one
+- jekyll-remote-theme
 
 # Build settings
 markdown: kramdown
 kramdown:
   toc_levels: 2..3
   auto_ids: true
+  parse_block_html: true
 
 # Navigation
 navigation:
   - title: Home
     url: /
+  - title: Motivation
+    url: /motivation.html
   - title: Participate
-    url: /participating
+    url: /participating.html
+  - title: The BWF Problem
+    url: /problem/
+    subnav:
+      - title: System Description
+        url: /problem/system-description/
+        subnav:
+          - title: Water Utilities
+            url: /problem/system-description/water-utilities.html
+          - title: Municipalities
+            url: /problem/system-description/municipalities.html
+          - title: Sources
+            url: /problem/system-description/sources.html
+          - title: Pumping Stations
+            url: /problem/system-description/pumping-stations.html
+          - title: Pipes
+            url: /problem/system-description/pipes.html
+      - title: External Drivers
+        url: /problem/external-drivers/
+        subnav:
+          - title: Climate
+            url: /problem/external-drivers/climate.html
+          - title: Energy System
+            url: /problem/external-drivers/energy-system.html
+          - title: Economy and Financing
+            url: /problem/external-drivers/economy-financing.html
+      - title: System Interventions
+        url: /problem/system-interventions/
+      - title: System Requirements
+        url: /problem/system-requirements/
   - title: Team
-    url: /team
+    url: /team.html
   - title: Contact Us
-    url: /contact
+    url: /contact.html
 
 # Exclude files from processing
 exclude:
@@ -33,3 +65,6 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
+  - trash
+  - paper
+  - bin

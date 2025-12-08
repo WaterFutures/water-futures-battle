@@ -1,0 +1,16 @@
+<nav class="problem-nav">
+    {% for item in site.navigation %}
+    {% if page.url contains item.url %}
+      {% if item.subnav %}
+        <div class="subpnav">
+          {% for subitem in item.subnav %}
+            <a href="{{ subitem.url | relative_url }}"
+              {% if page.url == subitem.url or page.url contains subitem.url %}class="active"{% endif %}>
+              {{ subitem.title }}
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+</nav>

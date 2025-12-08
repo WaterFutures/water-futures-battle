@@ -1,0 +1,126 @@
+{
+  "creators": [
+    {
+      "affiliation": "KWR Water Research Institute; Politecnico di Milano",
+      "name": "Zanutto, Dennis",
+      "orcid": "0000-0002-1997-3350",
+      "type": "ContactPerson"
+    },
+    {
+      "affiliation": "KWR Water Research Institute; National Technical University of Athens",
+      "name": "Michalopoulos, Christos",
+      "orcid": "0009-0004-5322-1509",
+      "type": "Researcher"
+    },
+    {
+      "affiliation": "KWR Water Research Institute; National Technical University of Athens",
+      "name": "Tsiami, Lydia",
+      "orcid": "0000-0001-5859-8197",
+      "type": "Researcher"
+    },
+    {
+      "affiliation": "Bielefeld University",
+      "name": "Artelt, André",
+      "orcid": "0000-0002-2426-3126",
+      "type": "Researcher"
+    },
+    {
+      "affiliation": "Bielefeld University",
+      "name": "Brandt, Jasmin",
+      "orcid": "0009-0003-4710-1300",
+      "type": "Researcher"
+    },
+    {
+      "affiliation": "KIOS Research and Innovation Center of Excellence at the University of Cyprus",
+      "name": "Vrachimis, Stelios",
+      "orcid": "0000-0001-8862-5205",
+      "type": "Researcher"
+    },
+    {
+      "affiliation": "Università di Ferrara",
+      "name": "Alvisi, Stefano",
+      "orcid": "0000-0002-5690-2092",
+      "type": "Researcher"
+    },
+    {
+      "affiliation": "Università di Ferrara",
+      "name": "Marsili, Valentina",
+      "orcid": "0000-0002-2672-781X",
+      "type": "Researcher"
+    },
+    {
+      "affiliation": "Università di Ferrara",
+      "name": "Mazzoni, Filippo",
+      "orcid": "0000-0002-4114-6829",
+      "type": "Researcher"
+    },
+    {
+      "affiliation": "University of Macedonia",
+      "name": "Samartzis, Panagiotis",
+      "orcid": "0000-0002-7890-0776",
+      "type": "Researcher"
+    },
+    {
+      "affiliation": "KIOS Research and Innovation Center of Excellence at the University of Cyprus",
+      "name": "Eliades, Demetrios",
+      "orcid": "0000-0001-6184-6366",
+      "type": "Supervisor"
+    },
+    {
+      "affiliation": "Bielefeld University",
+      "name": "Hammer, Barbara",
+      "orcid": "0000-0002-0935-5591",
+      "type": "Supervisor"
+    },
+    {
+      "affiliation": "Athens University of Economics and Business; ATHENA RC; Cambridge University",
+      "name": "Koundouri, Phoebe",
+      "orcid": "0000-0001-5979-6128",
+      "type": "Supervisor"
+    },
+    {
+      "affiliation": "KIOS Research and Innovation Center of Excellence at the University of Cyprus",
+      "name": "Polycarpou, Marios",
+      "orcid": "0000-0001-6495-9171",
+      "type": "Supervisor"
+    },
+    {
+      "affiliation": "KWR Water Research Institute; Centre for Water Systems at University of Exeter",
+      "name": "Savić, Dragan",
+      "orcid": "0000-0001-9567-9041",
+      "type": "Supervisor"
+    }
+  ],
+  
+  "access_right": "open",
+  "license": {
+    "id": "MIT"
+  },
+  "keywords": [
+    "python",
+    "competition",
+    "open-source",
+    "multi-objective-optimization",
+    "smart-cities",
+    "water-management",
+    "fairness",
+    "decision-making-under-uncertainty",
+    "water-distribution-networks",
+    "deep-uncertainty",
+    "urban-water",
+    "erc-synergy-grant",
+    "wdsa-ccwi",
+    "battle-of-the-water-networks-series"
+  ],
+  "communities": [{"identifier": "waterfutureserc"}],
+  "grants": [{"id": "951424"}],
+  "language": "eng",
+
+  "conference_title": "4th International Joint Conference on Water Distribution Systems Analysis and Computing and Control in the Water Industry",
+  "conference_acronym": "WDSA/CCWI 2026",
+  "conference_dates": "18-21 May 2026",
+  "conference_place": "Paphos, Cyprus",
+  "conference_url": "https://www.wdsa-ccwi2026.ucy.ac.cy",
+  "conference_session": "",
+  "conference_session_part": ""
+}
