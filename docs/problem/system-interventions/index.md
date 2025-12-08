@@ -35,7 +35,7 @@ The policy can be a predefined one or follow a custom allocation of the funds:
 
   - *by_inverse_income*: Allocate the funds to provinces with less economic activity (less revenue).
 
-  - *custom*: Allocate the budget according to the specified share for each water utility. Shares must sum to 1.
+  - *custom*: Allocate the budget according to the specified share for each water utility (must sum to 1).
 
   ```YAML
   YEAR: 2025
@@ -62,7 +62,7 @@ The policy can be a predefined one or follow a custom allocation of the funds:
 
   - *by_leak_class*: Allocate the budget to improve by one leak class each municipality in a greedy way (worst cases first) until no budget is left in that year.
   - *by_population*: Allocate the budget according to each municipality population.
-  - *custom*: Allocate the budget according to the specified share for each municipality. Shares must sum to 1.
+  - *custom*: Allocate the budget according to the specified share for each municipality (must sum to 1).
 
 ```YAML
 YEAR: 2025
