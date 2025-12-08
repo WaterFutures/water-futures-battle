@@ -11,7 +11,7 @@ website_page_authors:
 
 ## System External Drivers {#sec:ext-drivers}
 
-This chapter describes the external drivers that influence the water distribution system and how they have been modelled in the BWF competition.
+This chapter describes the external drivers that influence the national WDS and how they have been modelled in the BWF competition.
 The key external systems modelled are:
 - the climate,
 - the energy system, and

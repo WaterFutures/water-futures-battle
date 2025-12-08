@@ -31,7 +31,7 @@ While utilities cannot directly control bond yields, they can anticipate debt ac
 
 
 #### Budget Allocation 
-The budget allocation module governs how national funding is distributed across provincial water utilities, each of which operates and maintains its own water distribution system. This allocation affects the resources available to implement interventions and support operations. Budget distribution can follow several principled rules: proportional allocation to population size; inverse-proportional schemes favoring smaller regions; income-based allocations reflecting socioeconomic considerations; inverse-proportional schemes favoring less wealthy regions; or fully customized schemes. 
+The budget allocation module governs how national funding is distributed across provincial water utilities, each of which operates and maintains its own WDS. This allocation affects the resources available to implement interventions and support operations. Budget distribution can follow several principled rules: proportional allocation to population size; inverse-proportional schemes favoring smaller regions; income-based allocations reflecting socioeconomic considerations; inverse-proportional schemes favoring less wealthy regions; or fully customized schemes. 
 
 | Property | Type | Scope | Unit |
 | :--- | :--- | :--- | :--- |

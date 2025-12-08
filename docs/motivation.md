@@ -22,7 +22,7 @@ An open-source evaluator will also be released in the WaterBenchmarkHub [@wbhub]
 ## Background and motivation
 
 Water distribution systems (WDS) grow organically with cities and are therefore inherently subject to deep uncertainties.
-Strategic planning for water distribution networks focuses on the long-term design of the primary supply system – the national grid.
+Strategic WDS planning focuses on the long-term design of the primary supply system – the national grid.
 While secondary and tertiary network components can typically be selected using established engineering principles, planning the primary and supply network at a regional level requires a different approach, one that integrates policy considerations, standard engineering practice, and substantial investment.
 This part of the system is extremely critical. Failures at this level can propagate and lead to loss of service for thousands of people and businesses.
 Beyond system reliability and deep uncertainties, the complex governance requirements, such as the coordination between national, regional, and local administrations, present a major obstacle to integrated policy-making and long-term planning of these systems.
