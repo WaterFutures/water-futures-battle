@@ -63,7 +63,7 @@ Both the fixed and volumetric tariff components are exogenously given and evolve
 | Property | Type | Scope | Unit |
 | :--- | :--- | :--- | :--- |
 | Fixed tariff component (service charge) | Dynamic Exogenous  | Utility  ID                             |
-| Volumetric tariff component       | Dynamic Exogenous  | Utility  ID| $€/m^3$
+| Volumetric tariff component       | Dynamic Exogenous  | Utility  ID| $\text{€}/m^3$
 | Annual tariff escalation rule           | Dynamic Exogenous  | National (inflation-indexed)            |
 
 : Water price model's properties review. {#tbl:et-properties}

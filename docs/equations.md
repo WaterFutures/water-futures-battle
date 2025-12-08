@@ -26,8 +26,8 @@ where:
 - $S_{\text{new-src}}$: set of all sources that are newly built (activated).  
 - $t_s$: year when source $s$ is built.  
 - $\mathbf{1}_{\{t_s = t\}}$: 1 if source $s$ is built in year $t$, 0 otherwise.  
-- $c_{\text{unit}}^{\text{source}}(t)$: unit construction cost of sources in year $t$ (€/m³/day).  
-- $\text{Capacity}_{\text{nominal},s}$: nominal capacity of source $s$ (m³/day).
+- $c_{\text{unit}}^{\text{source}}(t)$: unit construction cost of sources in year $t$ ($\text{€}/m^3/day$).  
+- $\text{Capacity}_{\text{nominal},s}$: nominal capacity of source $s$ ($m^3/day$).
 
 ---
 

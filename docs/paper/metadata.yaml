@@ -26,6 +26,9 @@ tblPrefix:
 secPrefix:
   - "Section"
   - "Sections"
+figPrefix:
+  - "Figure"
+  - "Figures"
 bibliography: paper/references.bib
 cs: paper/apa.csl
 ---

@@ -17,9 +17,9 @@ We will model the following three different parameters for the evaluation of the
 
 | Property | Type | Scope | Unit |
 | :--- | :--- | :--- | :--- |
-| Elecricity price | Dynamic Exogenous  | National | €/kWh
+| Elecricity price | Dynamic Exogenous  | National | $\text{€}/kWh$
 | Greenhouse gas emission by electricity production | Dynamic Exogenous | National | tCO2eq/kWh
-| Unit costs for solar pv panel | Dynamic Endogenous | National | €/kW 
+| Unit costs for solar pv panel | Dynamic Endogenous | National | $\text{€}/kW$
 
 : Energy system model's properties review. {#tbl:es-properties}
 

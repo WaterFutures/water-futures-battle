@@ -64,10 +64,10 @@ The actual values for these variables can be inspected within the data files, wh
 | Closure date | Static [Optional] [Decision] | Source | date 
 | Capacity - nominal | Static [Optional]  [Decision] | Source | $m^3/day$
 | Capacity - target factor | Static | Source Type | %
-| Unit cost of construction | Dynamic Endogenous | Source Size Class $\times$ National  | $€/m^3\dot day$
-| Operational costs - fixed | Dynamic Endogenous [Uncertain] | Source Size Class $\times$ National  | $€/year$
+| Unit cost of construction | Dynamic Endogenous | Source Size Class $\times$ National  | $\text{€}/m^3\dot day$
+| Operational costs - fixed | Dynamic Endogenous [Uncertain] | Source Size Class $\times$ National  | $\text{€}/year$
 | Operational costs - volumetric for energy | Dynamic Endogenous [Uncertain] | Source Size Class $\times$ National  | $kWh/m^3$ |
-| Operational costs - volumetric for non-energy | Dynamic Endogenous [Uncertain] | Source Size Class $\times$ National  | $€/m^3$ |
+| Operational costs - volumetric for non-energy | Dynamic Endogenous [Uncertain] | Source Size Class $\times$ National  | $\text{€}/m^3$ |
 | Operational costs - volumetric for non-energy - multiplier | Static | Source Type | %
 | Construction time | Static [Uncertain] | Source Type | years
 | Availability factor | Dynamic Exogenous | Surface water sources | 

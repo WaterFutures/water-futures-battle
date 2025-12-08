@@ -15,6 +15,7 @@ markdown: kramdown
 kramdown:
   toc_levels: 2..3
   auto_ids: true
+  parse_block_html: true
 
 # Navigation
 navigation:

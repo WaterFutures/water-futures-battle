@@ -60,7 +60,7 @@ This section defines all variables and notation used in the KPI formulas.
 | **Financial Variables** |||
 | $K_j$ | € | Capital expenditure (CAPEX) for intervention *j* |
 | $L_j$ | yr | Asset lifetime of intervention *j* |
-| OPEX | €/yr | Operating expenditures (energy, maintenance, etc) |
+| OPEX | $\text{€}/year$ | Operating expenditures (energy, maintenance, etc) |
 | $r_f$ | — | Risk-free rate (e.g., 0.03 = 3 %) |
 | cs | — | Base credit spread (e.g., 0.01 = 1 %) |
 | a | — | Spread sensitivity to demand (e.g., 0.02 = 2 %) |
@@ -72,8 +72,8 @@ This section defines all variables and notation used in the KPI formulas.
 | $EF$ | t CO2/kWh | Electricity emission factor |
 | $EF^{emb}_j$ | t CO2 / € or unit | Embedded emission factor for intervention *j* |
 | **Socio-Economic Variables** |||
-| $p_v$ | €/m³ | Volumetric tariff |
-| $F_{\text{fixed}}$ | €/month | Fixed charge per household |
-| $V_{\text{lifeline}}$ | m³/month | Lifeline volume (e.g., 1.5 m³/person/month) |
-| $I_{p20}$ | €/month | 20th-percentile monthly income across nodes |
+| $p_v$ | $\text{€}/m^3$ | Volumetric tariff |
+| $F_{\text{fixed}}$ | $\text{€}/month$ | Fixed charge per household |
+| $V_{\text{lifeline}}$ | $m^3/month$ | Lifeline volume (e.g., 1.5 m³/person/month) |
+| $I_{p20}$ | $\text{€}/month$ | 20th-percentile monthly income across nodes |
 

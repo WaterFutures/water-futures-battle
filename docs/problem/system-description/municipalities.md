@@ -103,41 +103,50 @@ Max yearly temperature | Dynamic Exogenous | National | [°C]
 
 #### Non-Revenue Water Model {#sec:nrw}
 
-Our modelling of non-revenue water (NRW) relies on the average age of the pipe infrastructure in a municipality.
-Based on this average age, the municipality gets assigned to one of five possible classes (A - E) as follows:
+Non-revenue water (NRW) is an uncertain quantity modeled through the average age of pipe infrastructure in each municipality's inner distribution network (IDN).
+Based on this average age, municipalities are assigned to one of five NRW classes as reported in @tbl:nrw-classes.
+Each class is associated with a distinct probability distribution of NRW demands, from which daily samples are drawn to generate the volumetric NRW demand factor ($m^3/km/day$).
+Notably, older infrastructure suffers from more leaks and therefore exhibits higher NRW demand factors.
 
-| Age in years | Class | Lower and upper bound of NRW demand in m^3/day |
-| ------------ | ------| ---------------------------------------------- |
-| 0 - 25       | A     | [0, 12)                                        |
-| 25 - 43      | B     | [12, 20)                                       |
-| 43 - 54      | C     | [20, 35)                                       |
-| 54 - 60      | D     | [35, 55)                                       |
-| > 60         | E     | [55, inf)                                      |
+The distribution of NRW demands varies by class and is illustrated in @fig:nrw-demand.
+The actual values of the distributions' parameters can be inspected within the data files, which are mapped in Appendix A.
 
-Each class is associated with a distribution of NRW demands, from which we sample to generate the volumetric NRW demand.
-Notably, the NRW demand is different for each class, i.e., older systems suffer from more leaks and therefore have a higher NRW demand.
-The distribution of NRW demands per class and km of pipes is illustrated in the following figure.
-
-![Non-revenue water demand per class](../../assets/img/leak_demand.png)
-
-The total number of km of pipes in a given municipality is linked to its population size.
-Here, we use a linear relationship between the population size and the km of pipes, also illustrated in the following Figure:
+The total length of pipes in a municipality is linked to its population size through the following linear relationship:
 
 $$
 L^\text{IDN}_{m,y} = 57.7*10^{-4} * \text{inhabitants}_{m,y} 
 $$
 
-![Population size vs. km of pipes](../../assets/img/pop_to_km.png)
+where $m$ is the municipality index, $y$ is the year, and $L^\text{IDN}_{m,y}$ is the total length of pipes (km) in municipality $m$ at year $y$.
+
+The actual municipality NRW demand is also capped at twice the billable daily demand to prevent unrealistic leakage levels.
+Therefore, total NRW demand for municipality $m$ at day $d$ is calculated as:
+$$
+\text{NRW}_{m,d} = \min\left(f^\text{NRW}_{\text{class}(m),d} \times L^\text{IDN}_{m,y}, \, 2 \times D_{m,d}\right)
+$$
+where $f^\text{NRW}_{\text{class}(m),d}$​ is the sampled NRW demand factor ($m^3/km/day$) for the municipality's class, and $D_{m,d}$​ is the daily water demand. 
+
+![Non-revenue water demand factor per class](../../assets/img/leak_demand.png){#fig:nrw-demand width=60%}
+
+| Inner distribution network - average age [years] | NRW Class | Distribution
+| --- | --- | :--- |
+| 0 - 25       | A     | Inverted Exponential
+| 25 - 43      | B     | Uniform
+| 43 - 54      | C     | Uniform
+| 54 - 60      | D     | Uniform
+| > 60         | E     | Exponential
+
+: Non-revenue water classification by infrastructure age. {#tbl:nrw-classes}
 
 | Property | Type | Scope | Unit |
 | :--- | :--- | :--- | :--- |
 | NRW demand | Static [Uncertain] | National | $m^3/day$
-| Inner distribution network - length to population ratio | Static | National | $km/(10k inhabitants)$
-| Inner distribution network - length | Dynamic endogenous| Municipality | km
-| Inner distribution network - average age | Dynamic endogenous | Municipality | years
-| NRW intervention - unit cost | Dynamic endogenous | NRWClass, Municipality Size Class, National | $€/year$
+| Inner distribution network - length to population ratio | Static | National | $km \cdot (10^4 \text{ inhabitants})^{-1}$
+| Inner distribution network - length | Dynamic endogenous| Municipality | $km$
+| Inner distribution network - average age | Dynamic endogenous | Municipality | $years$
+| NRW intervention - unit cost | Dynamic endogenous | NRWClass, Municipality Size Class, National | $\text{€}/year$
 | NRW intervention - effectiveness factor | Static [Uncertain] | NRWClass, Municipality Size Class, National | 
-| Intervention budget | Option |  | $€/year$
+| Intervention budget | Option |  | $\text{€}/year$
 | Intervention policy | Option |  |
 
 : Non-revenue water model's properties review. {#tbl:nrw-properties}
