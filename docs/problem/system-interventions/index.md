@@ -53,9 +53,9 @@ The policy can be a predefined one or follow a custom allocation of the funds:
           WU02: 0.25 # and so on... 
   ```
 
-#### Non-Revenue Water Reduction Budget (Utility)
+#### Non-Revenue Water Mitigation Budget (Utility)
 
-Participants must decide each water utility's yearly budget used to reduce non-revenue water (NRW).
+Participants must decide each water utility's yearly budget used to mitigate non-revenue water (NRW).
 This budget is used to improve the municipalities innner distribution network (IDN).
 More precisely, this budget descreases the municipalities IDN's average age, which in turn improves the NRW class of the municipality, leading to a reduction of the NRW component.
 The policy can be a predefined one or follow a custom allocation of the funds:
@@ -86,7 +86,7 @@ YEAR: 2025
 
 #### Water Pricing (Utility)
 
-Participants must decide the water pricing increase strategy for each year.
+Participants must decide the water pricing adjustment strategy for each year.
 They have two options: increase all water price components according to inflation, or define a custom policy by specifying the percentage increase for each component (e.g., 2%).
 
 ```YAML
