@@ -38,17 +38,17 @@ The policy can be a predefined one or follow a custom allocation of the funds:
   - *custom*: Allocate the budget according to the specified share for each water utility (must sum to 1).
 
   ```YAML
-  YEAR: 2025
-    NATIONAL_POLICIES:                               
-      BUDGET_ALLOCATION:
-        POLICY: BY_POPULATION <OR> BY_INCOME <OR> ...
+  year: 2025
+    national_policies:                               
+      budget_allocation:
+        policy: by_population # or "by_income" or the corresponding inverse policies
   ```
   ```YAML
-  YEAR: 2025
-    NATIONAL_POLICIES:                               
-      BUDGET_ALLOCATION:
-        POLICY: CUSTOM
-        POLICY_ARGS:
+  year: 2026
+    national_policies:                               
+      budget_allocation:
+        policy: custom
+        policy_args:
           WU01: 0.12
           WU02: 0.25 # and so on... 
   ```
@@ -60,26 +60,26 @@ This budget is used to improve the municipalities innner distribution network (I
 More precisely, this budget descreases the municipalities IDN's average age, which in turn improves the NRW class of the municipality, leading to a reduction of the NRW component.
 The policy can be a predefined one or follow a custom allocation of the funds:
 
-  - *by_leak_class*: Allocate the budget to improve by one leak class each municipality in a greedy way (worst cases first) until no budget is left in that year.
+  - *by_nrw_class*: Allocate the budget to improve by one NRW-class each municipality in a greedy way (worst cases first) until no budget is left in that year.
   - *by_population*: Allocate the budget according to each municipality population.
   - *custom*: Allocate the budget according to the specified share for each municipality (must sum to 1).
 
 ```YAML
-YEAR: 2025
-  WATER_UTILITY: WU01
-    POLICIES:
-      NRW_REDUCTION:
-        BUDGET: 30000
-        POLICY: BY_LEAK_CLASS <OR> BY_POPULATION 
+year: 2025
+  water_utility: WU01
+    policies:
+      nrw_mitigation:
+        budget: 30000
+        policy: by_nrw_class # or "by_population"
 ```
 ```YAML
-YEAR: 2025
-  WATER_UTILITY: WU01
-    POLICIES:
-      NRW_REDUCTION:
-        BUDGET: 30000
-        POLICY: CUSTOM
-        POLICY_ARGS:
+year: 2026
+  water_utility: WU01
+    policies:
+      nrw_mitigation:
+        budget: 30000
+        policy: custom
+        policy_args:
           GM0001: 0.02
           GM0002: 0.02 # and so on...
 ```
@@ -90,24 +90,24 @@ Participants must decide the water pricing adjustment strategy for each year.
 They have two options: increase all water price components according to inflation, or define a custom policy by specifying the percentage increase for each component (e.g., 2%).
 
 ```YAML
-YEAR: 2025
-  WATER_UTILITY: WU01
-    POLICIES:
-      PRICING:
-        POLICY: BY_INFLATION
+year: 2025
+  water_utility: WU01
+    policies:
+      pricing_adjustment:
+        policy: by_inflation
 ```
 
 ```YAML
-YEAR: 2025
-  WATER_UTILITY: WU01
-    POLICIES:
-      PRICING:
-        POLICY: CUSTOM
+year: 2026
+  water_utility: WU01
+    policies:
+      pricing_adjustment:
+        policy: custom
         # Specify the percentage increase for each pricing component
-        POLICY_ARGS:
-          FIXED_COMPONENT: 0.03      # Annual increase for fixed costs (3%)
-          VARIABLE_COMPONENT: 0.02   # Annual increase for variable costs (2%)
-          SELLING_PRICE: 0.05        # Annual increase for water sales to other provinces (5%) 
+        policy_args:
+          fixed_component: 0.03      # Annual increase for fixed costs (3%)
+          variable_component: 0.02   # Annual increase for variable costs (2%)
+          selling_price: 0.05        # Annual increase for water sales to other provinces (5%) 
 ```
 
 ### Interventions
@@ -122,16 +122,22 @@ Participants can open new water sources to meet potential increases in demand.
 Available sources are predefined by location, and participants must specify a capacity within the allowable bounds.
 
 ```YAML
-YEAR: 2025
-  WATER_UTILITY: WU01
-    INTERVENTIONS:
-      OPEN_SOURCE: # Provide source identifier and capacity
-        - SOURCE_ID: SG0158
-          SOURCE_CAPACITY: 100
+year: 2025
+  water_utility: WU01
+    interventions:
+      open_source: # Provide source identifier, capacity, and info about the connection
+        - source_id: SG0158
+          source_capacity: 100
+          pump_option_id: PU003
+          n_pumps: 6
+          pipe_option_id: PI002
 
           # Multiple sources can be added like this
-        - SOURCE_ID: SG0159
-          SOURCE_CAPACITY: 50
+        - source_id: SG0159
+          source_capacity: 50
+          pump_option_id: PU001
+          n_pumps: 4
+          pipe_option_id: PI003
 ```
 
 #### Closing Sources (Utility)
@@ -139,14 +145,14 @@ YEAR: 2025
 Similarly, participants can close selected sources to improve the overall system efficiency.
 
 ```YAML
-YEAR: 2025
-  WATER_UTILITY: WU01
-    INTERVENTIONS:
-      CLOSE_SOURCE: # Provide only the source identifier
-        - SOURCE_ID: SG0173    
+year: 2025
+  water_utility: WU01
+    interventions:
+      close_source: # Provide only the source identifier
+        - source_id: SG0173    
 
           # Multiple sources can be removed like this.
-        - SOURCE_ID: SG0174
+        - source_id: SG0174
 ```
 
 #### Installing Pipes (National or Utility)
@@ -155,16 +161,16 @@ Participants can decide to install new pipes or replace existing ones in the sys
 Each installation requires specifying the connection identifier and selecting a pipe option from a predefined list.
 
 ```YAML
-YEAR: 2025
-  WATER_UTILITY: WU01
-    INTERVENTIONS:
-      INSTALL_PIPE: # Provide connection identifier and pipe option
-        - CONNECTION_ID: CS0112
-          PIPE_ID: PI001
+year: 2025
+  water_utility: WU01
+    interventions:
+      install_pipe: # Provide connection identifier and pipe option
+        - connection_id: CG0112
+          pipe_option_id: PI001
 
           # Multiple pipes can be added like this.             
-        - CONNECTION_ID: CS0113
-          PIPE_ID: PI008
+        - connection_id: CG0113
+          pipe_option_id: PI008
 ```
 
 #### Installing Pumps (Utility)
@@ -176,19 +182,14 @@ When installing pumps at an already-open pumping station, participants must spec
 If the selected pump option differs from those already installed, all existing pumps will be automatically replaced, as only one pump type is allowed per station.
 
 ```YAML
-YEAR: 2025
-  WATER_UTILITY: WU01
-    INTERVENTIONS:
-      INSTALL_PUMPS: # Provide source identifier, pump option and quantity for a new pumping station                                       
-        - SOURCE_ID: SG0158
-          PUMP_ID: PU002
-          NUM_PUMPS: 3
-
-          # Provide source identifier, pump option, quantity, AND BEHAVIOUR for an already open station
-        - SOURCE_ID: SG0159
-          PUMP_ID: PU003                                                             
-          NUM_PUMPS: 3
-          BEHAVIOUR: REPLACE <OR> NEW 
+year: 2025
+  water_utility: WU01
+    interventions:
+      install_pumps: # Provide source identifier, pump option and quantity for a new pumping station                                       
+        - source_id: SG0159
+          pump_option_id: PU003                                                             
+          n_pumps: 3
+          behaviour: replace # or "new" 
 ```
 
 #### Installing Solar (Utility)
@@ -199,14 +200,14 @@ Panels can be installed multiple times at different points in time.
 *Note: Solar panels have a given lifespan (see @sec:energy-model); participants must decide whether to replace them upon expiration.*
 
 ```YAML
-YEAR: 2025
-  WATER_UTILITY: WU01
-    INTERVENTIONS:
-      INSTALL_SOLAR: # Provide location and capacity
-        - SOURCE_ID: SG0158
-          CAPACITY: 20
+year: 2025
+  water_utility: WU01
+    interventions:
+      install_solar: # Provide location and capacity
+        - source_id: SG0158
+          capacity: 20
 
           # Multiple sources can be added like this
-        - SOURCE_ID: SG0159              
-          CAPACITY: 20
+        - source_id: SG0159              
+          capacity: 20
 ```
