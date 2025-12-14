@@ -3,6 +3,7 @@
 
 
 # Output filenames (in project root)
+OUTPUT_DATA := ../water_futures_battle-data.zip
 OUTPUT_PDF := ../water_futures_battle-preprint.pdf
 OUTPUT_LATEX := ../water_futures_battle-source.tex
 OUTPUT_LATEX_CLEANED := ../water_futures_battle-source_cleaned.tex
@@ -10,6 +11,7 @@ OUTPUT_SUBMISSION := ../water_futures_battle-arxiv_submission.zip
 OUTPUT_WEBSITE := ../water_futures_battle-website.zip
 
 # Documentation source directory (current working dir for builds)
+DATA_DIR := ../data
 DOCS_DIR := ../docs
 
 MATCH_STR="../../assets/img/"
@@ -39,6 +41,28 @@ MARKDOWN_FILES = \
 	paper/references.md \
 	paper/appendix.md
 
+DATA_FILES = \
+	configuration.yaml \
+	masterplan.yaml \
+	epanet-networks/*-2025.inp \
+	epanet-networks/README.md \
+	connections/connections-static_properties.xlsx \
+	jurisdictions/jurisdictions-static_properties.xlsx \
+	jurisdictions/municipalities-dynamic_properties.xlsx \
+	nrw_model/nrw_model-dynamic_properties.xlsx \
+	pipes/pipe_options-static_properties.xlsx \
+	pipes/pipe_options-dynamic_properties.xlsx \
+	pumping_stations/pumping_stations-static_properties.xlsx \
+	pumps/pump_options-static_properties.xlsx \
+	pumps/pump_options-dynamic_properties.xlsx \
+	sources/sources-static_properties.xlsx \
+	sources/desalination-dynamic_properties.xlsx \
+	sources/groundwater-dynamic_properties.xlsx \
+	sources/surface_water-dynamic_properties.xlsx \
+	water_demand_model/water_demand_model-dynamic_properties.xlsx \
+	water_utilities/water_utilities-static_properties.xlsx \
+	raw-data/
+
 # --- Dependencies ---
 
 DEPENDENCIES := \
@@ -65,9 +89,12 @@ PANDOC_PDF_ARGS := \
 
 # --- Build Targets ---
 
-.PHONY: all latex pdf website clean
+.PHONY: all data latex pdf website clean
 
-all: latex pdf website
+all: data latex pdf website
+
+data:
+	cd $(DATA_DIR) && zip -r $(OUTPUT_DATA) $(DATA_FILES)
 
 latex:
 	cd $(DOCS_DIR) && pandoc -o $(OUTPUT_LATEX) $(PANDOC_COMMON_ARGS) $(PANDOC_LATEX_ARGS) $(MARKDOWN_FILES)
