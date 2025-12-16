@@ -29,7 +29,7 @@ The solutions will be assessed using a transparent and inspectable **open-source
 >
 > [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17698299.svg)](https://doi.org/10.5281/zenodo.17698299)
 >
-> 📄 **[Problem Description (arXiv)](https://arxiv.org/abs/XXXX.XXXXX)** - Technical paper with problem formulation
+> 📄 **[Problem Description (arXiv)](http://arxiv.org/abs/2511.22986)** - Technical paper with problem formulation
 > 
 > [![arXiv](https://img.shields.io/badge/arXiv-2511.22986-b31b1b.svg)](http://arxiv.org/abs/2511.22986)
 
