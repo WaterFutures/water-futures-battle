@@ -5,7 +5,17 @@
 # Appendix A
 
 This Appendix A describes the data contained within the supplementary material (zipped data folder).
-Specifically we listing the variables included in each file along their unit and coded name.
+
+## EPANET Networks Files {.unnumbered .unlisted}
+
+The provided network files were generated using EPANET 2.3.
+Unfortunately, most common EPANET libraries and software (e.g., WNTR and EPANET for Windows) are not keeping up with the versions and they may generate warnings upon opening or fail to open them at all.
+When using a library based on an outdated version of EPANET, the hydraulic results will also differ, as EPANET 2.3 features numerous bug fixes with respect to previous versions.
+
+For these compatibility reason and to ensure consistency between results, the solutions will be submitted through an ad-hoc form and inp files will be rejected.
+The sole reference for correctness is the evaluator's computations, which uses the latest EPANET 2.3 library.
+
+At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to visualize the networks overlaid on a map of the Netherlands, while for hydraulic computations, we recommend using the EPANET-PLUS Python library, as it is currently the only one offering EPANET 2.3 support [@github:epanetplus].
 
 ## System Entities {.unnumbered .unlisted}
 
