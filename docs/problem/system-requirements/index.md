@@ -33,6 +33,10 @@ where $B(y)$ is the national investment budget in year $y$, $\alpha_w(y)$ is the
 Note that while surpluses are carried forward, deficits are financed through bond issuance as described in @sec:bonds.
 
 Evaluation will focus only on the remaining debt at the end of the planning period.
+Final debt measures insolvency risk, not financial optimality.
+Competitors are free to pursue any financial strategy they deem appropriate, such as minimising costs, adjusting prices to enable expensive solutions, or adopting other innovative approaches.
+The many-objective framework ensures balanced evaluation across all dimensions.
+In other words, maintaining financial stability is achievable; the real challenge is deciding what to sacrifice.
 
 ### Minimize GHG Emissions
 
