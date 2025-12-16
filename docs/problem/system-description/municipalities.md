@@ -61,6 +61,7 @@ The full list can be seen in @tbl:muni-properties, while the actual values for t
 | Surface water (open water) | Dynamic Exogenous | Municipality | $km^2$ |
 | Number of houses | Dynamic Exogenous | Municipality | units
 | Number of businesses | Dynamic Exogenous | Municipality | units
+| Average Disposable Income | Dynamic Exogenous | Municipality | $k\text{€}$
 | Average age distribution network | Dynamic Endogenous | Municipality | years
 
 : Municipalities' properties review. {#tbl:muni-properties}

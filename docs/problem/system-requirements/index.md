@@ -93,13 +93,13 @@ Evaluation will focus on maintaining adequate service levels across all municipa
 
 Participants must ensure water remains affordable, particularly for lower-income households, while maintaining equitable pricing across municipalities.
 
-The affordability fairness metric represents the fraction of income that lower-income households spend on essential water consumption.
+The affordability fairness metric represents the fraction of income that a household at the 20th percentile of the income distribution would spend on essential water consumption.
 Affordability fairness (lower is better) for water utility $w$ in year $y$ is:
 
 $$
-AF_w(y) = \frac{P_w^\text{fixed}(y) + P_w^\text{variable}(y) \cdot D^\text{life}}{DI_w^{p20}(y)}
+AF_w(y) = \frac{P_w^\text{fixed}(y) + P_w^\text{variable}(y) \cdot D^\text{life}}{ADI_w^{p20}(y)}
 $$
 
-where $P_w^\text{fixed}(y)$ and $P_w^\text{variable}(y)$ are the fixed and variable components of water price, $D^\text{life}$ is lifeline volume (minimum water required per person), and $DI_w^{p20}(y)$ is the 20th percentile of disposable income.
+where $P_w^\text{fixed}(y)$ and $P_w^\text{variable}(y)$ are the fixed and variable components of water price, $D^\text{life}$ is lifeline volume (minimum water required per person), and $ADI_w^{p20}(y)$ is the 20th percentile of disposable income across all households served by the water utility.
 
 Evaluation will focus on minimizing affordability while maintaining reasonable equity across utilities.
