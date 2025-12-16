@@ -36,7 +36,7 @@ Evaluation will focus only on the remaining debt at the end of the planning peri
 Final debt measures insolvency risk, not financial optimality.
 Competitors are free to pursue any financial strategy they deem appropriate, such as minimising costs, adjusting prices to enable expensive solutions, or adopting other innovative approaches.
 The many-objective framework ensures balanced evaluation across all dimensions.
-In other words, maintaining financial stability is achievable; the real challenge is deciding what to sacrifice.
+In other words, maintaining financial stability is an achievable target; the real challenge is deciding what to sacrifice.
 
 ### Minimize GHG Emissions
 
