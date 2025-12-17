@@ -64,7 +64,7 @@ $$
 
 where $\mathcal{C}_w$ is the set of connections of water utility $w$^[as described in @sec:connections, we distinguish between connections and pipes], $\mathbf{1}_{c\text{ activated in }y}$ is 1 if connection $c$ installs a new pipe in year $y$, 0 otherwise, $EF_{p_c}(y)$ is the unit emission factor of the connection's selected pipe option $p_c$, and $L_c$ is the connection length.
 
-The unit emission factor $EF_{p}$ for pipe option $p$ depends on the pipe option diameter $Diam_p$ and material $Mat_p$, i.e., $EF_{p}(y) = EF(Diam_p, Mat_p, y)$.
+The unit emission factor $EF_{p}$ for pipe option $p$ depends on the pipe option diameter $Diam_p$ and material $Mat_p$ and may change over time because of technological advancements, i.e., $EF_{p}(y) = EF(Diam_p, Mat_p, y)$.
 
 The operational emissions are calculated based on the total electricity purchased from the grid, covering both water treatment (sources) and transport (pumping).
 
