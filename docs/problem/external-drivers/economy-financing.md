@@ -28,6 +28,12 @@ In the absence of reliable long-term inflation forecasts, a reasonable baseline 
 
 : Inflation's properties review. {#tbl:ei-properties}
 
+Note that wherever unit prices are given only in base-year terms (e.g., only in the value in year 2000 is present in the input files), their value in year $y$ ($C(y)$) is obtained by multiplying by the cumulative inflation index
+$$
+C(y) = C(0) \cdot \prod_{\tau = 1}^{y} \bigl(1 + \pi(\tau)\bigr)
+$$
+where $C(0)$ is the base-year unit price and $\pi(y)$ is the inflation rate in year $y$.
+
 #### Budget Allocation 
 
 A national budget (predefined over the planning horizon) is distributed annually across utilities to fund infrastructure interventions and operational expenses.
