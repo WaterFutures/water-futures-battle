@@ -100,11 +100,11 @@ In greater detail, for each municipality, two residential profiles are selected 
 Phase III. The third phase produces the final hourly time series by applying a Fourier series-based approach which combines seasonal modulation, climate-related adjustments (accounting for the maximum yearly temperature), and random perturbations to capture temporal variability.
 The two residential profiles associated with each municipality are aggregated through weighted combinations, and both residential and non-residential profiles are scaled to match the previously estimated yearly volumes.
 
-The total billable demand of municipality $m$ at time $t$ (within year $y$) is defined as:
+Therefore, the total billable demand of municipality $m$ at time $t$ (within year $y$) is defined as:
 $$
-D^\text{BIL}_m(t) = D^\text{R1}_m(t, T_y) \cdot w_m + D^\text{R2}_m(t, T_y) \cdot (1-w_m) + D^\text{BUS}_m(t, T_y)
+D^\text{BIL}_m(t) = D^\text{R1}_m(t, T_y) \cdot w_m + D^\text{R2}_m(t, T_y) \cdot (1-w_m) + D^\text{bus}_m(t, T_y)
 $$
-where $D^\text{R1}_m(t, T_y)$ and $D^\text{R2}_m(t, T_y)$ represent the two residential demands, $w_m \in [0,1]$ is the unitary weight to combine them, $D^\text{BUS}_m(t, T_y)$ is the business demand, and $T_y$ is the maximum temperature recorded in year $y$.
+where $D^\text{R1}_m(t, T_y)$ and $D^\text{R2}_m(t, T_y)$ represent the two residential demands, $w_m \in [0,1]$ is the unitary weight to combine them, $D^\text{bus}_m(t, T_y)$ is the non-residential demand, and $T_y$ is the maximum temperature recorded in year $y$.
 
 | Property | Type | Scope | Unit |
 | :--- | :--- | :--- | :--- |
