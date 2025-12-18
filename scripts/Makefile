@@ -21,6 +21,7 @@ REPL_STR="./"
 
 # List of Markdown files, relative to docs/
 MARKDOWN_FILES = \
+	paper/exec-summary.md \
 	motivation.md \
 	problem/index.md \
 	problem/system-description/index.md \
@@ -73,7 +74,6 @@ DEPENDENCIES := \
 
 PANDOC_COMMON_ARGS := \
 	--from markdown \
-	--toc \
 	--number-sections \
 	--metadata-file=paper/metadata.yaml \
 	--resource-path=problem/system-description \
