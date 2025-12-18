@@ -58,10 +58,10 @@ Water transactions between utilities, however, use only a volumetric charge base
 Thus, the total revenue for a water utility $w$ in year $y$ is:
 
 $$
-REV_w(y) = \sum_{m \in \mathcal{M}_w} P_w^\text{fixed}(y) + P_w^\text{variable}(y) \cdot D_m(y) + \sum_{w' \in \mathcal{W}^-} P_w^\text{sell}(y) \cdot D^{w'}_w(y)
+REV_w(y) = \sum_{m \in \mathcal{M}_w} P_w^\text{fixed}(y) + P_w^\text{variable}(y) \cdot Q^\text{BIL}_m(y) + \sum_{w' \in \mathcal{W}^-} P_w^\text{sell}(y) \cdot Q^{w'}_w(y)
 $$
 
-where $P_w^\text{fixed}(y)$ and $P_w^\text{variable}(y)$ are the fixed and volumetric components of the retail water price, $D_m$ is the billable demand in municipality $m$, $\mathcal{M}_w$ is the set of municipalities in water utility $w$, $P_w^\text{sell}(y)$ is the volumetric charge for inter-utility water sales, and $D^{w'}_w$ is the net volume of water sold to utility $w'$ ($\mathcal{W}^-$ is the set of water utilities excluding utility $w$).
+where $P_w^\text{fixed}(y)$ and $P_w^\text{variable}(y)$ are the fixed and volumetric components of the retail water price, $Q^\text{BIL}_m$ is the delivered billable demand in municipality $m$, $\mathcal{M}_w$ is the set of municipalities in water utility $w$, $P_w^\text{sell}(y)$ is the volumetric charge for inter-utility water sales, and $Q^{w'}_w$ is the net volume of water sold to utility $w'$ ($\mathcal{W}^-$ is the set of water utilities excluding utility $w$).
 
 Note that if a water utility has a negative net exchange with another utility, that will be regarded as a production cost.
 

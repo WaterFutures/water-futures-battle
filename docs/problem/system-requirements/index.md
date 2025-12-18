@@ -83,9 +83,9 @@ Participants must ensure high service reliability by minimizing unmet water dema
 
 Service reliability for municipality $m$ in year $y$ is:
 
-$Rel_m(y) = 1 - \dfrac{U_m(y)}{D_m(y)}$
+$Rel_m(y) = 1 - \dfrac{U_m(y)}{D^\text{BIL}_m(y)}$
 
-where $U_m(y)$ is the undelivered demand and ${D_m(y)}$ is the billable water demand.
+where $U_m(y)$ is the undelivered demand and ${D^\text{BIL}_m(y)}$ is the billable water demand.
 
 Evaluation will focus on maintaining adequate service levels across all municipalities of each water utility throughout the entire planning horizon.
 
