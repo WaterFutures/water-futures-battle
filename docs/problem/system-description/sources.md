@@ -35,7 +35,7 @@ where:
 - $c^\text{vol}_s \cdot Q_s(y)$ represents the volumetric costs for non-energy related expenditures, such as chemicals and filters.
 - $c^\text{extra}_s \cdot \max\bigl(Q_s(y)-\phi_s \cdot Q^*_s, 0 \bigr)$ represent the extra volumetric costs incurred when production exceeds the planned threshold.
 
-In this formulation, $Q_s(y)$ is the total volume produced by the source in year $y$, $Q^*_s$ is the source nominal capacity, and $\phi_s$ is the capacity target factor, which defines the ideal efficiency point above which additional costs are applied.
+In this formulation, $Q_s(y)$ is the total volume produced by the source in year $y$, $Q^*_s$ is the source nominal capacity, and $\phi_s$ is the capacity target factor (source-type dependent), which defines the ideal operating point above which additional costs are applied.
 
 Therefore, the operational expenditure associated with all the sources in water utility $w$ at year $y$ is:
 $$

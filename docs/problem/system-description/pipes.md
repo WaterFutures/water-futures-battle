@@ -26,7 +26,7 @@ $$
 K^\text{pipes}_w(y)
 = \sum_{j \in \mathcal{J}_{w}} \mathbf{1}_{\{\tau_j = y\}}\cdot c^\text{pipe}(\theta_j, y) \cdot L_j
 $$
-where $\mathcal{J}_{l}$ is the set of all pipes within water utility $w$, $j$ the pipe index $\tau_j$ is the pipe installation time, $\mathbf{1}_{\{\tau_j = y\}}$ is an indicator function equal to 1 if the installation happened in year $y$ (0 otherwise), $c^\text{pipe}(\theta_j, y)$ the unit cost for the selected pipe option $\theta_j$, and $L_j$ is the length of pipe $j$.
+where $\mathcal{J}_{l}$ is the set of all pipes within water utility $w$, $j$ the pipe index, $\tau_j$ is the pipe installation time, $\mathbf{1}_{\{\tau_j = y\}}$ is an indicator function equal to 1 if the installation happened in year $y$ (0 otherwise), $c^\text{pipe}(\theta_j, y)$ the unit cost for the selected pipe option $\theta_j$, and $L_j$ is the length of pipe $j$.
 
 The Darcy friction factor of a new pipe is provided for every option.
 However, the rate at which the friction factor increases over time (decay rate) is uncertain and is bounded between minimum and maximum values.
