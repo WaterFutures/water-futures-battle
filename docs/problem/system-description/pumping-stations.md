@@ -21,10 +21,10 @@ Similarly, participants can decide to replace pumps at existing locations or add
 Whether replacing old pumps or being added in new pumping stations, the capital investment associated with the installation of pumps in water utility $w$ at year $y$ is:
 $$
 K^\text{pumps}_w(y)
-= \sum_{n \in \mathcal{N}_w} \sum_{p \in \mathcal{P}_{n}} \mathbf{1}_{\{\tau_p = y\}}\cdot c(\gamma_p, y)
+= \sum_{n \in \mathcal{N}_w} \sum_{p \in \mathcal{P}_{n}} \mathbf{1}_{\{\tau_p = y\}}\cdot c^\text{pump}(\gamma_p, y)
 $$
 
-where $n$ is the pumping station index within the set of the water utility's pumping stations ($\mathcal{N}_w$), $p$ is the p-th pump in that pumping station set ($\mathcal{P}_n$), $\tau_p$ is the pump installation time, $\mathbf{1}_{\{\tau_p = y\}}$ is an indicator function equal to 1 if the installation happened in year $y$ (0 otherwise), and $c(\gamma_p, y)$ the unit cost for the selected pump option $\gamma_p$.
+where $n$ is the pumping station index within the set of the water utility's pumping stations ($\mathcal{N}_w$), $p$ is the p-th pump in that pumping station set ($\mathcal{P}_n$), $\tau_p$ is the pump installation time, $\mathbf{1}_{\{\tau_p = y\}}$ is an indicator function equal to 1 if the installation happened in year $y$ (0 otherwise), and $c^\text{pump}(\gamma_p, y)$ the unit cost for the selected pump option $\gamma_p$.
 
 While a water source's daily outflow is constrained by its nominal capacity, the pumping station's configuration limits the source's peak outflow rate ($m^3/hour$).
 

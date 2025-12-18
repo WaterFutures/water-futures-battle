@@ -26,16 +26,16 @@ The fine amount is set by law and can therefore change at any time based on poli
 
 The cost of water production at every source $s$ is a combination of four components:
 $$
-\mathrm{OPEX}_s(y) =  F_s + (c^\text{en}_s+c^\text{vol}_s) \cdot Q_s(y) + c^\text{extra}_s \cdot \max\bigl(Q_s(y)-\phi_s \cdot \text{capacity}_s, 0 \bigr)
+\mathrm{OPEX}_s(y) =  F_s + (c^\text{en}_s+c^\text{vol}_s) \cdot Q_s(y) + c^\text{extra}_s \cdot \max\bigl(Q_s(y)-\phi_s \cdot Q^*_s, 0 \bigr)
 $$
 where: 
 
 - $F_s$ represents fixed costs, including personnel, taxes, and planned maintenance.
 - $c^\text{en}_s\cdot Q_s(y)$ represents volumetric costs for energy.
 - $c^\text{vol}_s \cdot Q_s(y)$ represents the volumetric costs for non-energy related expenditures, such as chemicals and filters.
-- $c^\text{extra}_s \cdot \max\bigl(Q_s(y)-\phi_s \cdot \text{capacity}_s, 0 \bigr)$ represent the extra volumetric costs incurred when production exceeds the planned threshold.
+- $c^\text{extra}_s \cdot \max\bigl(Q_s(y)-\phi_s \cdot Q^*_s, 0 \bigr)$ represent the extra volumetric costs incurred when production exceeds the planned threshold.
 
-In this formulation, $Q_s(y)$ is the total volume produced, $\text{capacity}_s$ is the source nominal capacity, and $\phi_s$ is the capacity target factor, which defines the ideal efficiency point above which additional costs are applied.
+In this formulation, $Q_s(y)$ is the total volume produced by the source in year $y$, $Q^*_s$ is the source nominal capacity, and $\phi_s$ is the capacity target factor, which defines the ideal efficiency point above which additional costs are applied.
 
 Therefore, the operational expenditure associated with all the sources in water utility $w$ at year $y$ is:
 $$
@@ -56,10 +56,10 @@ New water sources have an uncertain construction time, so participants must comm
 The capital investment associated with the construction of new sources in water utility $w$ at year $y$ is:
 $$
 K^\text{sources}_w(y)
-= \sum_{s \in \mathcal{S}_w} \mathbf{1}_{\{\tau_s = y\}} \cdot c^\text{source}_{\text{class}(s)}(y) \cdot \text{capacity}_s 
+= \sum_{s \in \mathcal{S}_w} \mathbf{1}_{\{\tau_s = y\}} \cdot c^\text{source} (\text{class}(s),y) \cdot Q^*_s 
 $$
 
-where for a source $s$ in the set of the water utility's sources ($\mathcal{S}_w$), $\tau_s$ is its starting construction time, $\mathbf{1}_{\{\tau_s = y\}}$ is an indicator function equal to 1 if the construction begins in year $y$ (0 otherwise), $\text{capacity}_s$ is the requested source nominal capacity, and $c^\text{source}_{\text{class}(s)}(y)$ the unit cost, which depends on the year of construction and the source class (see Table @tbl:sources-classes).
+where for a source $s$ in the set of the water utility's sources ($\mathcal{S}_w$), $\tau_s$ is its starting construction time, $\mathbf{1}_{\{\tau_s = y\}}$ is an indicator function equal to 1 if the construction begins in year $y$ (0 otherwise), $Q^*_s$ is the requested source nominal capacity, and $c^\text{source} (\text{class}(s),y)$ the unit cost, which depends on the year of construction and the source class (see @tbl:sources-classes).
 
 | Source nominal capacity [$Mm^3/year$] | Source Class 
 | --- | --- | 

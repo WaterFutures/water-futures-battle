@@ -102,9 +102,9 @@ The two residential profiles associated with each municipality are aggregated th
 
 Therefore, the total billable demand of municipality $m$ at time $t$ (within year $y$) is defined as:
 $$
-D^\text{BIL}_m(t) = D^\text{R1}_m(t, T_y) \cdot w_m + D^\text{R2}_m(t, T_y) \cdot (1-w_m) + D^\text{bus}_m(t, T_y)
+D^\text{BIL}_m(t) = D^\text{R1}_m(t, T_y) \cdot w_m + D^\text{R2}_m(t, T_y) \cdot (1-w_m) + D^\text{C}_m(t, T_y)
 $$
-where $D^\text{R1}_m(t, T_y)$ and $D^\text{R2}_m(t, T_y)$ represent the two residential demands, $w_m \in [0,1]$ is the unitary weight to combine them, $D^\text{bus}_m(t, T_y)$ is the non-residential demand, and $T_y$ is the maximum temperature recorded in year $y$.
+where $D^\text{R1}_m(t, T_y)$ and $D^\text{R2}_m(t, T_y)$ represent the two residential demands, $w_m \in [0,1]$ is the unitary weight to combine them, $D^\text{C}_m(t, T_y)$ is the (commercial) non-residential demand, and $T_y$ is the maximum temperature recorded in year $y$.
 
 | Property | Type | Scope | Unit |
 | :--- | :--- | :--- | :--- |
@@ -144,7 +144,7 @@ where $f^\text{NRW}_{\text{class}(m)}$​ is the sampled NRW demand factor ($m^3
 
 ![Non-revenue water demand factor per class](../../assets/img/leak_demand.png){#fig:nrw-demand width=60%}
 
-| Inner distribution network - average age [years] | NRW Class | Distribution
+| Inner distribution network - average age [years] | NRW Class | Probability distribution
 | --- | --- | :--- |
 | 0 - 25       | A     | Inverted Exponential
 | 25 - 43      | B     | Uniform
