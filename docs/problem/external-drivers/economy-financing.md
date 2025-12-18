@@ -80,22 +80,24 @@ They can either let all three quantities adjust according to inflation, or defin
 
 #### Bond Issuance {#sec:bonds}
 
-Whenever a water utility can not cover its expenses in a given year, it will resort to borrowing through national-issued bonds.
+Whenever a water utility is unable to cover its expenditures in a given year, it finances the resulting deficit by issuing nationally backed bonds.
 Bond dynamics are simplified for tractability.
 
-Bonds are automatically generated with an amount sufficient to cover the utility debt in that year ($amount_i$), a maturity of $M$ years, and the principal is repaid in equal annual instalments of $\text{amount}_i/M$.
-In addition to principal repayment, the utility pays annual interest based on the face value of the bond:
+Bonds are automatically generated with a principal amount sufficient to cover 5 times the utility debt in that year ($amount_i$), a maturity of $M$ years, and coupon rate ($coupon_i$).
+Every year, the utility must repay the sum of principal amounts of all bonds that reach maturity plus annual interests:
 $$
-\text{INT}_w(y) = \sum_{i \in \mathcal{B}_w(y)} amount_i \cdot coupon_i
+\begin{aligned}
+&\text{PRI}_w(y) = \sum_{i \in \mathcal {B}_w(y) : y=M} amount_i \\
+&\text{INT}_w(y) = \sum_{i \in \mathcal{B}_w(y)} amount_i \cdot coupon_i
+\end{aligned}
 $$
-where $\mathcal{B}_w(y)$ is the set of bonds active for water utility $w$ in year $y$ and $i$ indicating the i-th bond.
+where $i$ indicates the i-th bond, $\mathcal{B}_w(y)$ is the set of bonds active for water utility $w$ in year $y$ and $\mathcal {B}_w(y) : y=M$ the subset of bonds reaching maturity $M$.
 
-The i-th bond's coupon is:
+The i-th bond’s coupon is:
 $$
 coupon_i=r_f + cs + a \cdot (1-d_i)
 $$
-
-where $r_f$​ is the risk-free rate (long-term government yield), $cs$ is the base credit spread under normal conditions,  $a$ is the spread sensitivity to investor demand, and $d_i$​ is the uncertain demand factor for bond $i$.
+where $r_f$​ is the risk-free rate (long-term government yield), $cs$ is the base credit spread under normal conditions, $a$ is the spread sensitivity to investor demand, and $d_i$​ is the uncertain demand factor for bond $i$.
 
 Strong investor demand (d>1.0) lowers the coupon rate (cheaper borrowing), while weak demand (d < 1.0) raises it.
 This simulates real-world bond pricing where investor appetite determines borrowing costs and introduces uncertainty to the utilities budgetting.
