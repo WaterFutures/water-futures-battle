@@ -1,7 +1,3 @@
-
-# --- Configuration Variables ---
-
-
 # Output filenames (in project root)
 OUTPUT_DATA := ../water_futures_battle-data.zip
 OUTPUT_PDF := ../water_futures_battle-preprint.pdf
@@ -18,7 +14,6 @@ MATCH_STR="../../assets/img/"
 REPL_STR="./"
 
 # --- Input Files ---
-
 # List of Markdown files, relative to docs/
 MARKDOWN_FILES = \
 	motivation.md \
@@ -87,9 +82,18 @@ PANDOC_LATEX_ARGS := \
 PANDOC_PDF_ARGS := \
 	--pdf-engine=pdflatex
 
+PANDOC_HTML_ARGS := \
+    --to=html \
+	--mathjax \
+    --section-divs \
+    --metadata-file=paper/metadata.yaml \
+    --resource-path=problem/system-description \
+    --filter bin/pandoc-crossref \
+    --citeproc
+
 # --- Build Targets ---
 
-.PHONY: all data latex pdf website clean
+.PHONY: all data latex pdf website clean preprocess-html
 
 all: data latex pdf website
 
@@ -104,6 +108,34 @@ latex:
 
 pdf:
 	cd $(DOCS_DIR) && pandoc -o $(OUTPUT_PDF) $(PANDOC_COMMON_ARGS) $(PANDOC_PDF_ARGS) $(MARKDOWN_FILES)
+
+preprocess-html:
+	@echo "Pre-processing markdown files with Pandoc..."
+	@for file in $(MARKDOWN_FILES); do \
+		echo "Processing $$file..."; \
+		outfile="$${file%.md}.html"; \
+		cd $(DOCS_DIR) && pandoc \
+			--from markdown \
+			--to html \
+			--mathjax \
+			--bibliography=paper/references.bib \
+			--csl=paper/apa.csl \
+			--toc-depth=3 \
+			--section-divs \
+			--resource-path=problem/system-description \
+			--filter bin/pandoc-crossref \
+			--citeproc \
+			$$file -o $$outfile; \
+	done
+	@cd $(DOCS_DIR) && for file in $(MARKDOWN_FILES); do \
+		mdfile=$$file; \
+		htmlfile="$${file%.md}.html"; \
+		if [ -f $$htmlfile ]; then \
+			sed -n '/^---$$/,/^---$$/p' $$mdfile > $$htmlfile.tmp; \
+			cat $$htmlfile >> $$htmlfile.tmp; \
+			mv $$htmlfile.tmp $$htmlfile; \
+		fi; \
+	done
 
 website:
 	cd $(DOCS_DIR) && bundle exec jekyll build

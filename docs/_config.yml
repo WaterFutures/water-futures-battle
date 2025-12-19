@@ -16,6 +16,10 @@ kramdown:
   toc_levels: 2..3
   auto_ids: true
   parse_block_html: true
+  math_engine: mathjax
+  math_engine_opts:
+    preview: true
+    preview_as_code: false
 
 # Navigation
 navigation:
@@ -61,6 +65,8 @@ navigation:
 
 # Exclude files from processing
 exclude:
+  - 'problem/*.md'
+  - motivation.md
   - README.md
   - Gemfile
   - Gemfile.lock
