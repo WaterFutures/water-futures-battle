@@ -225,3 +225,8 @@ water_futures_battle-source.tex
 water_futures_battle-source_cleaned.tex
 water_futures_battle-arxiv_submission.zip
 water_futures_battle-website.zip
+
+# Website rendering
+docs/motivation.html
+docs/problem/*.html
+docs/problem/*/*.html
