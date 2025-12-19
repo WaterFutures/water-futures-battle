@@ -114,8 +114,8 @@ $$
 
 where $r_f$​ is the risk-free rate (long-term government yield), $\hat{\pi}(y=t_i)$ is the inflationary expectation at issuance year, $a$ is the sensitivity to investor demand, and $d(y=t_i)$​ is the uncertain demand factor for bond $i$ at issuance year.
 
-Strong investor demand ($d(y) > 1.0$) increases $\mathrm{amountRaised}_i$ (cheaper borrowing), while weak demand ($d(y) < 1.0$) decreases it.
-This simulates real-world bond pricing where investor appetite determines borrowing costs and introduces uncertainty to the utilities budgetting.
+Strong investor demand ($d(y) > 1.0$) increases $\mathrm{amountRaised}_i$ (through a lower yield and therefore higher price at issuance), while weak demand ($d(y) < 1.0$) decreases it.
+This simulates real-world bond pricing where investor appetite introduces uncertainty to the utilities budgetting.
 
 While utilities cannot directly control bond yields, they can anticipate debt accumulation through scenario analysis and adopt strategies that maintain financial sustainability.
 For instance, utilities may design pacing of interventions to minimize borrowing, or evaluate alternative interventions that reduce the likelihood of large bond issuances during periods with unfavorable yield conditions.
