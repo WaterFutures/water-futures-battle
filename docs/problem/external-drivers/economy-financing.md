@@ -87,7 +87,7 @@ Bond dynamics are simplified for tractability.
 
 Bonds are automatically generated with a principal amount sufficient to cover the utility debt in that year.
 Specifically, the bond amount ($\mathrm{amount}_i$) is set as a multiple of the debt (e.g., $\mathrm{amount}_i=\kappa \cdot \mathrm{debt}_w(y)$ where $\kappa \in [1,2.5]$) to ensure the utility maintains a cash surplus rather than operating at exactly zero balance.
-Bonds are also characterised by a maturity of $M$ years, determining when the bond principal must be repaid, a coupon rate ($\mathrm{coupon}_i$), which determines the interest payments due each year and a yield to maturity ($\mathrm{yield}_i$), which determines the price of the bond ($\mathrm{price}_i$). The price of the bond at issuance will determine the actual amount raised: $\mathrm{amount_raised}_i = \mathrm{price}_i * \mathrm{amount}_i.$
+Bonds are also characterised by a maturity of $M$ years, determining when the bond principal must be repaid, a coupon rate ($\mathrm{coupon}_i$), which determines the interest payments due each year and a yield to maturity ($\mathrm{yield}_i$), which determines the price of the bond ($\mathrm{price}_i$). The price of the bond at issuance will determine the actual amount raised: $\mathrm{amountRaised}_i = \mathrm{price}_i * \mathrm{amount}_i.$
 Each year, the utility must repay the sum of principal amounts of all bonds reaching maturity plus the annual interest payments:
 
 $$
@@ -115,7 +115,7 @@ $$
 
 where $t$ is the issaunce year, $r_f$​ is the risk-free rate (long-term government yield), $\hat{\pi}(y=t)$ is the inflationary expectations at issuance year, $a$ is the sensitivity to investor demand, and $d(y=t)$​ is the uncertain demand factor for bond $i$ at issuance year.
 
-Strong investor demand (d(y) > 1.0) increases $\mathrm{amount_raised}_i$ (cheaper borrowing), while weak demand (d(y) < 1.0) decreases it.
+Strong investor demand (d(y) > 1.0) increases $\mathrm{amountRaised}_i$ (cheaper borrowing), while weak demand (d(y) < 1.0) decreases it.
 This simulates real-world bond pricing where investor appetite determines borrowing costs and introduces uncertainty to the utilities budgetting.
 
 While utilities cannot directly control bond yields, they can anticipate debt accumulation through scenario analysis and adopt strategies that maintain financial sustainability.
