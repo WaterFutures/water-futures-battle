@@ -85,13 +85,15 @@ They can either let all three quantities adjust according to inflation, or defin
 Whenever a water utility is unable to cover its expenditures in a given year, it finances the resulting deficit by issuing nationally backed bonds.
 Bond dynamics are simplified for tractability.
 
-Bonds are automatically generated with a principal amount sufficient to cover 5 times the utility debt in that year ($amount_i$), a maturity of $M$ years, and coupon rate ($coupon_i$).
-Every year, the utility must repay the sum of principal amounts of all bonds that reach maturity plus annual interests:
+Bonds are automatically generated with a principal amount sufficient to cover the utility debt in that year.
+Specifically, the bond amount ($\mathrm{amount}_i$) is set as a multiple of the debt (e.g., $\mathrm{amount}_i=\kappa \cdot \mathrm{debt}_w(y)$ where $\kappa \in \mathbb{Z}^+$) to ensure the utility maintains a cash surplus rather than operating at exactly zero balance.
+Bonds are also characterised by a maturity of $M$ years, determining when the bond principal must be repaid, and a coupon rate ($\mathrm{coupon}_i$), which determines the interest payments due each year.
+Therefore, each year, the utility must repay the sum of principal amounts of all bonds reaching maturity plus the annual interest payments:
 
 $$
 \begin{aligned}
-&\text{PRI}_w(y) = \sum_{i \in \mathcal {B}_w(y) : y=M} amount_i \\
-&\text{INT}_w(y) = \sum_{i \in \mathcal{B}_w(y)} amount_i \cdot coupon_i
+&\text{PRI}_w(y) = \sum_{i \in \mathcal {B}_w(y) : y=M} \mathrm{amount}_i \\
+&\text{INT}_w(y) = \sum_{i \in \mathcal{B}_w(y)} \mathrm{amount}_i \cdot \mathrm{coupon}_i
 \end{aligned}
 $$
 
@@ -100,7 +102,7 @@ where $i$ indicates the i-th bond, $\mathcal{B}_w(y)$ is the set of bonds active
 The i-th bond’s coupon is:
 
 $$
-coupon_i=r_f + cs + a \cdot (1-d_i)
+\mathrm{coupon}_i=r_f + cs + a \cdot (1-d_i)
 $$
 
 where $r_f$​ is the risk-free rate (long-term government yield), $cs$ is the base credit spread under normal conditions, $a$ is the spread sensitivity to investor demand, and $d_i$​ is the uncertain demand factor for bond $i$.
@@ -116,6 +118,7 @@ The complete list of the bond model properties can be seen in @tbl:eb-properties
 | Property | Type | Scope | Unit |
 | :--- | :--- | :--- | :--- |
 | Balance | Dynamic Endogenous | Water utility | €
+| Bond amount to debt ratio | Static | National | 
 | Bond amount | Dynamic Endogenous | Bond | €
 | Bond issue date | Dynamic Endogenous | Bond | 
 | Bond maturity | Static | National | years
