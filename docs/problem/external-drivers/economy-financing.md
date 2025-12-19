@@ -86,9 +86,9 @@ Whenever a water utility is unable to cover its expenditures in a given year, it
 Bond dynamics are simplified for tractability.
 
 Bonds are automatically generated with a principal amount sufficient to cover the utility debt in that year.
-Specifically, the bond amount ($\mathrm{amount}_i$) is set as a multiple of the debt (e.g., $\mathrm{amount}_i=\kappa \cdot \mathrm{debt}_w(y)$ where $\kappa \in \mathbb{Z}^+$) to ensure the utility maintains a cash surplus rather than operating at exactly zero balance.
-Bonds are also characterised by a maturity of $M$ years, determining when the bond principal must be repaid, and a coupon rate ($\mathrm{coupon}_i$), which determines the interest payments due each year.
-Therefore, each year, the utility must repay the sum of principal amounts of all bonds reaching maturity plus the annual interest payments:
+Specifically, the bond amount ($\mathrm{amount}_i$) is set as a multiple of the debt (e.g., $\mathrm{amount}_i=\kappa \cdot \mathrm{debt}_w(y)$ where $\kappa \in [1,2.5]$) to ensure the utility maintains a cash surplus rather than operating at exactly zero balance.
+Bonds are also characterised by a maturity of $M$ years, determining when the bond principal must be repaid, a coupon rate ($\mathrm{coupon}_i$), which determines the interest payments due each year and a yield to maturity ($\mathrm{yield}_i$), which determines the price of the bond ($\mathrm{price}_i$). The price of the bond at issuance will determine the actual amount raised: $\mathrm{amount_raised}_i = \mathrm{price}_i * \mathrm{amount}_i.$
+Each year, the utility must repay the sum of principal amounts of all bonds reaching maturity plus the annual interest payments:
 
 $$
 \begin{aligned}
@@ -99,15 +99,23 @@ $$
 
 where $i$ indicates the i-th bond, $\mathcal{B}_w(y)$ is the set of bonds active for water utility $w$ in year $y$ and $\mathcal {B}_w(y) : y=M$ the subset of bonds reaching maturity $M$.
 
-The i-th bond’s coupon is:
+The i-th bond’s coupon, yield and price are given by:
 
 $$
-\mathrm{coupon}_i=r_f + cs + a \cdot (1-d_i)
+\mathrm{coupon}_i=r_f + $\hat{\pi}(y=t)$,
 $$
 
-where $r_f$​ is the risk-free rate (long-term government yield), $cs$ is the base credit spread under normal conditions, $a$ is the spread sensitivity to investor demand, and $d_i$​ is the uncertain demand factor for bond $i$.
+$$
+\mathrm{yield}_i=\mathrm{coupon}_i + a \cdot (1-d(y=t)),
+$$
 
-Strong investor demand (d>1.0) lowers the coupon rate (cheaper borrowing), while weak demand (d < 1.0) raises it.
+$$
+\mathrm{price}_i=\sum_{y=1}^M \frac{\mathrm{coupon}_i}{(1+\mathrm{yield}_i)^y} + \frac{\mathrm{amount}_i}{(1+\mathrm{yield}_i)^M},
+$$
+
+where $t$ is the issaunce year, $r_f$​ is the risk-free rate (long-term government yield), $\hat{\pi}(y=t)$ is the inflationary expectations at issuance year, $a$ is the sensitivity to investor demand, and $d(y=t)$​ is the uncertain demand factor for bond $i$ at issuance year.
+
+Strong investor demand (d(y) > 1.0) increases $\mathrm{amount_raised}_i$ (cheaper borrowing), while weak demand (d(y) < 1.0) decreases it.
 This simulates real-world bond pricing where investor appetite determines borrowing costs and introduces uncertainty to the utilities budgetting.
 
 While utilities cannot directly control bond yields, they can anticipate debt accumulation through scenario analysis and adopt strategies that maintain financial sustainability.
@@ -121,10 +129,12 @@ The complete list of the bond model properties can be seen in @tbl:eb-properties
 | Bond amount to debt ratio | Static | National | 
 | Bond amount | Dynamic Endogenous | Bond | €
 | Bond issue date | Dynamic Endogenous | Bond | 
-| Bond maturity | Static | National | years
+| Bond maturity | Static | National | years |
+| Bond yield | Dynamic Endogenous | Bond | 
+| Bond price | Dynamic Endogenous | Bond | 
 | Risk free rate | Static | National | 
-| Base credit spread | Static | National | 
-| Spread sensitivity | Static | National |
+| Inflationary expectations | Static | National | 
+| Sensitivity | Static | National |
 | Demand factor | Uncertain | National | 
 
 : Bonds model's properties review. {#tbl:eb-properties}
