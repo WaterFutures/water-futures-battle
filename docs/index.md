@@ -2,7 +2,7 @@
 layout: default
 website_title: Home 🚰
 prev_page_url: /
-next_page_url: /motivation.html
+next_page_url: /participating.html
 website_page_authors:
   - D. Zanutto
 ---
@@ -18,6 +18,12 @@ This competition embodies the core mission of Water-Futures and the theme for WD
 The objective is to **design and operate** a water distribution system over a long-term horizon **under deep uncertainty**, with interventions applied **in stages**.
 For the first time, this challenge features a staged-design approach, unobservable and unknown uncertainties, and incorporates elements of policymaking and artificial intelligence.
 The solutions will be assessed using a transparent and inspectable **open-source evaluation framework**.
+
+## Next Deadline ⏰ 
+
+> **Abstract submission**: *14th January 2025*
+
+Stay on track with all important dates on our [Timeline page]({{ site.baseurl }}/participating.html#important-dates-).
 
 ## Get ahead of everyone! 🥇
 

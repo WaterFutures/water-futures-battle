@@ -25,10 +25,10 @@ kramdown:
 navigation:
   - title: Home
     url: /
-  - title: Motivation
-    url: /motivation.html
   - title: Participate
     url: /participating.html
+  - title: Motivation
+    url: /motivation.html
   - title: The BWF Problem
     url: /problem/
     subnav:
