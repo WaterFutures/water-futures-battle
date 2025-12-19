@@ -83,9 +83,8 @@ They can either let all three quantities adjust according to inflation, or defin
 #### Bond Issuance {#sec:bonds}
 
 Whenever a water utility is unable to cover its expenditures in a given year, it finances the resulting deficit by issuing nationally backed bonds.
-Bond dynamics are simplified for tractability.
-
 Bonds are automatically generated to cover the utility debt in that year.
+
 Specifically, the bond amount is $\kappa$ times the debt, i.e., $\mathrm{amount}_i=\kappa \cdot \mathrm{debt}_w(y)$ where $\kappa \in [1,2.5]$.
 A value of $\kappa$ equal to 1, implies that, depending on investor demand and prevailing market conditions, the proceeds from the bond issuance may barely cover the utility’s financing needs, leaving the balance for the following year around 0.
 In contrast, higher values of $\kappa$ (closer to 2.5) generate a cash surplus with the downside of a larger principal obligation to be repaid at maturity.
