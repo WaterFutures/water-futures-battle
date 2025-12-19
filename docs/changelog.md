@@ -9,7 +9,7 @@ website_page_authors:
 
 # Changelog 🕑
 
-## [The Battle of the Water Futures [Data and Software - v0.3.0]]()
+## The Battle of the Water Futures [Data and Software - [v0.3.0]()]
 
 **Release Date:** 22nd December 2025
 
@@ -49,7 +49,7 @@ This will also be used to create the inp networks, as those currently available 
 
 ---
 
-## [The Battle of the Water Futures [Data and Software - v0.2.0]](https://doi.org/10.5281/zenodo.17935475)
+## The Battle of the Water Futures [Data and Software - [v0.2.0](https://doi.org/10.5281/zenodo.17935475)]
 
 **Release Date:** 15th December 2025
 
@@ -73,7 +73,7 @@ The submission form is almost ready.
 
 ---
 
-## [The Battle of the Water Futures [Data and Software - v0.1.0]](https://zenodo.org/records/17860069)
+## The Battle of the Water Futures [Data and Software - [v0.1.0](https://zenodo.org/records/17860069)]
 
 **Release date**: 8th December 2025
 
@@ -97,7 +97,7 @@ Please report any missing data so we can confirm whether it was intentionally ex
 
 ---
 
-## [The Battle of the Water Futures [Data and Software - v0.1.0-beta.3]](https://zenodo.org/records/17702680)
+## The Battle of the Water Futures [Data and Software - [v0.1.0-beta.3](https://zenodo.org/records/17702680)]
 
 **Release Date**: 24th November 2025
 
@@ -116,7 +116,7 @@ No code or data changes in this pre-release
 
 ---
 
-## [The Battle of the Water Futures [Data and Software - v0.1.0-beta.2]](https://zenodo.org/records/17698487)
+## The Battle of the Water Futures [Data and Software - [v0.1.0-beta.2](https://zenodo.org/records/17698487)]
 
 **Release Date**: 15th October 2025
 
@@ -137,7 +137,7 @@ This release features an update to the project website, which now includes infor
 
 ---
 
-## [The Battle of the Water Futures [Data and Software - v0.1.0-beta.1]](https://zenodo.org/records/17698300)
+## The Battle of the Water Futures [Data and Software - [v0.1.0-beta.1](https://zenodo.org/records/17698300)]
 
 **Release Date**: 1st September 2025
 
