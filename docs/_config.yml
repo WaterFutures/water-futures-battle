@@ -62,6 +62,8 @@ navigation:
     url: /team.html
   - title: Contact Us
     url: /contact.html
+  - title: Changelog
+    url: /changelog.html
 
 # Exclude files from processing
 exclude:

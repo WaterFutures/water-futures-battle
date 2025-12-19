@@ -54,5 +54,16 @@ Check out our [discussion page on GitHub](https://github.com/WaterFutures/water-
 
 If you can't find an answer to your question, just <a href="mailto:battlewaterfutures@kwrwater.nl">reach out to us</a>  and we'll get back to you!
  
+## Latest Updates 📢
+
+- *22nd December 2025* - **Version 0.3.0**
+- *15th December 2025* - Version 0.2.0
+- *8th December 2025* - Version 0.1.0
+- *24th November 2025* - Version 0.1.0-beta.3
+- *15th October 2025* - Version 0.1.0-beta.2
+- *1st September 2025* - Version 0.1.0-beta.1
+
+See the [full changelog]({{ site.baseurl }}/changelog.html).
+
 ---
 *This competition is organized by a dedicated subteam of the [Water-Futures project](/team), including external collaborators. Discover the full Water-Futures team and our broader initiatives on our [website](https://waterfutures.eu/).*
