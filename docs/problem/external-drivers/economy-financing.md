@@ -83,32 +83,40 @@ They can either let all three quantities adjust according to inflation, or defin
 #### Bond Issuance {#sec:bonds}
 
 Whenever a water utility is unable to cover its expenditures in a given year, it finances the resulting deficit by issuing nationally backed bonds.
-Bond dynamics are simplified for tractability.
+Bonds are automatically generated to cover the utility debt in that year.
 
-Bonds are automatically generated with a principal amount sufficient to cover the utility debt in that year.
-Specifically, the bond amount ($\mathrm{amount}_i$) is set as a multiple of the debt (e.g., $\mathrm{amount}_i=\kappa \cdot \mathrm{debt}_w(y)$ where $\kappa \in \mathbb{Z}^+$) to ensure the utility maintains a cash surplus rather than operating at exactly zero balance.
-Bonds are also characterised by a maturity of $M$ years, determining when the bond principal must be repaid, and a coupon rate ($\mathrm{coupon}_i$), which determines the interest payments due each year.
-Therefore, each year, the utility must repay the sum of principal amounts of all bonds reaching maturity plus the annual interest payments:
+Specifically, the bond amount is $\kappa$ times the debt, i.e., $\mathrm{amount}_i=\kappa \cdot \mathrm{debt}_w(y)$ where $\kappa \in [1,2.5]$.
+A value of $\kappa$ equal to 1, implies that, depending on investor demand and prevailing market conditions, the proceeds from the bond issuance may barely cover the utility’s financing needs, leaving the balance for the following year around 0.
+In contrast, higher values of $\kappa$ (closer to 2.5) generate a cash surplus with the downside of a larger principal obligation to be repaid at maturity.
+Bonds are also characterised by a maturity of $M$ years, determining when the bond principal must be repaid, a coupon rate ($\mathrm{coupon}_i$), which determines the interest payments due each year, and a yield to maturity ($\mathrm{yield}_i$), which determines the price of the bond ($\mathrm{price}_i$).
+
+Each year, the utility must repay the sum of principal amounts of all bonds reaching maturity plus the annual interest payments and and receives proceeds based on the bond price in that year.
+Formally:
 
 $$
 \begin{aligned}
-&\text{PRI}_w(y) = \sum_{i \in \mathcal {B}_w(y) : y=M} \mathrm{amount}_i \\
-&\text{INT}_w(y) = \sum_{i \in \mathcal{B}_w(y)} \mathrm{amount}_i \cdot \mathrm{coupon}_i
+&\text{PRI}_w(y) = \sum_{i \in \mathcal {B}_w(y) : y=\tau_i+M} \mathrm{amount}_i \\
+&\text{INT}_w(y) = \sum_{i \in \mathcal{B}_w(y)} \mathrm{amount}_i \cdot \mathrm{coupon}_i \\
+&\mathrm{PRO}_w(y) = \mathrm{price}_i/100 \cdot \mathrm{amount}_i
 \end{aligned}
 $$
 
-where $i$ indicates the i-th bond, $\mathcal{B}_w(y)$ is the set of bonds active for water utility $w$ in year $y$ and $\mathcal {B}_w(y) : y=M$ the subset of bonds reaching maturity $M$.
+where $i$ indicates the *i*-th bond, $\tau_i$ is the issuance year for bond $i$, $\mathcal{B}_w(y)$ is the set of bonds active for water utility $w$ in year $y$ and $\mathcal {B}_w(y) : y=\tau_i+M$ the subset of bonds reaching maturity $M$.
 
-The i-th bond’s coupon is:
+The i-th bond’s coupon, yield, and price are given by:
 
 $$
-\mathrm{coupon}_i=r_f + cs + a \cdot (1-d_i)
+\begin{aligned}
+&\mathrm{coupon}_i=r_f + \hat{\pi}(y=\tau_i) \\
+&\mathrm{yield}_i=\mathrm{coupon}_i + a \cdot (1-d(y=\tau_i)) \\
+&\mathrm{price}_i=\sum_{y=1}^M \frac{\mathrm{coupon}_i}{(1+\mathrm{yield}_i)^y} + \frac{100}{(1+\mathrm{yield}_i)^M}
+\end{aligned}
 $$
 
-where $r_f$​ is the risk-free rate (long-term government yield), $cs$ is the base credit spread under normal conditions, $a$ is the spread sensitivity to investor demand, and $d_i$​ is the uncertain demand factor for bond $i$.
+where $r_f$​ is the risk-free rate (long-term government yield), $\hat{\pi}(y=\tau_i)$ is the inflationary expectation at issuance year, $a$ is the sensitivity to investor demand, and $d(y=\tau_i)$​ is the uncertain demand factor for bond $i$ at issuance year.
 
-Strong investor demand (d>1.0) lowers the coupon rate (cheaper borrowing), while weak demand (d < 1.0) raises it.
-This simulates real-world bond pricing where investor appetite determines borrowing costs and introduces uncertainty to the utilities budgetting.
+Strong investor demand ($d(y) > 1.0$) increases $\mathrm{PRO}_w(y)$ (through a lower yield and therefore higher price at issuance), while weak demand ($d(y) < 1.0$) decreases it.
+This simulates real-world bond pricing where investor appetite introduces uncertainty to the utilities budgetting.
 
 While utilities cannot directly control bond yields, they can anticipate debt accumulation through scenario analysis and adopt strategies that maintain financial sustainability.
 For instance, utilities may design pacing of interventions to minimize borrowing, or evaluate alternative interventions that reduce the likelihood of large bond issuances during periods with unfavorable yield conditions.
@@ -119,12 +127,15 @@ The complete list of the bond model properties can be seen in @tbl:eb-properties
 | :--- | :--- | :--- | :--- |
 | Balance | Dynamic Endogenous | Water utility | €
 | Bond amount to debt ratio | Static | National | 
-| Bond amount | Dynamic Endogenous | Bond | €
-| Bond issue date | Dynamic Endogenous | Bond | 
-| Bond maturity | Static | National | years
+| Bond amount | Static | Bond | €
+| Bond issue date | Static | Bond | 
+| Bond maturity | Static | National | years |
 | Risk free rate | Static | National | 
-| Base credit spread | Static | National | 
-| Spread sensitivity | Static | National |
-| Demand factor | Uncertain | National | 
+| Inflationary expectations | Dynamic Exogenous | National |
+| Bond coupon | Dynamic Endogenous | Bond |
+| Sensitivity | Static | National |
+| Investors demand factor | Dynamic Exogenous | National |
+| Bond yield | Dynamic Endogenous | Bond | 
+| Bond price | Dynamic Endogenous | Bond | 
 
 : Bonds model's properties review. {#tbl:eb-properties}
