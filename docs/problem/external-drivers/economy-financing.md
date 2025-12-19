@@ -102,7 +102,7 @@ where $i$ indicates the i-th bond, $\mathcal{B}_w(y)$ is the set of bonds active
 The i-th bond’s coupon, yield and price are given by:
 
 $$
-\mathrm{coupon}_i=r_f + $\hat{\pi}(y=t)$,
+\mathrm{coupon}_i=r_f + \hat{\pi}(y=t),
 $$
 
 $$
