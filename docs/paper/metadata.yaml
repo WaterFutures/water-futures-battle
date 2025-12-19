@@ -31,4 +31,5 @@ figPrefix:
   - "Figures"
 bibliography: paper/references.bib
 cs: paper/apa.csl
+toc-depth: 3
 ---

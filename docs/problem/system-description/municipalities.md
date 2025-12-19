@@ -61,17 +61,29 @@ The full list can be seen in @tbl:muni-properties, while the actual values for t
 | Surface water (open water) | Dynamic Exogenous | Municipality | $km^2$ |
 | Number of houses | Dynamic Exogenous | Municipality | units
 | Number of businesses | Dynamic Exogenous | Municipality | units
+| Average Disposable Income | Dynamic Exogenous | Municipality | $k\text{€}$
 | Average age distribution network | Dynamic Endogenous | Municipality | years
 
 : Municipalities' properties review. {#tbl:muni-properties}
 
 The total municipality water demand comprises two volumetric quantities:
 
-- billable water demand (the sum of household and business water demands) described in @sec:water-dem, and
-- non-revenue water (accounting for leaks, flushing, measurement errors and other losses), described in @sec:nrw.
+- Billable water demand ($D^\text{BIL}$): The sum of household and business water demands described in @sec:water-dem.
+- Non-revenue water ($D^\text{NRW}$): accounting for leaks, flushing, measurement errors and other losses described in @sec:nrw.
 
-However, this breakdown is not observable to participants, which will be able to observe only total water demand divided in its two components: consumption (delivered outflow) and undelivered demand.
-These two variables are extracted from an EPANET simulation of the network run in pressure-driven analysis (PDA) mode with a minimum pressure threshold of 30 m.
+While these quantities represent the physical components of demand, they are not directly observable by participants. Instead, participants observe the total water demand divided into two components: consumption ($Q$; delivered outflow) and undelivered demand ($U$).
+
+For each municipality $m$ at time $t$, these quantities maintain the following relationships:
+
+$$
+\begin{aligned}
+D_m(t) &= D^\text{BIL}_m(t) + D^\text{NRW}_m(t) \\
+ &= Q_m(t) + U_m(t)
+\end{aligned}
+$$ 
+
+The decomposition between delivered and undelivered demand is extracted from an EPANET simulation of the network run in pressure-driven analysis (PDA) mode with a minimum pressure threshold of 30 m. 
+Whenever there is undelivered demand, we assume that this reduces the billable component first, i.e., $Q^\text{BIL}_m(t) = D^\text{BIL}_m(t) - U_m(t)$.
 
 [comment]: <> (PDA analysis applied to a transmission system?Trasmission mains and WDN are often connected through tanks (for daily volume compensation). Water energy upstream and downstream the storage element is not equal, often you have pumping systems to pressurize the WDN. How can we justify the absence of tank representation?)
 
@@ -88,7 +100,14 @@ In greater detail, for each municipality, two residential profiles are selected 
 
 Phase III. The third phase produces the final hourly time series by applying a Fourier series-based approach which combines seasonal modulation, climate-related adjustments (accounting for the maximum yearly temperature), and random perturbations to capture temporal variability.
 The two residential profiles associated with each municipality are aggregated through weighted combinations, and both residential and non-residential profiles are scaled to match the previously estimated yearly volumes.
-The outcome is a set of 8,760-point hourly water consumption series for each municipality and year. 
+
+Therefore, the total billable demand of municipality $m$ at time $t$ (within year $y$) is defined as:
+
+$$
+D^\text{BIL}_m(t) = D^\text{R1}_m(t, T_y) \cdot w_m + D^\text{R2}_m(t, T_y) \cdot (1-w_m) + D^\text{C}_m(t, T_y)
+$$
+
+where $D^\text{R1}_m(t, T_y)$ and $D^\text{R2}_m(t, T_y)$ represent the two residential demands, $w_m \in [0,1]$ is the unitary weight to combine them, $D^\text{C}_m(t, T_y)$ is the (commercial) non-residential demand, and $T_y$ is the maximum temperature recorded in year $y$.
 
 | Property | Type | Scope | Unit |
 | :--- | :--- | :--- | :--- |
@@ -114,21 +133,23 @@ The actual values of the distributions' parameters can be inspected within the d
 The total length of pipes in a municipality is linked to its population size through the following linear relationship:
 
 $$
-L^\text{IDN}_{m,y} = 57.7*10^{-4} * \text{inhabitants}_{m,y} 
+L^\text{IDN}_{m}(y) = 57.7*10^{-4} \cdot \text{inhabitants}_{m}(y) 
 $$
 
-where $m$ is the municipality index, $y$ is the year, and $L^\text{IDN}_{m,y}$ is the total length of pipes (km) in municipality $m$ at year $y$.
+where $m$ is the municipality index, $y$ is the year, and $L^\text{IDN}_{m}(y)$ is the total length of pipes (km) in municipality $m$ at year $y$.
 
 The actual municipality NRW demand is also capped at twice the billable daily demand to prevent unrealistic leakage levels.
 Therefore, total NRW demand for municipality $m$ at day $d$ is calculated as:
+
 $$
-\text{NRW}_{m,d} = \min\left(f^\text{NRW}_{\text{class}(m),d} \times L^\text{IDN}_{m,y}, \, 2 \times D_{m,d}\right)
+D^\text{NRW}_{m}(d) = \min\left(f^\text{NRW}_{\text{class}(m)} \cdot L^\text{IDN}_{m}(y), \, 2 \cdot \bar D^\text{BIL}_{m}(d)\right)
 $$
-where $f^\text{NRW}_{\text{class}(m),d}$​ is the sampled NRW demand factor ($m^3/km/day$) for the municipality's class, and $D_{m,d}$​ is the daily water demand. 
+
+where $f^\text{NRW}_{\text{class}(m)}$​ is the sampled NRW demand factor ($m^3/km/day$) for the municipality's class, and $\bar D^\text{BIL}_{m}(d)$​ is the average daily water demand of municipality $m$ at day $d$. The daily leak $D^\text{NRW}_{m}(d)$ is equally spread across the day (i.e., $D^\text{NRW}_{m}(t)=D^\text{NRW}_{m}(d)/24$).
 
 ![Non-revenue water demand factor per class](../../assets/img/leak_demand.png){#fig:nrw-demand width=60%}
 
-| Inner distribution network - average age [years] | NRW Class | Distribution
+| Inner distribution network - average age [years] | NRW Class | Probability distribution
 | --- | --- | :--- |
 | 0 - 25       | A     | Inverted Exponential
 | 25 - 43      | B     | Uniform
