@@ -77,9 +77,24 @@ DATA_FILES = \
 
 # --- Dependencies ---
 
-DEPENDENCIES := \
+PAPER_DEPENDENCIES := \
 	$(PAPER_FILES) \
-	paper/metadata.yaml
+	paper/metadata.yaml \
+	paper/acknowledgement.md \
+	paper/data-availability-statement.md \
+	paper/notation.md \
+	paper/references.md \
+	paper/appendix.md \
+	paper/executive-summary.md \
+	paper/references.bib
+
+WEBSITE_DEPENDENCIES := \
+	$(PREPRO_HTML_FILES) \
+	changelog.md \
+	contact.md \
+	index.md \
+	participating.md \
+	team.md
 
 # --- Pandoc Arguments ---
 
@@ -142,10 +157,9 @@ preprocess-html:
 		fi; \
 	done
 
-website:
+website: preprocess-html
 	cd $(DOCS_DIR) && bundle exec jekyll build
 	cd $(DOCS_DIR) && zip -r $(OUTPUT_WEBSITE) ./_site
-
 
 clean:
 	rm -f $(OUTPUT_LATEX) $(OUTPUT_PDF) $(OUTPUT_WEBSITE)
