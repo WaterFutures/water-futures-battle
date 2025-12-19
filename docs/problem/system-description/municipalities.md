@@ -74,6 +74,7 @@ The total municipality water demand comprises two volumetric quantities:
 While these quantities represent the physical components of demand, they are not directly observable by participants. Instead, participants observe the total water demand divided into two components: consumption ($Q$; delivered outflow) and undelivered demand ($U$).
 
 For each municipality $m$ at time $t$, these quantities maintain the following relationships:
+
 $$
 \begin{aligned}
 D_m(t) &= D^\text{BIL}_m(t) + D^\text{NRW}_m(t) \\
@@ -101,9 +102,11 @@ Phase III. The third phase produces the final hourly time series by applying a F
 The two residential profiles associated with each municipality are aggregated through weighted combinations, and both residential and non-residential profiles are scaled to match the previously estimated yearly volumes.
 
 Therefore, the total billable demand of municipality $m$ at time $t$ (within year $y$) is defined as:
+
 $$
 D^\text{BIL}_m(t) = D^\text{R1}_m(t, T_y) \cdot w_m + D^\text{R2}_m(t, T_y) \cdot (1-w_m) + D^\text{C}_m(t, T_y)
 $$
+
 where $D^\text{R1}_m(t, T_y)$ and $D^\text{R2}_m(t, T_y)$ represent the two residential demands, $w_m \in [0,1]$ is the unitary weight to combine them, $D^\text{C}_m(t, T_y)$ is the (commercial) non-residential demand, and $T_y$ is the maximum temperature recorded in year $y$.
 
 | Property | Type | Scope | Unit |
@@ -137,9 +140,11 @@ where $m$ is the municipality index, $y$ is the year, and $L^\text{IDN}_{m}(y)$ 
 
 The actual municipality NRW demand is also capped at twice the billable daily demand to prevent unrealistic leakage levels.
 Therefore, total NRW demand for municipality $m$ at day $d$ is calculated as:
+
 $$
 D^\text{NRW}_{m}(d) = \min\left(f^\text{NRW}_{\text{class}(m)} \cdot L^\text{IDN}_{m}(y), \, 2 \cdot \bar D^\text{BIL}_{m}(d)\right)
 $$
+
 where $f^\text{NRW}_{\text{class}(m)}$​ is the sampled NRW demand factor ($m^3/km/day$) for the municipality's class, and $\bar D^\text{BIL}_{m}(d)$​ is the average daily water demand of municipality $m$ at day $d$. The daily leak $D^\text{NRW}_{m}(d)$ is equally spread across the day (i.e., $D^\text{NRW}_{m}(t)=D^\text{NRW}_{m}(d)/24$).
 
 ![Non-revenue water demand factor per class](../../assets/img/leak_demand.png){#fig:nrw-demand width=60%}

@@ -22,10 +22,12 @@ Selection must occur from a predefined set of pipe options.
 Pipe options are characterized by material, hydraulic properties, installation cost, and associated carbon emissions, with a detailed overview available in @tbl:pi-properties and actual values provided in the data files mapped in Appendix A.
 
 Whether replacing old pipes or being added in a connection, the capital investment associated with the installation of pipes in water utility $w$ at year $y$ is:
+
 $$
 K^\text{pipes}_w(y)
 = \sum_{j \in \mathcal{J}_{w}} \mathbf{1}_{\{\tau_j = y\}}\cdot c^\text{pipe}(\theta_j, y) \cdot L_j
 $$
+
 where $\mathcal{J}_{l}$ is the set of all pipes within water utility $w$, $j$ the pipe index, $\tau_j$ is the pipe installation time, $\mathbf{1}_{\{\tau_j = y\}}$ is an indicator function equal to 1 if the installation happened in year $y$ (0 otherwise), $c^\text{pipe}(\theta_j, y)$ the unit cost for the selected pipe option $\theta_j$, and $L_j$ is the length of pipe $j$.
 
 The Darcy friction factor of a new pipe is provided for every option.

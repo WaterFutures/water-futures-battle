@@ -25,9 +25,11 @@ This penalty effectively represents compensation for the hydrological displaceme
 The fine amount is set by law and can therefore change at any time based on political decisions.
 
 The cost of water production at every source $s$ is a combination of four components:
+
 $$
 \mathrm{OPEX}_s(y) =  F_s + (c^\text{en}_s+c^\text{vol}_s) \cdot Q_s(y) + c^\text{extra}_s \cdot \max\bigl(Q_s(y)-\phi_s \cdot Q^*_s, 0 \bigr)
 $$
+
 where: 
 
 - $F_s$ represents fixed costs, including personnel, taxes, and planned maintenance.
@@ -38,9 +40,11 @@ where:
 In this formulation, $Q_s(y)$ is the total volume produced by the source in year $y$, $Q^*_s$ is the source nominal capacity, and $\phi_s$ is the capacity target factor (source-type dependent), which defines the ideal operating point above which additional costs are applied.
 
 Therefore, the operational expenditure associated with all the sources in water utility $w$ at year $y$ is:
+
 $$
 \mathrm{OPEX}^{\text{sources}}_w(y) = \sum_{s \in \mathcal{S}_w} \mathrm{OPEX}_s(y)
 $$
+
 where $\mathcal{S}_w$ represents the collection of water sources managed by utility $w$, and $\mathrm{OPEX}_s(y)$ is the individual source cost previously defined.
 
 Similarly to municipalities, sources can also open and close over time.
@@ -54,6 +58,7 @@ When activating a new source, participants must decide the nominal capacity, but
 New water sources have an uncertain construction time, so participants must communicate the construction start date, and the activation date will be randomized.
 
 The capital investment associated with the construction of new sources in water utility $w$ at year $y$ is:
+
 $$
 K^\text{sources}_w(y)
 = \sum_{s \in \mathcal{S}_w} \mathbf{1}_{\{\tau_s = y\}} \cdot c^\text{source} (\text{class}(s),y) \cdot Q^*_s 

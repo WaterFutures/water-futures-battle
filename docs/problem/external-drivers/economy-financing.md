@@ -29,9 +29,11 @@ In the absence of reliable long-term inflation forecasts, a reasonable baseline 
 : Inflation's properties review. {#tbl:ei-properties}
 
 Note that wherever unit prices are given only in base-year terms (e.g., only in the value in year 2000 is present in the input files), their value in year $y$ ($C(y)$) is obtained by multiplying by the cumulative inflation index
+
 $$
 C(y) = C(0) \cdot \prod_{\tau = 1}^{y} \bigl(1 + \pi(\tau)\bigr)
 $$
+
 where $C(0)$ is the base-year unit price and $\pi(y)$ is the inflation rate in year $y$.
 
 #### Budget Allocation 
@@ -85,18 +87,22 @@ Bond dynamics are simplified for tractability.
 
 Bonds are automatically generated with a principal amount sufficient to cover 5 times the utility debt in that year ($amount_i$), a maturity of $M$ years, and coupon rate ($coupon_i$).
 Every year, the utility must repay the sum of principal amounts of all bonds that reach maturity plus annual interests:
+
 $$
 \begin{aligned}
 &\text{PRI}_w(y) = \sum_{i \in \mathcal {B}_w(y) : y=M} amount_i \\
 &\text{INT}_w(y) = \sum_{i \in \mathcal{B}_w(y)} amount_i \cdot coupon_i
 \end{aligned}
 $$
+
 where $i$ indicates the i-th bond, $\mathcal{B}_w(y)$ is the set of bonds active for water utility $w$ in year $y$ and $\mathcal {B}_w(y) : y=M$ the subset of bonds reaching maturity $M$.
 
 The i-th bond’s coupon is:
+
 $$
 coupon_i=r_f + cs + a \cdot (1-d_i)
 $$
+
 where $r_f$​ is the risk-free rate (long-term government yield), $cs$ is the base credit spread under normal conditions, $a$ is the spread sensitivity to investor demand, and $d_i$​ is the uncertain demand factor for bond $i$.
 
 Strong investor demand (d>1.0) lowers the coupon rate (cheaper borrowing), while weak demand (d < 1.0) raises it.
