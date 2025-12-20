@@ -2,7 +2,7 @@ name: Build and Deploy Site
 
 on:
   push:
-    branches: [docs, docs-preview, fix/1-website]
+    branches: [docs, docs-preview]
   workflow_dispatch:
 
 permissions:
