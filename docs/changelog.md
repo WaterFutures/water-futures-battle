@@ -1,0 +1,153 @@
+---
+layout: default
+website_title: Changelog 🕑
+prev_page_url: /contact.html
+next_page_url: /changelog.html
+website_page_authors:
+  - D. Zanutto
+---
+
+# Changelog 🕑
+
+## The Battle of the Water Futures [Data and Software - [v0.3.0]()]
+
+**Release Date:** 22nd December 2025
+
+This release introduces a few clarifications and fixes based on the first comments received. Ensure that you update your dataset and review the updated sections.
+
+### What's New
+
+- **Data**
+    - Municipalities' average disposable income (historical)
+    - Water demand model (properties and historical data)
+    - Economy (historical inflation and others)
+    - Energy system (historical data)
+    - Submission form
+
+- **Problem Description (PDF and Website)**
+    - Executive Summary
+
+### What's Changed
+
+- **Data**
+    - Sources and pumping stations parameters
+- **Code**
+    - We dedicated quite some time making sure all of our synthetic generation algorithms were correctly seeded to maintain the same value across runs
+- **Problem Description PDF and Website**
+    - Clarified the Disposable Income (Sec. 2.1.2) and Fairness metric (2.4.4)
+    - Reordered the economy model description, enriched it with equations, and increased details in the bond description
+    - Equations all over 
+    - Minor: rendering Appendix A and Section 2.3
+
+### What's Unchanged
+- **Rules and Information (Website)**
+
+### Important Notes
+
+We are currently working on the evaluator and making sure it is ready to be made open source.  
+This will also be used to create the inp networks, as those currently available are only for visualisation purposes.
+
+---
+
+## The Battle of the Water Futures [Data and Software - [v0.2.0](https://doi.org/10.5281/zenodo.17935475)]
+
+**Release Date:** 15th December 2025
+
+This release is merely a patch release to add the missing file `water_utilities-static_properties` and to give us the opportunity to match the GitHub versions (previously 0.1.0, now 0.2.0) with the Arxiv version (v2, unchanged).
+
+### What's New
+- **Data**
+  - Added missing file `water_utilities-static_properties.xlsx` describing the provinces assigned to each water utility.
+
+### What Changed
+- **Code**
+  - The `Makefile` has been changed to also prepare the zip of the data folder to make sure we don't miss files anymore
+
+### What's Unchanged
+-  **Problem Description PDF and Website**
+- **Website Rules and Information**
+
+### Important Notes
+We are currently working on the evaluator and making sure it is ready to be made open source.
+The submission form is almost ready.
+
+---
+
+## The Battle of the Water Futures [Data and Software - [v0.1.0](https://zenodo.org/records/17860069)]
+
+**Release date**: 8th December 2025
+
+### Competition Release
+
+This releases marks the official start of the competition!
+
+**What's new:**
+- Complete problem description (website and PDF versions)
+- Initial dataset
+- Helpful EPANET inp network files for visualization of the system topology 
+
+**Technical changes in the repository:**
+- Website update
+- Data files are supplementary material in the release and Zenodo entry
+
+**What to know:**
+The problem description is complete but may undergo minor revisions. This initial dataset may change slightly in future releases due to the probabilistic nature of the algorithms used to generate it. Future releases will include additional data with improved formatting.
+
+Please report any missing data so we can confirm whether it was intentionally excluded or inadvertently lost.
+
+---
+
+## The Battle of the Water Futures [Data and Software - [v0.1.0-beta.3](https://zenodo.org/records/17702680)]
+
+**Release Date**: 24th November 2025
+
+### Timeline Update
+
+This release features an update to the competition timeline in the website.
+
+**What's New**:
+
+New timeline, delaying the start of the competition
+
+**Technical Changes**:
+
+Website updates only
+No code or data changes in this pre-release
+
+---
+
+## The Battle of the Water Futures [Data and Software - [v0.1.0-beta.2](https://zenodo.org/records/17698487)]
+
+**Release Date**: 15th October 2025
+
+### Website Update
+
+This release features an update to the project website, which now includes information on the team and a new architecture.
+
+**What's New**:
+
+- Added team member profiles and information
+- Enhanced content across multiple pages and website architecture
+- Added more details about participating in the competition
+
+**Technical Changes**:
+
+- Website updates only
+- No code or data changes in this release
+
+---
+
+## The Battle of the Water Futures [Data and Software - [v0.1.0-beta.1](https://zenodo.org/records/17698300)]
+
+**Release Date**: 1st September 2025
+
+### Competition Announcement
+We're excited to announce the start of the Battle of the Water Futures!
+This initial release marks the public launch of our project website and Zenodo repository.
+
+**What's New**:
+
+Published project website with initial content and structure
+Established online presence for the project
+
+**Note**: This is a beta release focused on establishing our web presence and the Zenodo entry. Code and data releases will follow in future versions.
