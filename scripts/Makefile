@@ -56,9 +56,14 @@ PREPRO_HTML_FILES = \
 DATA_FILES = \
 	configuration.yaml \
 	masterplan.yaml \
+	masterplan.xlsx \
+	connections/connections-static_properties.xlsx \
+	economy/bonds-static_properties.xlsx \
+	economy/economy-dynamic_properties.xlsx \
+	energy/solar_farms-static_properties.xlsx \
+	energy/energy_system-dynamic_properties.xlsx \
 	epanet-networks/*-2025.inp \
 	epanet-networks/README.md \
-	connections/connections-static_properties.xlsx \
 	jurisdictions/jurisdictions-static_properties.xlsx \
 	jurisdictions/municipalities-dynamic_properties.xlsx \
 	nrw_model/nrw_model-dynamic_properties.xlsx \
@@ -71,6 +76,7 @@ DATA_FILES = \
 	sources/desalination-dynamic_properties.xlsx \
 	sources/groundwater-dynamic_properties.xlsx \
 	sources/surface_water-dynamic_properties.xlsx \
+	water_demand_model/water_demand_model-static_properties.xlsx \
 	water_demand_model/water_demand_model-dynamic_properties.xlsx \
 	water_utilities/water_utilities-static_properties.xlsx \
 	raw-data/
