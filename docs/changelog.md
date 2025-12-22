@@ -18,31 +18,33 @@ This release introduces a few clarifications and fixes based on community report
 ### What's New
 
 - **Data**
-    - Municipalities' average disposable income (historical)
-    - Water demand model (properties and historical data)
-    - Economy (historical data on inflation and others)
-    - Energy system (historical data)
-    - Submission form
+  - Municipalities' average disposable income (historical)
+  - Water demand model (properties and historical data)
+  - Economy (historical data on inflation and others)
+  - Energy system (historical data)
+  - Submission form
 
-- **Problem Description (PDF and Website)**
-    - Executive Summary
+- **Problem Description PDF**
+  - Executive Summary
 
 ### What's Changed
 
 - **Data**
-    - Sources and pumping stations parameters
-    - National INP network (corrected units)
-- **Code**
-    - We dedicated significant time making sure all of our synthetic generation algorithms were correctly seeded to maintain the same value across releases
-- **Problem Description PDF and Website**
-    - Clarified the Disposable Income (Sec. 2.1.2) and Fairness metric (2.4.4)
-    - Reordered the economy model description, enriched it with equations, and increased details in the bond description
-    - Equations all over 
-    - Minor: rendering Appendix A and Section 2.3
-    - Minor: fix broken links and rendering
+  - Sources and pumping stations parameters
+  - National INP network (corrected units)
 
-### What's Unchanged
+- **Code**  
+  - We dedicated significant time making sure all of our synthetic generation algorithms were correctly seeded to maintain the same value across releases
+
+- **Problem Description PDF (and Website)**
+  - Clarified the Disposable Income (Sec. 2.1.2) and Fairness metric (2.4.4)
+  - Reordered the economy model description, enriched it with equations, and increased details in the bond description
+  - Equations all over 
+  - Minor: rendering Appendix A and Section 2.3
+
 - **Rules and Information (Website)**
+  - Minor: fix broken links and rendering of equations
+  - Added Changelog and important info on Home
 
 ### Important Notes
 
