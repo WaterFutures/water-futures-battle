@@ -16,15 +16,19 @@ kramdown:
   toc_levels: 2..3
   auto_ids: true
   parse_block_html: true
+  math_engine: mathjax
+  math_engine_opts:
+    preview: true
+    preview_as_code: false
 
 # Navigation
 navigation:
   - title: Home
     url: /
-  - title: Motivation
-    url: /motivation.html
   - title: Participate
     url: /participating.html
+  - title: Motivation
+    url: /motivation.html
   - title: The BWF Problem
     url: /problem/
     subnav:
@@ -58,9 +62,13 @@ navigation:
     url: /team.html
   - title: Contact Us
     url: /contact.html
+  - title: Changelog
+    url: /changelog.html
 
 # Exclude files from processing
 exclude:
+  - 'problem/*.md'
+  - motivation.md
   - README.md
   - Gemfile
   - Gemfile.lock

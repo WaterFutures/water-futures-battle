@@ -2,7 +2,7 @@
 layout: default
 website_title: Contact 📧
 prev_page_url: /team.html
-next_page_url: /contact.html
+next_page_url: /changelog.html
 website_page_authors:
   - D. Zanutto
 ---

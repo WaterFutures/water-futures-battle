@@ -33,6 +33,10 @@ where $B(y)$ is the national investment budget in year $y$, $\alpha_w(y)$ is the
 Note that while surpluses are carried forward, deficits are financed through bond issuance as described in @sec:bonds.
 
 Evaluation will focus only on the remaining debt at the end of the planning period.
+Final debt measures insolvency risk, not financial optimality.
+Competitors are free to pursue any financial strategy they deem appropriate, such as minimising costs, adjusting prices to enable expensive solutions, or adopting other innovative approaches.
+The many-objective framework ensures balanced evaluation across all dimensions.
+In other words, maintaining financial stability is an achievable target; the real challenge is deciding what to sacrifice.
 
 ### Minimize GHG Emissions
 
@@ -58,20 +62,21 @@ EF_{p_c}(y) \cdot L_c
 $$
 
 
-where $\mathcal{C}_w$ is the set of connections of water utility $w$^[as described in @sec:connections, we distinguish between connections and pipes], $\mathbf{1}_{c\text{ activated in }y}$ is 1 if connection $c$ installs a new pipe in year $y$, 0 otherwise, $EF_{p_c}(y)$ is the unit emission factor of the connection's selected pipe option $p_c$, and $L_c$ is the connection lenght.
+where $\mathcal{C}_w$ is the set of connections of water utility $w$^[as described in @sec:connections, we distinguish between connections and pipes], $\mathbf{1}_{c\text{ activated in }y}$ is 1 if connection $c$ installs a new pipe in year $y$, 0 otherwise, $EF_{p_c}(y)$ is the unit emission factor of the connection's selected pipe option $p_c$, and $L_c$ is the connection length.
 
-The unit emission factor $EF_{p}$ for pipe option $p$ depends on the pipe option diameter $Diam_p$ and material $Mat_p$, i.e., $EF_{p}(y) = EF(Diam_p, Mat_p, y)$.
+The unit emission factor $EF_{p}$ for pipe option $p$ depends on the pipe option diameter $Diam_p$ and material $Mat_p$ and may change over time because of technological advancements, i.e., $EF_{p}(y) = EF(Diam_p, Mat_p, y)$.
 
 The operational emissions are calculated based on the total electricity purchased from the grid, covering both water treatment (sources) and transport (pumping).
 
 $$
 \mathrm{GHG}_w^{\text{op}}(y) = \sum_{t \in \mathcal{Y}} \bigl[ \sum_{s \in \mathcal{S_w}} E_s(t) \cdot EF_s(t) + \sum_{p \in \mathcal{P}_w} E_p(t) \cdot EF_p(t) \bigr]
 $$
+
 where for each timestep $t$ of a year $y$^[$y$ represent the year, while $\mathcal{Y}$ is the collection of timesteps], $E_s(t)$ and $EF_s(t)$ are the energy consumption and the emission factor of source $s$, while $E_p(t)$ and $EF_p(t)$ represent the same quantities for pump $p$.
 
 Pumps energy consumption is retrieved via the EPANET simulations, while the water sources energy consumption is calculated as $E_s(t) = c_s^E(t) \cdot V_s(t)$, i.e., the combination of the source unit energy consumption $c_s^E(t)$ and the volume of water produced by the source $V_s(t)$.
 
-The emission factors of both entities (pumping stations $EF_p(t)$ and sources $EF_s(t)$) are dynamic and depend on the size and time of production of the behind-the-meter solar panels installation at that location (if no solar is installed, this variable reduces to the constant electricity grid emission factor in year $y$, i.e., $EF^\text{el}(y)$ ).
+The emission factors of both entities (pumping stations $EF_p(t)$ and sources $EF_s(t)$) are dynamic and depend on the size and time of production of the behind-the-meter solar panels installation at that location (if no solar is installed, this variable reduces to the constant electricity grid emission factor in year $y$, i.e., $EF^{\text{el}}(y)$ ).
 
 ### Maximize Service Reliability
 
@@ -79,9 +84,11 @@ Participants must ensure high service reliability by minimizing unmet water dema
 
 Service reliability for municipality $m$ in year $y$ is:
 
-$Rel_m(y) = 1 - \dfrac{U_m(y)}{D_m(y)}$
+$$
+Rel_m(y) = 1 - \frac{U_m(y)}{D^{\text{BIL}}_m(y)}
+$$
 
-where $U_m(y)$ is the undelivered demand and ${D_m(y)}$ is the billable water demand.
+where $U_m(y)$ is the undelivered demand and $D^{\text{BIL}}_m(y)$ is the billable water demand.
 
 Evaluation will focus on maintaining adequate service levels across all municipalities of each water utility throughout the entire planning horizon.
 
@@ -89,13 +96,13 @@ Evaluation will focus on maintaining adequate service levels across all municipa
 
 Participants must ensure water remains affordable, particularly for lower-income households, while maintaining equitable pricing across municipalities.
 
-The affordability fairness metric represents the fraction of income that lower-income households spend on essential water consumption.
+The affordability fairness metric represents the fraction of income that a household at the 20th percentile of the income distribution would spend on essential water consumption.
 Affordability fairness (lower is better) for water utility $w$ in year $y$ is:
 
 $$
-AF_w(y) = \frac{P_w^\text{fixed}(y) + P_w^\text{variable}(y) \cdot D^\text{life}}{DI_w^{p20}(y)}
+AF_w(y) = \frac{P_w^{\text{fixed}}(y) + P_w^{\text{variable}}(y) \cdot D^{\text{life}}}{ADI_w^{p20}(y)}
 $$
 
-where $P_w^\text{fixed}(y)$ and $P_w^\text{variable}(y)$ are the fixed and variable components of water price, $D^\text{life}$ is lifeline volume (minimum water required per person), and $DI_w^{p20}(y)$ is the 20th percentile of disposable income.
+where $P_w^{\text{fixed}}(y)$ and $P_w^{\text{variable}}(y)$ are the fixed and variable components of water price, $D^{\text{life}}$ is lifeline volume (minimum water required per person), and $ADI_w^{p20}(y)$ is the 20th percentile of disposable income across all households served by the water utility.
 
 Evaluation will focus on minimizing affordability while maintaining reasonable equity across utilities.

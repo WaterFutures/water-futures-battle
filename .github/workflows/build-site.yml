@@ -1,0 +1,62 @@
+name: Build and Deploy Site
+
+on:
+  push:
+    branches: [docs, docs-preview]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Pandoc # It is not the latest, but is the one that gets installed on my VM with apt install
+        run: |
+          wget https://github.com/jgm/pandoc/releases/download/3.1.3/pandoc-3.1.3-1-amd64.deb
+          sudo dpkg -i pandoc-3.1.3-1-amd64.deb
+
+      - name: Install pandoc-crossref
+        run: |
+          wget https://github.com/lierdakil/pandoc-crossref/releases/download/v0.3.16.0a/pandoc-crossref-Linux.tar.xz
+          tar -xf pandoc-crossref-Linux.tar.xz
+          mkdir -p docs/bin
+          sudo mv pandoc-crossref docs/bin/
+          sudo chmod +x docs/bin/pandoc-crossref
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2.3' # again, same as my VM
+      
+      - name: Install Bundler
+        run: gem install bundler
+      
+      - name: Install dependencies
+        run: |
+          bundle config set path 'vendor/bundle'
+          cd docs
+          bundle install
+      
+      - name: Build site
+        run: |
+          cd scripts
+          make website
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_site
+  
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
