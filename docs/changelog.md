@@ -13,14 +13,14 @@ website_page_authors:
 
 **Release Date:** 22nd December 2025
 
-This release introduces a few clarifications and fixes based on the first comments received. Ensure that you update your dataset and review the updated sections.
+This release introduces a few clarifications and fixes based on community reports Ensure that you update your dataset and review the updated sections.
 
 ### What's New
 
 - **Data**
     - Municipalities' average disposable income (historical)
     - Water demand model (properties and historical data)
-    - Economy (historical inflation and others)
+    - Economy (historical data on inflation and others)
     - Energy system (historical data)
     - Submission form
 
@@ -31,13 +31,15 @@ This release introduces a few clarifications and fixes based on the first commen
 
 - **Data**
     - Sources and pumping stations parameters
+    - National INP network (corrected units)
 - **Code**
-    - We dedicated quite some time making sure all of our synthetic generation algorithms were correctly seeded to maintain the same value across runs
+    - We dedicated significant time making sure all of our synthetic generation algorithms were correctly seeded to maintain the same value across releases
 - **Problem Description PDF and Website**
     - Clarified the Disposable Income (Sec. 2.1.2) and Fairness metric (2.4.4)
     - Reordered the economy model description, enriched it with equations, and increased details in the bond description
     - Equations all over 
     - Minor: rendering Appendix A and Section 2.3
+    - Minor: fix broken links and rendering
 
 ### What's Unchanged
 - **Rules and Information (Website)**
