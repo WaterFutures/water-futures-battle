@@ -1,8 +1,8 @@
 ---
 layout: default
 website_title: Motivation
-prev_page_url: /
-next_page_url: /participating.html
+prev_page_url: /participating.html
+next_page_url: /problem/
 website_page_authors:
   - D. Zanutto
 ---

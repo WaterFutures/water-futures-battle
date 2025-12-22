@@ -9,7 +9,7 @@ website_page_authors:
   - D. Zanutto
 ---
 
-## System Decription
+## System Description
 
 This chapter describes the physical components that constitute the water transport network in the BWF competition.
 The key entities are municipalities, water sources, pumping stations, and pipes and each of the following section will detail their characteristics, operational constraints, and how they evolve over time.

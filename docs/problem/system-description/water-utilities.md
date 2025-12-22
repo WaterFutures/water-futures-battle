@@ -17,7 +17,7 @@ WUs must choose the policies to apply to their own system (e.g, setting the budg
 
 Multiple WUs can also join their efforts to pursue common interventions, for example, the cost of placing a pipe connecting two water utilities will be shared between the two utilities.
 If WU are connected with each other and there is an exchange of water, the receiving utility pays a volumetric fee to the supplying utility.
-More detailed information about the water tariff scheme are available in @sec:water-tariff.
+More detailed information about the water tariff scheme are available in @sec:water-pricing.
 
 The structure of the system is static.
 The number of WUs and their specific geographic responsibilities (assigned provinces) will not change through the competition.
