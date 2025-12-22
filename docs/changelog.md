@@ -9,7 +9,7 @@ website_page_authors:
 
 # Changelog 🕑
 
-## The Battle of the Water Futures [Data and Software - [v0.3.0]()]
+## The Battle of the Water Futures [Data and Software - [v0.3.0](https://doi.org/10.5281/zenodo.17698299)]
 
 **Release Date:** 22nd December 2025
 
