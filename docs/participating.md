@@ -63,8 +63,14 @@ An open-source evaluator will be released before the first submission deadline, 
 
 ## Ranking 📊
 
-The exact ranking criteria for determining the winner are still being finalized and will be announced after the competition begins, along with further details about the problem.
+Competitor solutions will be evaluated using the four metrics detailed in the problem description: economic performance, environmental impact, reliability, and fairness.
 
-For now, be aware that we will evaluate submissions using multiple metrics—such as cost, reliability, GHG emissions (as in previous competitions), and possibly new ones like fairness.
-The final ranking will reflect the social importance of these dimensions.
-Despite the multi-objective nature of the challenge, each team must submit a single solution.
+The competition consists of multiple rounds.
+The ranking formula will blend weighted aggregation of these metrics with multi-criteria decision-making methods, reflecting changing social priorities and societal perspectives.
+This formula may vary between rounds to represent how societal values and priorities shift over time.
+
+To simulate real-world decision-making under deep uncertainty, the exact ranking formula will not be disclosed to participants before each submission deadline.
+However, the ranking methodology used will be revealed at the end of each round, before the next submission opens.
+The final winner will be announced at the conference.
+
+Despite the multi-objective nature of the challenge, each team must submit a single solution per round, requiring participants to identify their own compromise within this complex decision space.
