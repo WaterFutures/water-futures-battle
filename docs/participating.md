@@ -14,13 +14,21 @@ On this page you can find the [rules](#participation-rules-), [deadlines](#impor
 ## Participation rules 🚷
 
 The competition is organized as an __invited session__ at the WDSA/CCWI 2026 conference.
-The process and timeline for the battle are __independent of the standard conference submission workflow__.
+Abstract submission, paper publication, and conference registration will follow the standard conference procedures and [platform](https://cmt3.research.microsoft.com/WDSACCWI2026/).
+Solution submission will be handled through a different workflow [explained below](#submitting-a-solution-).
 
 - Participants may submit a solution individually or as part of a team, but **each person can only be included in one team**. 
-- If your team submits a solution, **at least one team member must register for the conference and present** your work at the event.
-- Each team is **required to submit a short paper (4–6 pages) describing the methodology** used.
+- **A team is considered formed when an extended abstract** (between 500 and 1000 words) **is submitted** through the conference platform.
+The abstract should cover the aim, methodology, and originality of the solution the team intends to develop for the competition.
+All individuals listed as authors in the abstract will be considered team members.
+- Upon acceptance of the abstract, authors who have not yet registered through the standard conference submission will be able to register for the conference.
+**At least one team member must register for the conference and present the work at the event.**
+*Teams that do not have at least one registered member will not be considered eligible for the competition.*
+- Teams whose abstracts have been accepted and who submit a solution following the competition guidelines **will have the option to submit a full paper (6-8 pages) describing their methodology** to be published in the conference proceedings.
+Full papers will be reviewed for quality, and feedback will be sent to authors for any necessary revisions.
+Full papers should be submitted in standard A4 paper format, following the template provided on the conference website.
 
-More information about the conference and the regular paper submission are available on the [conference website](https://www.wdsa-ccwi2026.ucy.ac.cy/).
+More information about the conference and the abstract and paper submission are available on the [conference website](https://www.wdsa-ccwi2026.ucy.ac.cy/call-for-papers/).
 
 > Authors are encouraged but not required to submit a regular contribution to the conference to participate in the competition.
 
