@@ -57,9 +57,9 @@ More information about the conference and the abstract and paper submission are 
 
 ## Submitting a solution 📩
 
-We'll provide a solution template shortly.
-We understand that addressing the problem is challenging enough, so the template will be designed to make submissions easy.
-You'll be able to check the compliance of your solution through our open-source evaluator before submitting it.
+Solutions must be submitted through a form opening during submission week, using the template from the data folder on Zenodo (file named `masterplan`).
+Participants can submit either an Excel file (simplest option with the dropdown options) or JSON/YAML files (for greater customisation and following the naming convention and structure detailed in Section 2.3 of the paper).
+An open-source evaluator will be released before the first submission deadline, enabling participants to test the compatibility of their solution in advance.
 
 ## Ranking 📊
 
