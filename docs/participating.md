@@ -14,7 +14,7 @@ On this page you can find the [rules](#participation-rules-), [deadlines](#impor
 ## Participation rules 🚷
 
 The competition is organized as an __invited session__ at the WDSA/CCWI 2026 conference.
-Abstract submission, paper publication, and conference registration will follow the standard conference procedures and [platform](https://cmt3.research.microsoft.com/WDSACCWI2026/).
+Abstract submission, paper publication, and conference registration will follow the [standard conference procedures](https://www.wdsa-ccwi2026.ucy.ac.cy/call-for-papers/) and [platform](https://cmt3.research.microsoft.com/WDSACCWI2026/).
 Solution submission will be handled through a different workflow [explained below](#submitting-a-solution-).
 
 - Participants may submit a solution individually or as part of a team, but **each person can only be included in one team**. 
