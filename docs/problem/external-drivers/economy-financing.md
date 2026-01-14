@@ -32,7 +32,7 @@ Note that wherever unit prices are given only in base-year terms (e.g., only in 
 
 $$
 C(y) = C(0) \cdot \prod_{\tau = 1}^{y} \bigl(1 + \pi(\tau)\bigr)
-$$
+$${eq:interest-rate-prod}
 
 where $C(0)$ is the base-year unit price and $\pi(y)$ is the inflation rate in year $y$.
 
@@ -61,7 +61,7 @@ Thus, the total revenue for a water utility $w$ in year $y$ is:
 
 $$
 REV_w(y) = \sum_{m \in \mathcal{M}_w} P_w^\text{fixed}(y) + P_w^\text{variable}(y) \cdot Q^\text{BIL}_m(y) + \sum_{w' \in \mathcal{W}^-} P_w^\text{sell}(y) \cdot Q^{w'}_w(y)
-$$
+$${eq:revenue-water-utility}
 
 where $P_w^\text{fixed}(y)$ and $P_w^\text{variable}(y)$ are the fixed and volumetric components of the retail water price, $Q^\text{BIL}_m$ is the delivered billable demand in municipality $m$, $\mathcal{M}_w$ is the set of municipalities in water utility $w$, $P_w^\text{sell}(y)$ is the volumetric charge for inter-utility water sales, and $Q^{w'}_w$ is the net volume of water sold to utility $w'$ ($\mathcal{W}^-$ is the set of water utilities excluding utility $w$).
 
@@ -99,7 +99,7 @@ $$
 &\text{INT}_w(y) = \sum_{i \in \mathcal{B}_w(y)} \mathrm{amount}_i \cdot \mathrm{coupon}_i \\
 &\mathrm{PRO}_w(y) = \mathrm{price}_i/100 \cdot \mathrm{amount}_i
 \end{aligned}
-$$
+$$ {eq:bonds-payment}
 
 where $i$ indicates the *i*-th bond, $\tau_i$ is the issuance year for bond $i$, $\mathcal{B}_w(y)$ is the set of bonds active for water utility $w$ in year $y$ and $\mathcal {B}_w(y) : y=\tau_i+M$ the subset of bonds reaching maturity $M$.
 
@@ -111,7 +111,7 @@ $$
 &\mathrm{yield}_i=\mathrm{coupon}_i + a \cdot (1-d(y=\tau_i)) \\
 &\mathrm{price}_i=\sum_{y=1}^M \frac{\mathrm{coupon}_i}{(1+\mathrm{yield}_i)^y} + \frac{100}{(1+\mathrm{yield}_i)^M}
 \end{aligned}
-$$
+$$ {eq:coupons-price}
 
 where $r_f$​ is the risk-free rate (long-term government yield), $\hat{\pi}(y=\tau_i)$ is the inflationary expectation at issuance year, $a$ is the sensitivity to investor demand, and $d(y=\tau_i)$​ is the uncertain demand factor for bond $i$ at issuance year.
 

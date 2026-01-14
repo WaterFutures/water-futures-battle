@@ -80,7 +80,8 @@ $$
 D_m(t) &= D^\text{BIL}_m(t) + D^\text{NRW}_m(t) \\
  &= Q_m(t) + U_m(t)
 \end{aligned}
-$$ 
+$$ {#eq:comp-of-demands}
+
 
 The decomposition between delivered and undelivered demand is extracted from an EPANET simulation of the network run in pressure-driven analysis (PDA) mode with a minimum pressure threshold of 30 m. 
 Whenever there is undelivered demand, we assume that this reduces the billable component first, i.e., $Q^\text{BIL}_m(t) = D^\text{BIL}_m(t) - U_m(t)$.
@@ -105,7 +106,7 @@ Therefore, the total billable demand of municipality $m$ at time $t$ (within yea
 
 $$
 D^\text{BIL}_m(t) = D^\text{R1}_m(t, T_y) \cdot w_m + D^\text{R2}_m(t, T_y) \cdot (1-w_m) + D^\text{C}_m(t, T_y)
-$$
+$$ {#eq:water-demand-model}
 
 where $D^\text{R1}_m(t, T_y)$ and $D^\text{R2}_m(t, T_y)$ represent the two residential demands, $w_m \in [0,1]$ is the unitary weight to combine them, $D^\text{C}_m(t, T_y)$ is the (commercial) non-residential demand, and $T_y$ is the maximum temperature recorded in year $y$.
 
@@ -134,7 +135,7 @@ The total length of pipes in a municipality is linked to its population size thr
 
 $$
 L^\text{IDN}_{m}(y) = 57.7*10^{-4} \cdot \text{inhabitants}_{m}(y) 
-$$
+$${#eq:pipe-length}
 
 where $m$ is the municipality index, $y$ is the year, and $L^\text{IDN}_{m}(y)$ is the total length of pipes (km) in municipality $m$ at year $y$.
 
@@ -143,7 +144,7 @@ Therefore, total NRW demand for municipality $m$ at day $d$ is calculated as:
 
 $$
 D^\text{NRW}_{m}(d) = \min\left(f^\text{NRW}_{\text{class}(m)} \cdot L^\text{IDN}_{m}(y), \, 2 \cdot \bar D^\text{BIL}_{m}(d)\right)
-$$
+$$ {#eq:new-demand}
 
 where $f^\text{NRW}_{\text{class}(m)}$​ is the sampled NRW demand factor ($m^3/km/day$) for the municipality's class, and $\bar D^\text{BIL}_{m}(d)$​ is the average daily water demand of municipality $m$ at day $d$. The daily leak $D^\text{NRW}_{m}(d)$ is equally spread across the day (i.e., $D^\text{NRW}_{m}(t)=D^\text{NRW}_{m}(d)/24$).
 

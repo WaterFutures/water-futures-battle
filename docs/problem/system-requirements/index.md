@@ -26,7 +26,7 @@ Each year, the financial balance $F_w$ of every water utility $w$ is updated bas
 
 $$
 F_{w}(y+1) = F_{w}(y) + B(y) \cdot \alpha_w(y) - \text{CAPEX}_w(y) - \text{OPEX}_w(y) - \text{INT}_w(y) + REV_{w}(y)
-$$
+$${eq:water-utility-finance}
 
 where $B(y)$ is the national investment budget in year $y$, $\alpha_w(y)$ is the share of budget allocated for the water utility $w$, $\text{CAPEX}_w$ all the utility's interventions capital costs, $\text{OPEX}_w$ all the utility's operational costs, and $REV_w$ the water utility's revenue from the billable water demand.
 
@@ -47,7 +47,7 @@ The GHG emissions for water utility $w$ in year $y$ are:
 $$
 \mathrm{GHG}_w(y) = \mathrm{GHG}_w^{\text{emb}}(y)
 + \mathrm{GHG}_w^{\text{op}}(y)
-$$
+$${eq:ghg-emissions-calc}
 
 where $\mathrm{GHG}_w^{\text{emb}}(y)$ the embedded (construction) emissions, and $\mathrm{GHG}_w^{\text{op}}(y)$ the operational emissions from electricity use.
 
@@ -59,7 +59,7 @@ $$
 =  \sum_{c \in \mathcal{C}_w}
 \mathbf{1}_{c\text{ activated in }y} \cdot
 EF_{p_c}(y) \cdot L_c
-$$
+$${eq:ghg-emissions-pipes}
 
 
 where $\mathcal{C}_w$ is the set of connections of water utility $w$^[as described in @sec:connections, we distinguish between connections and pipes], $\mathbf{1}_{c\text{ activated in }y}$ is 1 if connection $c$ installs a new pipe in year $y$, 0 otherwise, $EF_{p_c}(y)$ is the unit emission factor of the connection's selected pipe option $p_c$, and $L_c$ is the connection length.
@@ -70,7 +70,7 @@ The operational emissions are calculated based on the total electricity purchase
 
 $$
 \mathrm{GHG}_w^{\text{op}}(y) = \sum_{t \in \mathcal{Y}} \bigl[ \sum_{s \in \mathcal{S_w}} E_s(t) \cdot EF_s(t) + \sum_{p \in \mathcal{P}_w} E_p(t) \cdot EF_p(t) \bigr]
-$$
+$${eq:ghg-emissions-operational}
 
 where for each timestep $t$ of a year $y$^[$y$ represent the year, while $\mathcal{Y}$ is the collection of timesteps], $E_s(t)$ and $EF_s(t)$ are the energy consumption and the emission factor of source $s$, while $E_p(t)$ and $EF_p(t)$ represent the same quantities for pump $p$.
 
@@ -86,7 +86,7 @@ Service reliability for municipality $m$ in year $y$ is:
 
 $$
 Rel_m(y) = 1 - \frac{U_m(y)}{D^{\text{BIL}}_m(y)}
-$$
+$${eq:service-reliability}
 
 where $U_m(y)$ is the undelivered demand and $D^{\text{BIL}}_m(y)$ is the billable water demand.
 
@@ -101,7 +101,7 @@ Affordability fairness (lower is better) for water utility $w$ in year $y$ is:
 
 $$
 AF_w(y) = \frac{P_w^{\text{fixed}}(y) + P_w^{\text{variable}}(y) \cdot D^{\text{life}}}{ADI_w^{p20}(y)}
-$$
+$${eq:affordability}
 
 where $P_w^{\text{fixed}}(y)$ and $P_w^{\text{variable}}(y)$ are the fixed and variable components of water price, $D^{\text{life}}$ is lifeline volume (minimum water required per person), and $ADI_w^{p20}(y)$ is the 20th percentile of disposable income across all households served by the water utility.
 
