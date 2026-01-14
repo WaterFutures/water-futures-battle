@@ -26,7 +26,7 @@ Whether replacing old pipes or being added in a connection, the capital investme
 $$
 K^\text{pipes}_w(y)
 = \sum_{j \in \mathcal{J}_{w}} \mathbf{1}_{\{\tau_j = y\}}\cdot c^\text{pipe}(\theta_j, y) \cdot L_j
-$$
+$$ {#eq:pipes-capital-cost}
 
 where $\mathcal{J}_{l}$ is the set of all pipes within water utility $w$, $j$ the pipe index, $\tau_j$ is the pipe installation time, $\mathbf{1}_{\{\tau_j = y\}}$ is an indicator function equal to 1 if the installation happened in year $y$ (0 otherwise), $c^\text{pipe}(\theta_j, y)$ the unit cost for the selected pipe option $\theta_j$, and $L_j$ is the length of pipe $j$.
 
@@ -38,6 +38,7 @@ These emission factors may change over time due to technological advancements.
 
 Connections are either completely within a province (intra-province) or shared between provinces (inter-province).
 The complete lists of intra-province and inter-province connections are included in the data files mapped in Appendix A.
+The capital cost for inter-provincial pipes is shared equally between the water utilities operating in the connected provinces (@eq:pipes-capital-cost is used but the pipe's length is half).
 
 | Property | Type | Scope | Unit |
 | :--- | :--- | :--- | :--- |

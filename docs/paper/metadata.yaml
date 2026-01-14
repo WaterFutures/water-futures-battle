@@ -29,6 +29,9 @@ secPrefix:
 figPrefix:
   - "Figure"
   - "Figures"
+eqPrefix:
+  - "Equation"
+  - "Equations"
 bibliography: paper/references.bib
 cs: paper/apa.csl
 toc-depth: 3
