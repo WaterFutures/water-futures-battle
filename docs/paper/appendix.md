@@ -4,7 +4,7 @@
 
 # Appendix A
 
-This Appendix A describes the data contained within the supplementary material (zipped data folder).
+This appendix describes the data contained within the supplementary material (zipped data folder).
 
 ## EPANET Networks Files {.unnumbered .unlisted}
 
@@ -239,3 +239,35 @@ Have a look at the `raw-data` folder.
   - Start year (`start_year`) [ - ]
   - End year (`end_year`) [ - ]
   - National budget (`national_budget`) [€]
+
+# Appendix B
+
+This appendix describes how to complete the solution template (file named masterplan in the supplementary materials).
+
+The masterplan for each competition stage should be prepared using one of the template files provided in the supplementary materials.
+All three file formats are accepted to provide a trade-off between flexibility and usability.
+
+The Excel file is the most user-friendly way to describe the solution.
+Each lever is described in a separate sheet and requires adding one entry per row and filling in the columns.
+The advantage is that most options can simply be selected using the dropdown menus in the columns.
+The downside is that it doesn't offer the flexibility to produce custom policies for budget allocation (@sec:policy-budget-allocation) and NRW interventions (@sec:policy-nrw-mitigation).
+
+The YAML format describes the masterplan using the same structure we introduce for all the levers outlined in @sec:system-levers.
+It allows users to define custom policies and to populate the file programmatically.
+However, preparing it may be somewhat more difficult as it needs to follow the specific structure shown in @lst:yaml-format.
+The masterplan can be provided in either JSON or YAML format as long as the structure remains unchanged.
+
+```{#lst:yaml-format .yaml caption="Structure of the masterplan in YAML."}
+years:
+  - year: YYYY                                                                                  
+    national_policies:
+      # Amend here budget allocation and other national policies
+    national_interventions:
+      # Install here inter-provincial pipes connecting water utilities
+    water_utilities:
+      - water_utility: WUxx
+        policies:
+        # Amend here policies for this water utility
+        interventions:
+        # Report here interventions for this water utility (e.g., pipe installations)
+```

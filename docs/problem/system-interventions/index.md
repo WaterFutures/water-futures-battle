@@ -9,7 +9,7 @@ website_page_authors:
   - D. Zanutto
 ---
 
-## System Levers
+## System Levers {#sec:system-levers}
 
 Participants make two types of strategic decisions: policies and interventions.
 
@@ -22,7 +22,7 @@ Here, we consolidate this information to give participants a complete overview o
 Policies encompass regulatory and operational rules, such as pricing structures, budget allocations, and maintenance protocols.
 Once set, policies remain in effect until explicitly amended.
 
-#### National Budget Allocation (National)
+#### National Budget Allocation (National) {#sec:policy-budget-allocation}
 
 Participants must decide the strategy to allocate the national budget across the water utilities.
 The policy can be a predefined one or follow a custom allocation of the funds:
@@ -53,7 +53,7 @@ The policy can be a predefined one or follow a custom allocation of the funds:
           WU02: 0.25 # and so on... 
   ```
 
-#### Non-Revenue Water Mitigation Budget (Utility)
+#### Non-Revenue Water Mitigation Budget (Utility) {#sec:policy-nrw-mitigation}
 
 Participants must decide each water utility's yearly budget used to mitigate non-revenue water (NRW).
 This budget is used to improve the municipalities innner distribution network (IDN).

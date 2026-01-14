@@ -32,6 +32,9 @@ figPrefix:
 eqnPrefix:
   - "Equation"
   - "Equations"
+lstPrefix:
+  - "Listing"
+  - "Listings"
 bibliography: paper/references.bib
 cs: paper/apa.csl
 toc-depth: 3
