@@ -110,6 +110,18 @@ year: 2026
           selling_price: 0.05        # Annual increase for water sales to other provinces (5%) 
 ```
 
+#### Bond Issuance (Utility)
+
+Whenever the water utility is unable to cover its expenditures in a specific year, it finances the resulting deficit by issuing nationally backed bonds. Given that the raised amount is uncertain participants can cover this uncertainty increasing the bond amount ratio.This adjustment is determined by the parameter k, which can be any real number ranging from 1 to 2.5. More details in @sec:bonds.
+
+```YAML
+year: 2025
+  water_utility: WU01
+      policies:
+          bond_ratio:
+            value: 2.0
+
+```
 ### Interventions
 
 Interventions are physical modifications to the system, such as infrastructure upgrades or new installations.
