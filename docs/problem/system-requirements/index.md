@@ -26,7 +26,7 @@ Each year ($y$), the financial balance $F_w$ of every water utility $w$ is updat
 
 $$
 \begin{aligned}
-F^*_{w}(y+1) &= F_{w}(y) + \text{NIB}(y) \cdot \alpha_w(y) + REV_{w}(y) \nonumber \\
+F^*_{w}(y+1) &= F_{w}(y) + \text{NIB}(y) \cdot \alpha_w(y) + REV_{w}(y) \\
 &\quad - \text{CAPEX}_w(y) - \text{OPEX}_w(y) - \text{INT}_w(y) - \text{PRI}_w(y) - \text{WLR}_w(y) \\
 \text{debt}_w(y) &= \begin{cases}
 -F_{w}^{*}(y+1) & \text{if } F_{w}^{*}(y+1) < 0 \\

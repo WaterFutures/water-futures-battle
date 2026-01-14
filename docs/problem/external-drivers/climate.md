@@ -12,7 +12,7 @@ website_page_authors:
 ### Climate & Hydro-meteorological Forcing
 
 Climate is an exogenous factor beyond the control of the national water sector.
-Four meteorological variables are relevant for the national grid planning: temperature, precipitation and solar radiation and the standardized precipitation-evapotranspiration index. 
+Four meteorological variables are relevant for the national grid planning: temperature, precipitation and solar radiation and the Standardized Precipitation-Evapotranspiration Index (SPEI). 
 
 Temperature affects both water demand seasonality and river flows (Meuse and Rhine).
 When these flows fall below mandated environmental thresholds, surface water treatment plants must reduce operations or close, temporarily limiting available supply.
