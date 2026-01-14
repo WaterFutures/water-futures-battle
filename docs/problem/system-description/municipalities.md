@@ -115,9 +115,9 @@ where $D^\text{R1}_m(t, T_y)$ and $D^\text{R2}_m(t, T_y)$ represent the two resi
 Population | Dynamic Exogenous | Municipality | inhabitants
 Number of houses | Dynamic Exogenous | Municipality | units
 Number of businesses | Dynamic Exogenous | Municipality | units
-Daily per household demand | Dynamic Exogenous | Municipality | L/house/day
-Daily per business demand | Dynamic Exogenous | Municipality | L/business/day
-Max yearly temperature | Dynamic Exogenous | National | [°C]
+Daily per household demand | Dynamic Exogenous | Municipality | m³/house/hour
+Daily per business demand | Dynamic Exogenous | Municipality | m³/business/hour
+Max yearly temperature | Dynamic Exogenous | National | °C
 
 : Water demand model's properties review. {#tbl:wd-properties}
 
@@ -162,11 +162,10 @@ where $f^\text{NRW}_{\text{class}(m)}$​ is the sampled NRW demand factor ($m^3
 
 | Property | Type | Scope | Unit |
 | :--- | :--- | :--- | :--- |
-| NRW demand | Static [Uncertain] | National | $m^3/day$
 | Inner distribution network - length to population ratio | Static | National | $km \cdot (10^4 \text{ inhabitants})^{-1}$
 | Inner distribution network - length | Dynamic endogenous| Municipality | $km$
 | Inner distribution network - average age | Dynamic endogenous | Municipality | $years$
-| NRW intervention - unit cost | Dynamic endogenous | NRWClass, Municipality Size Class, National | $\text{€}/year$
+| NRW intervention - unit cost | Dynamic endogenous | NRWClass, Municipality Size Class, National | $\text{€}/year/km$
 | NRW intervention - effectiveness factor | Static [Uncertain] | NRWClass, Municipality Size Class, National | 
 | Intervention budget | Option |  | $\text{€}/year$
 | Intervention policy | Option |  |

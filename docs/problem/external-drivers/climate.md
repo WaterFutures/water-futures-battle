@@ -26,6 +26,6 @@ The review of the climate variables can be seen in @tbl:clim-properties, while t
 | Temperature | Dynamic Exogenous  | National | °C
 | Precipitation | Dynamic Exogenous | National | mm/day
 | Solar Radiation | Dynamic Exogenous | National | W/m²
-| Standardized Precipitation-Evapotranspiration Index| Dynamic Exogenous | National | -
+| Stand. Precip.-Evap. Ind. (SPEI) | Dynamic Exogenous | National | -
 
 : Climate model's properties review. {#tbl:clim-properties}
