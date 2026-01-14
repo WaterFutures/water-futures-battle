@@ -38,7 +38,7 @@ These emission factors may change over time due to technological advancements.
 
 Connections are either completely within a province (intra-province) or shared between provinces (inter-province).
 The complete lists of intra-province and inter-province connections are included in the data files mapped in Appendix A.
-The capital cost for inter-provincial pipes is shared equally between the water utilities operating in the connected provinces (@eq:pipes-capital-cost is used but the pipe's length is half).
+The capital cost for inter-provincial pipes is shared equally between the water utilities operating in the connected provinces (i.e., @eq:pipes-capital-cost is used but the pipe's length is half).
 
 | Property | Type | Scope | Unit |
 | :--- | :--- | :--- | :--- |

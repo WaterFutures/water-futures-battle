@@ -29,7 +29,7 @@ secPrefix:
 figPrefix:
   - "Figure"
   - "Figures"
-eqPrefix:
+eqnPrefix:
   - "Equation"
   - "Equations"
 bibliography: paper/references.bib
