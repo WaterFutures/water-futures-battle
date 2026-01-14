@@ -24,7 +24,7 @@ Pipe options are characterized by material, hydraulic properties, installation c
 Whether replacing old pipes or being added in a connection, the capital investment associated with the installation of pipes in water utility $w$ at year $y$ is:
 
 $$
-K^\text{pipes}_w(y)
+\text{CAPEX}^\text{pipes}_w(y)
 = \sum_{j \in \mathcal{J}_{w}} \mathbf{1}_{\{\tau_j = y\}}\cdot c^\text{pipe}(\theta_j, y) \cdot L_j
 $$ {#eq:pipes-capital-cost}
 

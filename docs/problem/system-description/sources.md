@@ -68,9 +68,9 @@ New water sources have an uncertain construction time, so participants must comm
 The capital investment associated with the construction of new sources in water utility $w$ at year $y$ is:
 
 $$
-K^\text{sources}_w(y)
+\text{CAPEX}^\text{sources}_w(y)
 = \sum_{s \in \mathcal{S}_w} \mathbf{1}_{\{\tau_s = y\}} \cdot c^\text{source} (\text{class}(s),y) \cdot Q^*_s 
-$$
+$${#eq:capex-sources}
 
 where for a source $s$ in the set of the water utility's sources ($\mathcal{S}_w$), $\tau_s$ is its starting construction time, $\mathbf{1}_{\{\tau_s = y\}}$ is an indicator function equal to 1 if the construction begins in year $y$ (0 otherwise), $Q^*_s$ is the requested source nominal capacity, and $c^\text{source} (\text{class}(s),y)$ the unit cost, which depends on the year of construction and the source class (see @tbl:sources-classes).
 
@@ -103,7 +103,7 @@ The actual values for these variables can be inspected within the data files, wh
 | Closure date | Static [Optional] [Decision] | Source | date 
 | Capacity - nominal | Static [Optional]  [Decision] | Source | $m^3/day$
 | Capacity - target factor | Static | Source Type | %
-| Unit cost of construction | Dynamic Endogenous | Source Size Class $\times$ National  | $\text{€}/m^3/day$
+| Unit cost of construction | Dynamic Endogenous | Source Size Class $\times$ National  | $\text{€}(/m^3/day)$
 | Operational costs - fixed | Dynamic Endogenous [Uncertain] | Source Size Class $\times$ National  | $\text{€}/year$
 | Operational costs - volumetric for energy | Dynamic Endogenous [Uncertain] | Source Size Class $\times$ National  | $kWh/m^3$ |
 | Operational costs - volumetric for non-energy | Dynamic Endogenous [Uncertain] | Source Size Class $\times$ National  | $\text{€}/m^3$ |
@@ -111,6 +111,6 @@ The actual values for these variables can be inspected within the data files, wh
 | Construction time | Static [Uncertain] | Source Type | years
 | Availability factor | Dynamic Exogenous | Surface water sources | 
 | Permit | Static | Groundwater sources | $m^3/year$
-| Fine amount | Dynamic Exogenous | Groundwater source permit excedance Severity Class | $€$
+| Fine amount | Dynamic Exogenous | Groundwater source permit excedance Severity Class | $\text{€}
 
 : Sources' properties review. {#tbl:sources-properties}

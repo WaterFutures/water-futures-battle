@@ -24,7 +24,7 @@ The unit cost of solar energy is modeled as a dynamic variable, changing annuall
 The capital investment associated with the installation of solar panels in water utility $w$ at year $y$ is:
 
 $$
-K^\text{solar}_w(y)
+\text{CAPEX}^\text{solar}_w(y)
 = \sum_{v \in \mathcal{V}_{w}} \mathbf{1}_{\{\tau_v = y\}}\cdot c^\text{solar}(y) \cdot P_v
 $${#eq:solar-capital-investment}
 
