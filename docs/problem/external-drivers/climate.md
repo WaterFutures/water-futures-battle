@@ -12,11 +12,11 @@ website_page_authors:
 ### Climate & Hydro-meteorological Forcing
 
 Climate is an exogenous factor beyond the control of the national water sector.
-Three meteorological variables are relevant for the national grid planning: temperature, precipitation and evapotranspiration. 
+Four meteorological variables are relevant for the national grid planning: temperature, precipitation and solar radiation and the standardized precipitation-evapotranspiration index. 
 
 Temperature affects both water demand seasonality and river flows (Meuse and Rhine).
 When these flows fall below mandated environmental thresholds, surface water treatment plants must reduce operations or close, temporarily limiting available supply.
-All three variables affect groundwater availability and recharge rates, potentially reducing the permitted extraction volumes.
+All four variables affect groundwater availability and recharge rates, potentially reducing the permitted extraction volumes.
 For a more detailed description of surface water and groundwater source dynamics, see @sec:water-sources.
 
 The review of the climate variables can be seen in @tbl:clim-properties, while the actual values for these variables can be inspected within the data files, which are mapped in Appendix A.
@@ -25,6 +25,7 @@ The review of the climate variables can be seen in @tbl:clim-properties, while t
 | :--- | :--- | :--- | :--- |
 | Temperature | Dynamic Exogenous  | National | °C
 | Precipitation | Dynamic Exogenous | National | mm/day
-| Evapotranspiration | Dynamic Exogenous | National | mm/day
+| Solar Radiation | Dynamic Exogenous | National | W/m²
+| Standardized Precipitation-Evapotranspiration Index| Dynamic Exogenous | National | -
 
 : Climate model's properties review. {#tbl:clim-properties}
