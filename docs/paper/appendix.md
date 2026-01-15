@@ -67,85 +67,109 @@ When a property requires multiple parameters, column headers use a dash separato
 
 #### Water Utilities {.unnumbered .unlisted}
 
-- File: `water_utilities/water_utilities-static_properties.xlsx`
+##### Entities
 
+- Entity: **Water Utility**
+  - File: `water_utilities/water_utilities-static_properties.xlsx`
   - Sheet: `entities`
-
-    Properties:
+  - Properties:
     - Identifier (`water_utility_id`) [ - ]
     - Assigned provinces (`assigned_provinces`) [ - ]
 
-### Municipalities {.unnumbered .unlisted}
+#### Jurisdictions {.unnumbered .unlisted}
 
-- File: `jurisdictions/jurisdictions-static_properties.xlsx`
+##### Entities
 
+- Entity: **State**
+  - File: `configuration.yaml`
+  - Properties: 
+    - Identifier (`id`) [ - ]
+    - Name (`name`) [ - ]
+
+- Entity: **Region**
+  - File: `jurisdictions/jurisdictions-static_properties.xlsx`
   - Sheet: `regions`
-
-    Properties:
+  - Properties: 
     - Region name (`name`) [ - ]
     - Region ID (`cbs_id`) [ - ]
+    - State (`state`) [ - ]
 
+- Entity: **Province**
+  - File: `jurisdictions/jurisdictions-static_properties.xlsx`
   - Sheet: `provinces`
-
-    Properties:
+  - Properties:
     - Province name (`name`) [ - ]
-    - Province ID (`cbs-id`) [ - ]
+    - Province ID (`cbs_id`) [ - ]
     - Region (`region`) [ - ]
 
+- Entity: **Municipality**
+  - File: `jurisdictions/jurisdictions-static_properties.xlsx`
   - Sheet: `municipalities`
-
-    Properties:
+  - Properties:
     - Municipality name (`name`) [ - ]
     - Municipality ID (`cbs_id`) [ - ]
     - Municipality elevation (`elevation`) [ - ]       #TODO DECIDE WHICH PARAMETERS WE SHOULD INCLUDE
- 
-- File: `jurisdictions/municipalities-dynamic_properties.xlsx`
-  
+
+##### Dynamic Properties
+
+- Property: **Explanation**
+  - File: `folder/file.xlsx`
+  - Sheet: `sheet`
+  - Scope: ??
+  - Unit: [ ]
+
+- Property: **Population**
+  - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   - Sheet: `population`
+  - Scope: Municipality CBS ID
+  - Unit: [ inhabitants ]
 
-    Properties:
-
-    - Municipality ID  [ - ] 
-    - Population [ inhabitants ]
-    
+- Property: **Land Area**
+  - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   - Sheet: `surface-land`
-
-    Properties:
+  - Scope:
+  - Unit: [ ]
+  - Properties:
     
     - Municipality ID  [ - ] 
     - Land Area [ $km^2$ ]
 
+  - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   - Sheet: `surface-water-inland`
   
-    Properties:
+  - Properties:
     
     - Municipality ID  [ - ] 
     - Water Area [ $km^2$ ]
-
+  
+  - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   - Sheet: `surface-water-open`
   
-    Properties:
+  - Properties:
     
     - Municipality ID  [ - ] 
     - Water Area [ $km^2$ ]
-
+  
+  - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   - Sheet: `n_houses`
   
-    Properties:
+  - Properties:
     
     - Municipality ID  [ - ] 
     - Number Houses [ houses ]
 
+  - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   - Sheet: `n_businesses`
   
-    Properties:
+  - Properties:
     
     - Municipality ID  [ - ] 
     - Number businesses [ businesses ]
 
+  - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   - Sheet: `dist_network-age-avg`
   
-    Properties:
+  - Properties:
     
     - Municipality ID  [ - ] 
     - Network Age [ years ]
@@ -156,7 +180,7 @@ When a property requires multiple parameters, column headers use a dash separato
   
   - Sheet: `groundwater`
 
-    Properties:
+  - Properties:
   
     - Source ID (`source_id`) [ - ]
     - Source elevation (`elevation`) [ m ]
@@ -167,7 +191,7 @@ When a property requires multiple parameters, column headers use a dash separato
 
   - Sheet: `surface_water`
 
-    Properties:
+  - Properties:
   
     - Source ID (`source_id`) [ - ]
     - Source elevation (`elevation`) [ m ]
@@ -177,7 +201,7 @@ When a property requires multiple parameters, column headers use a dash separato
 
   - Sheet: `desalination`
 
-    Properties:
+  - Properties:
   
     - Source ID (`source_id`) [ - ]
     - Source elevation (`elevation`) [ m ]
@@ -188,28 +212,28 @@ When a property requires multiple parameters, column headers use a dash separato
 
   - Sheet: `new_source-unit_cost`
   
-    Properties:
+  - Properties:
     
     - Source Size [ - ]
     - Cost [ $\text{€}/m^3$]
 
   - Sheet: `opex-fixed`
   
-    Properties:
+  - Properties:
     
     - Source Size [ - ]
     - Cost [ $\text{€}/m^3$ ]
 
   - Sheet: `opex-volum-other`
   
-    Properties:
+  - Properties:
     
     - Source Size [ - ]
     - Cost [ $\text{€}/m^3$ ]
 
   - Sheet: `availability_factor`
   
-    Properties:
+  - Properties:
     
     - Source  [ - ]
     - Availability [ - ]
@@ -220,7 +244,7 @@ When a property requires multiple parameters, column headers use a dash separato
 
   - Sheet: `options`
   
-    Properties:
+  - Properties:
   
     - Pump ID (`option_id`) [ - ]
     - Nominal Flowrate (`flow_rate-nominal`) [ $m^3/hour$ ]
@@ -228,7 +252,7 @@ When a property requires multiple parameters, column headers use a dash separato
 
   - Sheet: `PU01`, `PU02`, `PU03`, `PU04`
   
-    Properties:
+  - Properties:
   
     - Flowrate (`flowrate`) [ $m^3/hour$ ]
     - Head (`head`) [ m ]
@@ -240,7 +264,7 @@ When a property requires multiple parameters, column headers use a dash separato
   
   - Sheet: `provincial`
 
-    Properties:
+  - Properties:
 
     - Connection ID (`connection_id`) [ - ]  
     - Starting Node (`from_node`) [ - ]
@@ -250,7 +274,7 @@ When a property requires multiple parameters, column headers use a dash separato
 
   - Sheet: `sources`
 
-    Properties:
+  - Properties:
 
     - Connection ID (`connection_id`) [ - ]  
     - Starting Node (`from_node`) [ - ]
@@ -260,7 +284,7 @@ When a property requires multiple parameters, column headers use a dash separato
 
   - Sheet: `cross-provincial`
 
-    Properties:
+  - Properties:
 
     - Connection ID (`connection_id`) [ - ]  
     - Starting Node (`from_node`) [ - ]
