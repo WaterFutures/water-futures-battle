@@ -76,6 +76,8 @@ When a property requires multiple parameters, column headers use a dash separato
     - Identifier (`water_utility_id`) [ - ]
     - Assigned provinces (`assigned_provinces`) [ - ]
 
+
+
 #### Jurisdictions {.unnumbered .unlisted}
 
 ##### Entities {.unnumbered .unlisted}
@@ -355,6 +357,16 @@ When a property requires multiple parameters, column headers use a dash separato
 
 ##### Entities {.unnumbered .unlisted}
 
+- Entity: **Solar Farm**
+  - File: `energy/solar_farms-static_properties.xlsx`
+  - Sheet: `entities`
+  - Properties:
+    - Solar farm ID (`solar_farm_id`) [ - ]
+    - Capacity (`capacity`) [ - ]
+    - Installation date (`installation_date`) [ - ]
+    - Decommission date (`decommission_date`) [ - ]
+    - Connected entity ID source/pumping station (`connected_entity_id`) [ - ]
+
 ##### Dynamic Properties {.unnumbered .unlisted}
 
 - Property: **Electricity Price**
@@ -385,6 +397,17 @@ When a property requires multiple parameters, column headers use a dash separato
 
 ##### Entities {.unnumbered .unlisted}
 
+- Entity: **Bonds**
+  - File: `economy/bonds-static_properties.xlsx`
+  - Sheet: `entities`
+  - Properties:
+    - Bond issuance ID (`bond_issuance_id`) [ - ]
+    - Number of bonds (`n_bonds`) [ - ]
+    - Issue date (`issue_date`) [ - ]
+    - Maturity date (`maturity_date`) [ - ]
+    - Coupon rate (`coupon_rate`) [ - ]
+    - Water Utility ID (`water_utility_id`) [ - ]
+
 ##### Dynamic Properties {.unnumbered .unlisted}
 - Property: **Inflation**
   - File: `economy/economy-dynamic_properties.xlsx`
@@ -403,6 +426,8 @@ When a property requires multiple parameters, column headers use a dash separato
   - Sheet: `investor_demand`
   - Scope: National
   - Unit: [ - ]
+
+
 
 ## Masterplan Files {.unnumbered .unlisted}
 
