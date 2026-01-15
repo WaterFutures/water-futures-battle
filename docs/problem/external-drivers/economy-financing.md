@@ -28,7 +28,7 @@ In the absence of reliable long-term inflation forecasts, a reasonable baseline 
 
 : Inflation's properties review. {#tbl:ei-properties}
 
-Note that wherever unit prices are given only in base-year terms (e.g., only in the value in year 2000 is present in the input files), their value in year $y$ ($C(y)$) is obtained by multiplying by the cumulative inflation index
+Note that wherever unit prices are given only in base-year terms (e.g., only the value in year 2000 is reported in the input files), their value in year $y$ ($C(y)$) is obtained by multiplying by the cumulative inflation index
 
 $$
 C(y) = C(0) \cdot \prod_{\tau = 1}^{y} \bigl(1 + \pi(\tau)\bigr)
@@ -126,7 +126,7 @@ The complete list of the bond model properties can be seen in @tbl:eb-properties
 | Property | Type | Scope | Unit |
 | :--- | :--- | :--- | :--- |
 | Balance | Dynamic Endogenous | Water utility | €
-| Bond amount to debt ratio | Static | National | 
+| Bond amount to debt ratio | Option | National | 
 | Bond amount | Static | Bond | €
 | Bond issue date | Static | Bond | 
 | Bond maturity | Static | National | years |

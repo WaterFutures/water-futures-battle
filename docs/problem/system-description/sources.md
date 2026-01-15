@@ -27,15 +27,15 @@ The fine amount is set by law and can therefore change at any time based on poli
 The cost of water production at every source $s$ is a combination of four components:
 
 $$
-\mathrm{OPEX}_s(y) =  F_s + c^{\text{el}}(y) \cdot E^{\text{grid}}_s(y) +c^\text{vol}_s \cdot Q_s(y) + c^\text{extra}_s \cdot \max\bigl(Q_s(y)-\phi_s \cdot Q^*_s, 0 \bigr)
+\mathrm{OPEX}_s(y) =  F_s + c^{\text{el}}(y) \cdot E^{\text{grid}}_s(y) +c^\text{vol}_s(y) \cdot Q_s(y) + c^\text{extra}_s(y) \cdot \max\bigl(Q_s(y)-\phi_s \cdot Q^*_s, 0 \bigr)
 $${#eq:water-production-cost}
 
 where: 
 
 - $F_s$ represents fixed costs, including personnel, taxes, and planned maintenance.
-- $c^\text{el}\cdot E^{\text{grid}}_s(y)$ represents volumetric costs for energy.
-- $c^\text{vol}_s \cdot Q_s(y)$ represents the volumetric costs for non-energy related expenditures, such as chemicals and filters.
-- $c^\text{extra}_s \cdot \max\bigl(Q_s(y)-\phi_s \cdot Q^*_s, 0 \bigr)$ represent the extra volumetric costs incurred when production exceeds the planned threshold.
+- $c^\text{el}(y)\cdot E^{\text{grid}}_s(y)$ represents volumetric costs for energy.
+- $c^\text{vol}_s(y) \cdot Q_s(y)$ represents the volumetric costs for non-energy related expenditures, such as chemicals and filters.
+- $c^\text{extra}_s(y) \cdot \max\bigl(Q_s(y)-\phi_s \cdot Q^*_s, 0 \bigr)$ represent the extra volumetric costs incurred when production exceeds the planned threshold.
 
 In @eq:water-production-cost, $Q_s(y)$ is the total volume produced by the source in year $y$, $Q^*_s$ is the source nominal capacity, and $\phi_s$ is the capacity target factor (source-type dependent), which defines the ideal operating point above which additional costs are applied.
 
@@ -52,7 +52,7 @@ $$
 E_s(t) = \epsilon_s \cdot Q_s(t)
 $${#eq:source-energy}
 
-where $\epsilon_s$ is the source specific energy and $Q_s(y)$ is the volume produced by the source at timestep $t$.
+where $\epsilon_s$ is the source specific energy and $Q_s(t)$ is the volume produced by the source at timestep $t$.
 
 To complete the accounting, the total operational expenditure associated with all the sources in water utility $w$ at year $y$ is:
 

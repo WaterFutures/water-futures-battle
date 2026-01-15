@@ -26,7 +26,7 @@ Each year ($y$), the financial balance $F_w$ of every water utility $w$ is updat
 
 $$
 \begin{aligned}
-F^*_{w}(y+1) &= F_{w}(y) + \text{NIB}(y) \cdot \alpha_w(y) + REV_{w}(y) \\
+F^*_{w}(y+1) &= F_{w}(y) + \text{NIB}(y) \cdot \alpha_w(y) + \text{REV}_{w}(y) \\
 &\quad - \text{CAPEX}_w(y) - \text{OPEX}_w(y) - \text{INT}_w(y) - \text{PRI}_w(y) - \text{WLR}_w(y) \\
 \text{debt}_w(y) &= \begin{cases}
 -F_{w}^{*}(y+1) & \text{if } F_{w}^{*}(y+1) < 0 \\
@@ -40,7 +40,7 @@ The provisional fund balance $F_{w}^{*}(y+1)$ is calculated by accounting for al
 
 - $\text{NIB}(y) \cdot \alpha_w(y)$  is the national investment budget allocated for the water utility $w$ (see @sec:policy-budget-allocation),
 - $\text{REV}_w(y)$ the water utility's revenue from the billable water demand (see @sec:water-pricing),
-- $\text{CAPEX}_w(y)$ all the utility's interventions capital costs (i.e., the sum of [@eq:capex-sources;@eq:pumping-stations-capital-cost;@eq:pipes-capital-cost;eq:solar-capital-investment]),
+- $\text{CAPEX}_w(y)$ all the utility's interventions capital costs (i.e., the sum of @eq:capex-sources;@eq:pumping-stations-capital-cost;@eq:pipes-capital-cost;@eq:solar-capital-investment),
 - $\text{OPEX}_w(y)$ all the utility's operational costs (i.e., the sum of [@eq:op-expends;@eq:pumping-stations-opex]),
 - $\text{INT}_w(y)$ the utility's interest payments due ([@eq:bonds-payment]),
 - $\text{PRI}_w(y)$ is the principal amount due ([@eq:bonds-payment]), and
@@ -94,7 +94,7 @@ $${#eq:ghg-emissions-operational}
 
 where for each timestep $t$ of a year $y$^[$y$ represent the year, while $\mathcal{Y}$ is the collection of timesteps], $E_s(t)$ and $EF_s(t)$ are the energy consumption and the emission factor of source $s$, while $E_p(t)$ and $EF_p(t)$ represent the same quantities for pump $p$.
 
-Pumps energy consumption is retrieved via the EPANET simulations, while the water sources energy consumption is calculated as $E_s(t) = c_s^E(t) \cdot V_s(t)$, i.e., the combination of the source unit energy consumption $c_s^E(t)$ and the volume of water produced by the source $V_s(t)$.
+Pumps energy consumption is retrieved via the EPANET simulations, while the water sources energy consumption is calculated according to @eq:source-energy$.
 
 The emission factors of both entities (pumping stations $EF_p(t)$ and sources $EF_s(t)$) are dynamic and depend on the size and time of production of the behind-the-meter solar panels installation at that location (if no solar is installed, this variable reduces to the constant electricity grid emission factor in year $y$, i.e., $EF^{\text{el}}(y)$ ).
 
