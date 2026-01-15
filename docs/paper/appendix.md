@@ -177,37 +177,20 @@ When a property requires multiple parameters, column headers use a dash separato
 
 ##### Entities {.unnumbered .unlisted}
 
-- File: `sources\sources-static_properties.xlsx`
-  
-  - Sheet: `groundwater`
-
-  - Properties:
-  
+- Entity: **Water Source**
+  - File: `sources/sources-static_properties.xlsx`
+  - Sheet: `groundwater`, `surface_water`, `desalination`
+  - Properties:   
     - Source ID (`source_id`) [ - ]
     - Source elevation (`elevation`) [ m ]
     - Province (`province`) [ - ]
     - Closest municipality (`closest_municipality`)
-    - Source nominal capacity (`capacity-nominal`) [ meters<sup>3</sup> ]
-    - Source permit (`permit`) [ meters<sup>3</sup> ]
-
-  - Sheet: `surface_water`
-
-  - Properties:
-  
-    - Source ID (`source_id`) [ - ]
-    - Source elevation (`elevation`) [ m ]
-    - Province (`province`) [ - ]
-    - Closest municipality (`closest_municipality`)
-    - Source nominal capacity (`capacity-nominal`) [ m<sup>3</sup> ]
-
-  - Sheet: `desalination`
-
-  - Properties:
-  
-    - Source ID (`source_id`) [ - ]
-    - Source elevation (`elevation`) [ m ]
-    - Province (`province`) [ - ]
-    - Closest municipality (`closest_municipality`)
+    - Activation date (`activation_date`) [ - ]
+    - Closure date (`closure_date`) [ - ]
+    - Nominal capacity (`capacity-nominal`) [ $m^3/day$ ]
+    - Specific energy (`opex-volum-energy_factor`) [ $kWh/m^3$ ]
+    - Source permit (`permit`) [ m$m^3/year$ ] *Only groundwater*
+    - Basin (`basin`) [ - ] *Only surface water*
 
 ##### Dynamic Properties {.unnumbered .unlisted}
 
@@ -346,13 +329,15 @@ When a property requires multiple parameters, column headers use a dash separato
   - Scope: National
   - Unit: [ $\text{W}/m^2$ ]
 
-  - Property: **SPEI**
+- Property: **Standardized Precipitation-Evotranspiration Index**
   - File: `climate/climate-dynamic_properties.xlsx`
   - Sheet: `SPEI`
   - Scope: National
   - Unit: [ - ]
 
 #### Energy System {.unnumbered .unlisted}
+
+##### Entities {.unnumbered .unlisted}
 
 ##### Dynamic Properties {.unnumbered .unlisted}
 
@@ -381,6 +366,8 @@ When a property requires multiple parameters, column headers use a dash separato
   - Unit: [  $\text{€}/kW$ ]
 
 #### Economy {.unnumbered .unlisted}
+
+##### Entities {.unnumbered .unlisted}
 
 ##### Dynamic Properties {.unnumbered .unlisted}
 - Property: **Inflation**
