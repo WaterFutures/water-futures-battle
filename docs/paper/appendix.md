@@ -172,6 +172,22 @@ When a property requires multiple parameters, column headers use a dash separato
   - Sheet: `disposable_income-avg`
   - Scope: Municipality ID
   - Unit: [ k€ ]
+- Property: **Business Demand**
+  - File: `jurisdictions/water_demand_model-dynamic_properties.xlsx`
+  - Sheet: `per_business_demand`
+  - Unit: [ $m³/business/hour$ ]
+
+- Property: **House Demand**
+  - File: `jurisdictions/water_demand_model-dynamic_properties.xlsx`
+  - Sheet: `per_house_demand`
+  - Unit: [ $m³/house/hour$ ]
+
+- Property: **NRW Intervention**
+  - File: `jurisdictions/nrw_model-dynamic_properties.xlsx`
+  - Sheet: `nrw_intervention-unit_cost`
+  - Unit: [ $\text{€}/year/km$ ]
+
+### Water Sources {.unnumbered .unlisted}
 
 #### Water Sources {.unnumbered .unlisted}
 
