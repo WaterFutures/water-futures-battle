@@ -65,20 +65,7 @@ When a property requires multiple parameters, column headers use a dash separato
 
 ### Modules {.unnumbered .unlisted}
 
-#### Water Utilities {.unnumbered .unlisted}
-
-##### Entities {.unnumbered .unlisted}
-
-- Entity: **Water Utility**
-  - File: `water_utilities/water_utilities-static_properties.xlsx`
-  - Sheet: `entities`
-  - Properties:
-    - Identifier (`water_utility_id`) [ - ]
-    - Assigned provinces (`assigned_provinces`) [ - ]
-
-
-
-#### Jurisdictions {.unnumbered .unlisted}
+#### State {.unnumbered .unlisted}
 
 ##### Entities {.unnumbered .unlisted}
 
@@ -110,7 +97,8 @@ When a property requires multiple parameters, column headers use a dash separato
   - Properties:
     - Municipality name (`name`) [ - ]
     - Municipality ID (`cbs_id`) [ - ]
-    - Municipality elevation (`elevation`) [ - ]       #TODO DECIDE WHICH PARAMETERS WE SHOULD INCLUDE
+    - Municipality elevation (`elevation`) [ - ]
+    - and more...
 
 ##### Dynamic Properties {.unnumbered .unlisted}
 
@@ -174,6 +162,22 @@ When a property requires multiple parameters, column headers use a dash separato
   - Sheet: `disposable_income-avg`
   - Scope: Municipality ID
   - Unit: [ k€ ]
+
+#### Water Demand Model {.unnumbered .unlisted}
+
+##### Entities {.unnumbered .unlisted}
+
+- Entity: **Municipality**
+  - File: `jurisdictions/jurisdictions-static_properties.xlsx`
+  - Sheet: `municipalities`
+  - Properties:
+    - Municipality name (`name`) [ - ]
+    - Municipality ID (`cbs_id`) [ - ]
+    - Municipality elevation (`elevation`) [ - ]
+    - and more...
+
+##### Dynamic Properties {.unnumbered .unlisted}
+
 - Property: **Business Demand**
   - File: `jurisdictions/water_demand_model-dynamic_properties.xlsx`
   - Sheet: `per_business_demand`
@@ -184,14 +188,21 @@ When a property requires multiple parameters, column headers use a dash separato
   - Sheet: `per_house_demand`
   - Unit: [ $m³/house/hour$ ]
 
-- Property: **NRW Intervention**
+#### Non-Revenue Water Model {.unnumbered .unlisted}
+
+##### Dynamic Properties {.unnumbered .unlisted}
+
+- Property: **NRW Intervention success probability**
+  - File: `configuration.yaml`
+  - Value: `nrw_model-intervention_success_prob-min`
+  - Unit: [ $\text{€}/year/km$ ]
+
+- Property: **NRW Intervention Unit cost**
   - File: `jurisdictions/nrw_model-dynamic_properties.xlsx`
   - Sheet: `nrw_intervention-unit_cost`
   - Unit: [ $\text{€}/year/km$ ]
 
-### Water Sources {.unnumbered .unlisted}
-
-#### Water Sources {.unnumbered .unlisted}
+#### Sources {.unnumbered .unlisted}
 
 ##### Entities {.unnumbered .unlisted}
 
@@ -247,24 +258,33 @@ When a property requires multiple parameters, column headers use a dash separato
   - Dimension: Displacement severity
   - Unit: [ € ]
 
-#### Pumping Stations {.unnumbered .unlisted}
+#### Pumping Infrastructure {.unnumbered .unlisted}
 
 ##### Entities {.unnumbered .unlisted}
 
-  - File: `pumps\pump_options-static_properties.xlsx`
+- Entity: **Pumping Station**
+  - File: `pumping_stations/pumping_stations-static_properties.xlsx`
+  - Sheet: `entities`
+  - Properties:   
+    - Pumping Station ID (`pumping_station_id`) [ - ]
+    - Assigned source (`assigned_source`) [ - ]
+    - Installed pumps - options IDs (`pumps-option_ids`) [ - ]
+    - Installed pumps - installation date (`pumps-installation_dates`) [ - ]
+    - Installed pumps - decomission date (`pumps-end_dates`) [ - ]
 
+- Entity: **Pump Options**
+  - File: `pumps/pump_options-static_properties.xlsx`
   - Sheet: `options`
-  
+  - Properties:   
+    - Pump Option ID (`option_id`) [ - ]
+    - Name (`name`) [ - ]
+    - Nominal Flow rate (`flow_rate-nominal`) [ $m^3/hour$ ]
+    - Lifetime (`lifetime`) [ years ] Dimension: Uniform Uncertain
+    
+- Entity: **Pump Curve**
+  - File: `pumps/pump_options-static_properties.xlsx`
+  - Sheet: `{option_id}`
   - Properties:
-  
-    - Pump ID (`option_id`) [ - ]
-    - Nominal Flowrate (`flow_rate-nominal`) [ $m^3/hour$ ]
-    - Lifespan (`lifespan-min`) [ years ]
-
-  - Sheet: `PU01`, `PU02`, `PU03`, `PU04`
-  
-  - Properties:
-  
     - Flowrate (`flowrate`) [ $m^3/hour$ ]
     - Head (`head`) [ m ]
     - Efficiency (`efficiency`) [ - ]
@@ -277,41 +297,32 @@ When a property requires multiple parameters, column headers use a dash separato
   - Scope: Pump Option
   - Unit: [ € ]
 
-#### Connections {.unnumbered .unlisted}
+#### Piping Infrastructure {.unnumbered .unlisted}
 
 ##### Entities {.unnumbered .unlisted}
 
+- Entity: **Connection**
+  - File: `connections/connections-static_properties.xlsx`
+  - Sheet: `provincial`, `sources`, `cross-provincial`
+  - Properties:   
+    - Connection ID (`connection_id`) [ - ]
+    - From node (`from_node`) [ - ]
+    - To node (`to_node`) [ - ]
+    - Distance (`distance`) [ m ]
+    - Minor loss coefficient (`minor_loss_coeff`) [ - ]
+    - Installed pipes - options IDs (`pipes-option_ids`) [ - ]
+    - Installed pipes - installation date (`pipes-installation_dates`) [ - ]
 
-  - File: `connections\connections-static_properties.xlsx`
-  
-  - Sheet: `provincial`
-
-  - Properties:
-
-    - Connection ID (`connection_id`) [ - ]  
-    - Starting Node (`from_node`) [ - ]
-    - Ending Node (`to_node`) [ - ]
-    - Distance (`distance`) [ meters ]
-    - Pipe Type (`pipes-options_ids`) [ - ]
-
-  - Sheet: `sources`
-
-  - Properties:
-
-    - Connection ID (`connection_id`) [ - ]  
-    - Starting Node (`from_node`) [ - ]
-    - Ending Node (`to_node`) [ - ]
-    - Distance (`distance`) [ meters ]
-    - Pipe Type (`pipes-options_ids`) [ - ]
-
-  - Sheet: `cross-provincial`
-
-  - Properties:
-
-    - Connection ID (`connection_id`) [ - ]  
-    - Starting Node (`from_node`) [ - ]
-    - Ending Node (`to_node`) [ - ]
-    - Distance (`distance`) [ meters ]
+- Entity: **Pipe Options**
+  - File: `pipes/pipe_options-static_properties.xlsx`
+  - Sheet: `options`
+  - Properties:   
+    - Pipe Option ID (`option_id`) [ - ]
+    - Diameter (`diameter`) [ mm ]
+    - Material (`material`) [ - ]
+    - Darcy friction factor - New pipe (`darcy_friction_factor-new_pipe`) [ - ]
+    - Darcy friction factor - Decay rate (`darcy_friction_factor-decay_rate`) [ - ] Dimension: Uniform Uncertain
+    - Lifetime (`lifetime`) [ years ] Dimension: Uniform Uncertain
 
 ##### Dynamic Properties {.unnumbered .unlisted}
 
@@ -329,7 +340,7 @@ When a property requires multiple parameters, column headers use a dash separato
 
 ##### Dynamic Properties {.unnumbered .unlisted}
 
-- Property: **Temperature**
+- Property: **Temperature** (Average, Average of minimum/maximum daily temperatures, Maximum/Minimum temperature recorded)
   - File: `climate/climate-dynamic_properties.xlsx`
   - Sheet: `temperature-avg`, `temperature-min-avg`,`temperature-max-avg`, `temperature-warmest_day`, `temperature-coldest_day`
   - Scope: National
@@ -350,6 +361,40 @@ When a property requires multiple parameters, column headers use a dash separato
 - Property: **Standardized Precipitation-Evotranspiration Index**
   - File: `climate/climate-dynamic_properties.xlsx`
   - Sheet: `SPEI`
+  - Scope: National
+  - Unit: [ - ]
+
+#### Economy {.unnumbered .unlisted}
+
+##### Entities {.unnumbered .unlisted}
+
+- Entity: **Bonds**
+  - File: `economy/bonds-static_properties.xlsx`
+  - Sheet: `entities`
+  - Properties:
+    - Bond issuance ID (`bond_issuance_id`) [ - ]
+    - Number of bonds (`n_bonds`) [ - ]
+    - Issue date (`issue_date`) [ - ]
+    - Maturity date (`maturity_date`) [ - ]
+    - Coupon rate (`coupon_rate`) [ - ]
+    - Water Utility ID (`water_utility_id`) [ - ]
+
+##### Dynamic Properties {.unnumbered .unlisted}
+- Property: **Inflation**
+  - File: `economy/economy-dynamic_properties.xlsx`
+  - Sheet: `inflation`
+  - Scope: National
+  - Unit: [ % ]
+
+- Property: **Inflation Expected**
+  - File: `economy/economy-dynamic_properties.xlsx`
+  - Sheet: `inflation-expected`
+  - Scope: National
+  - Unit: [ % ]
+
+- Property: **Investor Demand**
+  - File: `economy/economy-dynamic_properties.xlsx`
+  - Sheet: `investor_demand`
   - Scope: National
   - Unit: [ - ]
 
@@ -393,41 +438,42 @@ When a property requires multiple parameters, column headers use a dash separato
   - Scope: National
   - Unit: [  $\text{€}/kW$ ]
 
-#### Economy {.unnumbered .unlisted}
+#### Water Utilities {.unnumbered .unlisted}
 
 ##### Entities {.unnumbered .unlisted}
 
-- Entity: **Bonds**
-  - File: `economy/bonds-static_properties.xlsx`
+- Entity: **Water Utility**
+  - File: `water_utilities/water_utilities-static_properties.xlsx`
   - Sheet: `entities`
   - Properties:
-    - Bond issuance ID (`bond_issuance_id`) [ - ]
-    - Number of bonds (`n_bonds`) [ - ]
-    - Issue date (`issue_date`) [ - ]
-    - Maturity date (`maturity_date`) [ - ]
-    - Coupon rate (`coupon_rate`) [ - ]
-    - Water Utility ID (`water_utility_id`) [ - ]
+    - Identifier (`water_utility_id`) [ - ]
+    - Assigned provinces (`assigned_provinces`) [ - ]
 
 ##### Dynamic Properties {.unnumbered .unlisted}
-- Property: **Inflation**
-  - File: `economy/economy-dynamic_properties.xlsx`
-  - Sheet: `inflation`
-  - Scope: National
-  - Unit: [ % ]
 
-- Property: **Inflation Expected**
-  - File: `economy/economy-dynamic_properties.xlsx`
-  - Sheet: `inflation-expected`
-  - Scope: National
-  - Unit: [ % ]
+- Property: **Funds Balance**
+  - File: `water_utilities/water_utilities-dynamic_properties.xlsx`
+  - Sheet: `balance`
+  - Scope: Water Utility
+  - Unit: [ € ]
 
-- Property: **Investor Demand**
-  - File: `economy/economy-dynamic_properties.xlsx`
-  - Sheet: `investor_demand`
-  - Scope: National
-  - Unit: [ - ]
+- Property: **Water Price Fixed Component**
+  - File: `water_utilities/water_utilities-dynamic_properties.xlsx`
+  - Sheet: `water_price-fixed`
+  - Scope: Water Utility
+  - Unit: [ €/house ]
 
+- Property: **Water Price Variable Component**
+  - File: `water_utilities/water_utilities-dynamic_properties.xlsx`
+  - Sheet: `water_price-variable`
+  - Scope: Water Utility
+  - Unit: [ $\text{€}/m^3$ ]
 
+- Property: **Water Price Exchange Rate**
+  - File: `water_utilities/water_utilities-dynamic_properties.xlsx`
+  - Sheet: `water_price-selling`
+  - Scope: Water Utility
+  - Unit: [ $\text{€}/m^3$ ]
 
 ## Masterplan Files {.unnumbered .unlisted}
 
