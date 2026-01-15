@@ -4,7 +4,7 @@
 
 # Appendix A
 
-This appendix describes the data contained within the supplementary material (zipped data folder).
+This appendix describes the data contained within the supplementary material (zipped data folder). Four types of data are included in the folder and they are described independently in the following sections.
 
 ## EPANET Networks Files {.unnumbered .unlisted}
 
@@ -17,15 +17,63 @@ The sole reference for correctness is the evaluator's computations, which uses t
 
 At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to visualize the networks overlaid on a map of the Netherlands, while for hydraulic computations, we recommend using the EPANET-PLUS Python library, as it is currently the only one offering EPANET 2.3 support [@github:epanetplus].
 
-## System Entities {.unnumbered .unlisted}
+## Configuration File {.unnumbered .unlisted}
 
-### Water Utilities {.unnumbered .unlisted}
+The configuration file `configuration.yaml` tells the evaluator how to build the system.
+Specifically, it indicates:
+
+- The locations of Excel input files containing the variables needed to build the various system components
+- The parameters and settings that control the simulation
+
+This makes the configuration file the central reference point that connects all the input data sources with the simulation engine.
+By modifying these parameters (e.g., switching input files), participants can quickly simulate the system under different scenarios.
+
+### Settings {.unnumbered .unlisted}
+  - Start year (`start_year`) [ - ]
+  - End year (`end_year`) [ - ]
+  - National budget (`national_budget`) [€]
+
+## Evaluator Input Files {.unnumbered .unlisted}
+
+The evaluator input files fully describe the system entities (municipalities, sources, etc.) and modules (energy system, water demand module, etc.).
+By modifying these files, participants can simulate different scenarios and system configurations.
+
+### Static Properties Files {.unnumbered .unlisted}
+
+Static Properties files define the characteristics of each entity, with one entity per row and properties in columns.
+Multiple sheets can be used to distinguish between subtypes of the same object (e.g., water sources are divided into desalination, groundwater, and surface water).
+
+### Dynamic Properties Files {.unnumbered .unlisted}
+
+Dynamic Properties files contain time-varying data for both exogenous inputs and initial values of endogenous variables.
+Each property has its own sheet within the Excel file, organized as follows:
+
+- Rows: Each row represents a snapshot in time, with the first column containing the timestamp
+- Columns: Each column represents a scope, i.e., which entity or group of entities the value applies to.
+For example, while 'GMxxxx' indicates the value applies only to that specific municipality, 'NL0000' indicates a national scope and therefore applies to all municipalities.
+
+**When future values are reported** (e.g., timestamp after 2024 for the first stage), **they can be regarded as expert-driven scenarios.**
+Actual values will override these parameters in subsequent stages.
+
+### Multi-Parameter (Static and Dynamic) Properties {.unnumbered .unlisted}
+
+When a property requires multiple parameters, column headers use a dash separator ('-') to indicate:
+
+- Uncertainty bounds: `['NL0000-min', 'NL0000-max']`
+- Multi-dimensional scope: `['A-SMALL', 'A-MEDIUM', ...]` (e.g., variable varying by both class and size)
+- Time series patterns: `['NL0000-1', 'NL0000-2', ...]` (e.g., electricity price profiles at national level)
+
+### Modules {.unnumbered .unlisted}
+
+#### Water Utilities {.unnumbered .unlisted}
 
 - File: `water_utilities/water_utilities-static_properties.xlsx`
 
-  Variables:
-  - Identifier (`water_utility_id`) [ - ]
-  - Assigned provinces (`assigned_provinces`) [ - ]
+  - Sheet: `entities`
+
+    Properties:
+    - Identifier (`water_utility_id`) [ - ]
+    - Assigned provinces (`assigned_provinces`) [ - ]
 
 ### Municipalities {.unnumbered .unlisted}
 
@@ -33,20 +81,20 @@ At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to vi
 
   - Sheet: `regions`
 
-    Variables:
+    Properties:
     - Region name (`name`) [ - ]
-    - Region ID (`cbs_id`) [ - ]      #I DID NOT INCLUDE STATE
+    - Region ID (`cbs_id`) [ - ]
 
   - Sheet: `provinces`
 
-    Variables:
+    Properties:
     - Province name (`name`) [ - ]
     - Province ID (`cbs-id`) [ - ]
     - Region (`region`) [ - ]
 
   - Sheet: `municipalities`
 
-    Variables:
+    Properties:
     - Municipality name (`name`) [ - ]
     - Municipality ID (`cbs_id`) [ - ]
     - Municipality elevation (`elevation`) [ - ]       #TODO DECIDE WHICH PARAMETERS WE SHOULD INCLUDE
@@ -55,49 +103,49 @@ At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to vi
   
   - Sheet: `population`
 
-    Variables:
+    Properties:
 
     - Municipality ID  [ - ] 
     - Population [ inhabitants ]
     
   - Sheet: `surface-land`
 
-    Variables:
+    Properties:
     
     - Municipality ID  [ - ] 
     - Land Area [ $km^2$ ]
 
   - Sheet: `surface-water-inland`
   
-    Variables:
+    Properties:
     
     - Municipality ID  [ - ] 
     - Water Area [ $km^2$ ]
 
   - Sheet: `surface-water-open`
   
-    Variables:
+    Properties:
     
     - Municipality ID  [ - ] 
     - Water Area [ $km^2$ ]
 
   - Sheet: `n_houses`
   
-    Variables:
+    Properties:
     
     - Municipality ID  [ - ] 
     - Number Houses [ houses ]
 
   - Sheet: `n_businesses`
   
-    Variables:
+    Properties:
     
     - Municipality ID  [ - ] 
     - Number businesses [ businesses ]
 
   - Sheet: `dist_network-age-avg`
   
-    Variables:
+    Properties:
     
     - Municipality ID  [ - ] 
     - Network Age [ years ]
@@ -108,7 +156,7 @@ At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to vi
   
   - Sheet: `groundwater`
 
-    Variables:
+    Properties:
   
     - Source ID (`source_id`) [ - ]
     - Source elevation (`elevation`) [ m ]
@@ -119,7 +167,7 @@ At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to vi
 
   - Sheet: `surface_water`
 
-    Variables:
+    Properties:
   
     - Source ID (`source_id`) [ - ]
     - Source elevation (`elevation`) [ m ]
@@ -129,7 +177,7 @@ At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to vi
 
   - Sheet: `desalination`
 
-    Variables:
+    Properties:
   
     - Source ID (`source_id`) [ - ]
     - Source elevation (`elevation`) [ m ]
@@ -140,28 +188,28 @@ At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to vi
 
   - Sheet: `new_source-unit_cost`
   
-    Variables:
+    Properties:
     
     - Source Size [ - ]
     - Cost [ $\text{€}/m^3$]
 
   - Sheet: `opex-fixed`
   
-    Variables:
+    Properties:
     
     - Source Size [ - ]
     - Cost [ $\text{€}/m^3$ ]
 
   - Sheet: `opex-volum-other`
   
-    Variables:
+    Properties:
     
     - Source Size [ - ]
     - Cost [ $\text{€}/m^3$ ]
 
   - Sheet: `availability_factor`
   
-    Variables:
+    Properties:
     
     - Source  [ - ]
     - Availability [ - ]
@@ -172,7 +220,7 @@ At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to vi
 
   - Sheet: `options`
   
-    Variables:
+    Properties:
   
     - Pump ID (`option_id`) [ - ]
     - Nominal Flowrate (`flow_rate-nominal`) [ $m^3/hour$ ]
@@ -180,7 +228,7 @@ At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to vi
 
   - Sheet: `PU01`, `PU02`, `PU03`, `PU04`
   
-    Variables:
+    Properties:
   
     - Flowrate (`flowrate`) [ $m^3/hour$ ]
     - Head (`head`) [ m ]
@@ -192,7 +240,7 @@ At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to vi
   
   - Sheet: `provincial`
 
-    Variables:
+    Properties:
 
     - Connection ID (`connection_id`) [ - ]  
     - Starting Node (`from_node`) [ - ]
@@ -202,7 +250,7 @@ At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to vi
 
   - Sheet: `sources`
 
-    Variables:
+    Properties:
 
     - Connection ID (`connection_id`) [ - ]  
     - Starting Node (`from_node`) [ - ]
@@ -212,7 +260,7 @@ At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to vi
 
   - Sheet: `cross-provincial`
 
-    Variables:
+    Properties:
 
     - Connection ID (`connection_id`) [ - ]  
     - Starting Node (`from_node`) [ - ]
@@ -230,17 +278,7 @@ Have a look at the `raw-data` folder.
 
 ### Economy {.unnumbered .unlisted}
 
-## Problem Settings {.unnumbered .unlisted}
-
-- File: `configuration.yaml`
-
-  Variables:
-
-  - Start year (`start_year`) [ - ]
-  - End year (`end_year`) [ - ]
-  - National budget (`national_budget`) [€]
-
-# Appendix B
+## Masterplan Files {.unnumbered .unlisted}
 
 This appendix describes how to complete the solution template (file named masterplan in the supplementary materials).
 
