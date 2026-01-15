@@ -67,7 +67,7 @@ When a property requires multiple parameters, column headers use a dash separato
 
 #### Water Utilities {.unnumbered .unlisted}
 
-##### Entities
+##### Entities {.unnumbered .unlisted}
 
 - Entity: **Water Utility**
   - File: `water_utilities/water_utilities-static_properties.xlsx`
@@ -78,7 +78,7 @@ When a property requires multiple parameters, column headers use a dash separato
 
 #### Jurisdictions {.unnumbered .unlisted}
 
-##### Entities
+##### Entities {.unnumbered .unlisted}
 
 - Entity: **State**
   - File: `configuration.yaml`
@@ -110,71 +110,72 @@ When a property requires multiple parameters, column headers use a dash separato
     - Municipality ID (`cbs_id`) [ - ]
     - Municipality elevation (`elevation`) [ - ]       #TODO DECIDE WHICH PARAMETERS WE SHOULD INCLUDE
 
-##### Dynamic Properties
-
-- Property: **Explanation**
-  - File: `folder/file.xlsx`
-  - Sheet: `sheet`
-  - Scope: ??
-  - Unit: [ ]
+##### Dynamic Properties {.unnumbered .unlisted}
 
 - Property: **Population**
   - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   - Sheet: `population`
-  - Scope: Municipality CBS ID
+  - Scope: Municipality ID
   - Unit: [ inhabitants ]
 
-- Property: **Land Area**
+- Property: **Surface land**
   - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   - Sheet: `surface-land`
-  - Scope:
-  - Unit: [ ]
-  - Properties:
-    
-    - Municipality ID  [ - ] 
-    - Land Area [ $km^2$ ]
-
+  - Scope: Municipality ID
+  - Unit: [ $km^2$ ]
+  
+- Property: **Surface water (inland)**
   - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   - Sheet: `surface-water-inland`
+  - Scope: Municipality ID
+  - Unit: [ $km^2$ ]
   
-  - Properties:
-    
-    - Municipality ID  [ - ] 
-    - Water Area [ $km^2$ ]
-  
+- Property: **Surface water (open water)**
   - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   - Sheet: `surface-water-open`
+  - Scope: Municipality ID
+  - Unit: [ $km^2$ ]
   
-  - Properties:
-    
-    - Municipality ID  [ - ] 
-    - Water Area [ $km^2$ ]
-  
+- Property: **Number of houses**
   - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   - Sheet: `n_houses`
-  
-  - Properties:
-    
-    - Municipality ID  [ - ] 
-    - Number Houses [ houses ]
+  - Scope: Municipality ID
+  - Unit: [ houses ]
 
+- Property: **Number of businesses**
   - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   - Sheet: `n_businesses`
-  
-  - Properties:
-    
-    - Municipality ID  [ - ] 
-    - Number businesses [ businesses ]
+  - Scope: Municipality ID
+  - Unit: [ businesses ]
 
+- Property: **Associated water demand pattern - Residential**
+  - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
+  - Sheet: `assoc_dem_pat-residential`
+  - Dimension: Pair
+  - Scope: Municipality ID
+  - Unit: [ - ]
+
+- Property: **Associated water demand pattern - Business**
+  - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
+  - Sheet: `assoc_dem_pat-business`
+  - Scope: Municipality ID
+  - Unit: [ - ]
+
+- Property: **Average age of the Inner Distribution Network**
   - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   - Sheet: `dist_network-age-avg`
-  
-  - Properties:
-    
-    - Municipality ID  [ - ] 
-    - Network Age [ years ]
+  - Scope: Municipality ID
+  - Unit: [ years ]
 
-### Water Sources {.unnumbered .unlisted}
+- Property: **Average disposable income**
+  - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
+  - Sheet: `disposable_income-avg`
+  - Scope: Municipality ID
+  - Unit: [ k€ ]
+
+#### Water Sources {.unnumbered .unlisted}
+
+##### Entities {.unnumbered .unlisted}
 
 - File: `sources\sources-static_properties.xlsx`
   
@@ -208,37 +209,46 @@ When a property requires multiple parameters, column headers use a dash separato
     - Province (`province`) [ - ]
     - Closest municipality (`closest_municipality`)
 
-- File: `sources\groundwater-dynamic_properties.xlsx`, `surface-dynamic_properties.xlsx`, `desalination-dynamic_properties.xlsx`
+##### Dynamic Properties {.unnumbered .unlisted}
 
+- Property: **Unit cost of construction**
+  - File: `sources/{source_type}-dynamic_properties.xlsx`
   - Sheet: `new_source-unit_cost`
-  
-  - Properties:
-    
-    - Source Size [ - ]
-    - Cost [ $\text{€}/m^3$]
+  - Scope: National
+  - Dimension: Source size
+  - Unit: [ $\text{€}/(m^3/day)$ ]
 
+- Property: **Unit Operational costs - fixed**
+  - File: `sources/{source_type}-dynamic_properties.xlsx`
   - Sheet: `opex-fixed`
-  
-  - Properties:
-    
-    - Source Size [ - ]
-    - Cost [ $\text{€}/m^3$ ]
+  - Scope: National
+  - Dimension: Source size $\times$ Uniform Uncertain
+  - Unit: [ $\text{€}/(m^3)$ ]
+  - Notes: gets multiplied by annual nominal capacity
 
+- Property: **Operational costs - volumetric for non-energy**
+  - File: `sources/{source_type}-dynamic_properties.xlsx`
   - Sheet: `opex-volum-other`
-  
-  - Properties:
-    
-    - Source Size [ - ]
-    - Cost [ $\text{€}/m^3$ ]
+  - Scope: National
+  - Dimension: Source size $\times$ Uniform Uncertain
+  - Unit: [ $\text{€}/(m^3)$ ]
 
+- Property: **Availability factor**
+  - File: `sources/{source_type}-dynamic_properties.xlsx`
   - Sheet: `availability_factor`
-  
-  - Properties:
-    
-    - Source  [ - ]
-    - Availability [ - ]
+  - Scope: National
+  - Unit: [ - ]
 
-### Pumping Stations {.unnumbered .unlisted}
+- Property: **Water displacement fine amount**
+  - File: `sources/groundwater-dynamic_properties.xlsx`
+  - Sheet: `water_displacement-fine_amount`
+  - Scope: National
+  - Dimension: Displacement severity
+  - Unit: [ € ]
+
+#### Pumping Stations {.unnumbered .unlisted}
+
+##### Entities {.unnumbered .unlisted}
 
   - File: `pumps\pump_options-static_properties.xlsx`
 
@@ -258,7 +268,17 @@ When a property requires multiple parameters, column headers use a dash separato
     - Head (`head`) [ m ]
     - Efficiency (`efficiency`) [ - ]
   
-### Connections {.unnumbered .unlisted}
+##### Dynamic Properties {.unnumbered .unlisted}
+
+- Property: **Unit cost for a new pump**
+  - File: `pumps/pump_options-dynamic_properties.xlsx`
+  - Sheet: `new_pump-cost`
+  - Scope: Pump Option
+  - Unit: [ € ]
+
+#### Connections {.unnumbered .unlisted}
+
+##### Entities {.unnumbered .unlisted}
 
 
   - File: `connections\connections-static_properties.xlsx`
@@ -292,7 +312,7 @@ When a property requires multiple parameters, column headers use a dash separato
     - Ending Node (`to_node`) [ - ]
     - Distance (`distance`) [ meters ]
 
-##### Dynamic Properties
+##### Dynamic Properties {.unnumbered .unlisted}
 
 - Property: **New Pipe Unit Cost**
   - File: `connections/pipe_options-dynamic_properties.xlsx`
@@ -304,14 +324,9 @@ When a property requires multiple parameters, column headers use a dash separato
   - Sheet: `new_pipe-emissions_factor`
   - Unit: [ $\text{tCO2eq}/m$ ]
 
+#### Climate {.unnumbered .unlisted}
 
-
-## System External Drivers {.unnumbered .unlisted}
-
-These data has not been released in a formatted way yet.
-Have a look at the `raw-data` folder.
-
-### Climate {.unnumbered .unlisted}
+##### Dynamic Properties {.unnumbered .unlisted}
 
 - Property: **Temperature**
   - File: `climate/climate-dynamic_properties.xlsx`
@@ -329,15 +344,17 @@ Have a look at the `raw-data` folder.
   - File: `climate/climate-dynamic_properties.xlsx`
   - Sheet: `solar_radiation-avg`
   - Scope: National
-  - Unit: [ $\text{W}/m²$ ]
+  - Unit: [ $\text{W}/m^2$ ]
 
   - Property: **SPEI**
   - File: `climate/climate-dynamic_properties.xlsx`
   - Sheet: `SPEI`
   - Scope: National
-  - Unit: [ $-$ ]
+  - Unit: [ - ]
 
-### Energy System {.unnumbered .unlisted}
+#### Energy System {.unnumbered .unlisted}
+
+##### Dynamic Properties {.unnumbered .unlisted}
 
 - Property: **Electricity Price**
   - File: `energy/energy_system-dynamic_properties.xlsx`
@@ -349,13 +366,13 @@ Have a look at the `raw-data` folder.
   - File: `energy/energy_system-dynamic_properties.xlsx`
   - Sheet: `electricity_price-pattern`
   - Scope: National
-  - Unit: [ $-$ ]
+  - Unit: [ - ]
 
 - Property: **Grid Emission factor**
   - File: `energy/energy_system-dynamic_properties.xlsx`
   - Sheet: `grid_emission_factor`
   - Scope: National
-  - Unit: [ $-$ ]
+  - Unit: [ - ]
 
 - Property: **Solar Panel Unit Cost**
   - File: `energy/energy_system-dynamic_properties.xlsx`
@@ -363,26 +380,26 @@ Have a look at the `raw-data` folder.
   - Scope: National
   - Unit: [  $\text{€}/kW$ ]
 
-### Economy {.unnumbered .unlisted}
+#### Economy {.unnumbered .unlisted}
 
+##### Dynamic Properties {.unnumbered .unlisted}
 - Property: **Inflation**
   - File: `economy/economy-dynamic_properties.xlsx`
   - Sheet: `inflation`
   - Scope: National
-  - Unit: [ $-$ % ]
+  - Unit: [ % ]
 
 - Property: **Inflation Expected**
   - File: `economy/economy-dynamic_properties.xlsx`
   - Sheet: `inflation-expected`
   - Scope: National
-  - Unit: [ $-$ % ]
+  - Unit: [ % ]
 
 - Property: **Investor Demand**
   - File: `economy/economy-dynamic_properties.xlsx`
   - Sheet: `investor_demand`
   - Scope: National
-  - Unit: [ $-$ % ]
-
+  - Unit: [ - ]
 
 ## Masterplan Files {.unnumbered .unlisted}
 

@@ -1,3 +1,4 @@
 {
-    "makefile.makefilePath": "scripts"
+    "makefile.makefilePath": "scripts",
+    "makefile.configureOnOpen": false
 }
