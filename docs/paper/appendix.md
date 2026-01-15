@@ -260,6 +260,7 @@ When a property requires multiple parameters, column headers use a dash separato
   
 ### Connections {.unnumbered .unlisted}
 
+
   - File: `connections\connections-static_properties.xlsx`
   
   - Sheet: `provincial`
@@ -291,6 +292,20 @@ When a property requires multiple parameters, column headers use a dash separato
     - Ending Node (`to_node`) [ - ]
     - Distance (`distance`) [ meters ]
 
+##### Dynamic Properties
+
+- Property: **New Pipe Unit Cost**
+  - File: `connections/pipe_options-dynamic_properties.xlsx`
+  - Sheet: `new_pipe-unit_cost`
+  - Unit: [ $\text{€}/m$ ]
+
+- Property: **New Pipe Emission Factor**
+  - File: `connections/pipe_options-dynamic_properties.xlsx`
+  - Sheet: `new_pipe-emissions_factor`
+  - Unit: [ $\text{tCO2eq}/m$ ]
+
+
+
 ## System External Drivers {.unnumbered .unlisted}
 
 These data has not been released in a formatted way yet.
@@ -298,9 +313,76 @@ Have a look at the `raw-data` folder.
 
 ### Climate {.unnumbered .unlisted}
 
+- Property: **Temperature**
+  - File: `climate/climate-dynamic_properties.xlsx`
+  - Sheet: `temperature-avg`, `temperature-min-avg`,`temperature-max-avg`, `temperature-warmest_day`, `temperature-coldest_day`
+  - Scope: National
+  - Unit: [ $\text{°C}$ ]
+
+- Property: **Precipitation**
+  - File: `climate/climate-dynamic_properties.xlsx`
+  - Sheet: `precipitation`
+  - Scope: National
+  - Unit: [ $\text{mm}/day$ ]
+
+- Property: **Solar Radiation**
+  - File: `climate/climate-dynamic_properties.xlsx`
+  - Sheet: `solar_radiation-avg`
+  - Scope: National
+  - Unit: [ $\text{W}/m²$ ]
+
+  - Property: **SPEI**
+  - File: `climate/climate-dynamic_properties.xlsx`
+  - Sheet: `SPEI`
+  - Scope: National
+  - Unit: [ $-$ ]
+
 ### Energy System {.unnumbered .unlisted}
 
+- Property: **Electricity Price**
+  - File: `energy/energy_system-dynamic_properties.xlsx`
+  - Sheet: `electricity_price-unit_cost`
+  - Scope: National
+  - Unit: [ $\text{€}/kWh$ ]
+
+- Property: **Electricity Price Pattern**
+  - File: `energy/energy_system-dynamic_properties.xlsx`
+  - Sheet: `electricity_price-pattern`
+  - Scope: National
+  - Unit: [ $-$ ]
+
+- Property: **Grid Emission factor**
+  - File: `energy/energy_system-dynamic_properties.xlsx`
+  - Sheet: `grid_emission_factor`
+  - Scope: National
+  - Unit: [ $-$ ]
+
+- Property: **Solar Panel Unit Cost**
+  - File: `energy/energy_system-dynamic_properties.xlsx`
+  - Sheet: `solar_panel-unit_cost`
+  - Scope: National
+  - Unit: [  $\text{€}/kW$ ]
+
 ### Economy {.unnumbered .unlisted}
+
+- Property: **Inflation**
+  - File: `economy/economy-dynamic_properties.xlsx`
+  - Sheet: `inflation`
+  - Scope: National
+  - Unit: [ $-$ % ]
+
+- Property: **Inflation Expected**
+  - File: `economy/economy-dynamic_properties.xlsx`
+  - Sheet: `inflation-expected`
+  - Scope: National
+  - Unit: [ $-$ % ]
+
+- Property: **Investor Demand**
+  - File: `economy/economy-dynamic_properties.xlsx`
+  - Sheet: `investor_demand`
+  - Scope: National
+  - Unit: [ $-$ % ]
+
 
 ## Masterplan Files {.unnumbered .unlisted}
 
