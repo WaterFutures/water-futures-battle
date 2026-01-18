@@ -45,7 +45,7 @@ The provisional fund balance $F_{w}^{*}(y+1)$ is calculated by accounting for al
 - $\text{CAPEX}_w(y)$ represents all the utility's interventions capital costs (i.e., the sum of [@eq:capex-sources;@eq:pumping-stations-capital-cost;@eq:pipes-capital-cost;@eq:solar-capital-investment]),
 - $\text{OPEX}_w(y)$ accounts for all the utility's operational costs (i.e., the sum of [@eq:op-expends;@eq:pumping-stations-opex]),
 - $\text{WLR}_w(y)$ is the budget for NRW mitigation (see [@sec:policy-nrw-mitigation]),
-- $\text{WIC}_w(y)$ is the cost for imported water ([@eq:water-purchase-utility]),
+- $\text{WIC}_w(y)$ is the cost for imported water from other water utilities ([@eq:water-purchase-utility]),
 - $\text{INT}_w(y)$ the utility's interest payments due ([@eq:bonds-payment]), and
 - $\text{PRI}_w(y)$ is the principal amount due ([@eq:bonds-payment]).
 

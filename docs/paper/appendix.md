@@ -22,7 +22,7 @@ At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to vi
 The configuration file `configuration.yaml` tells the evaluator how to build the system.
 Specifically, it indicates:
 
-- The locations of Excel input files containing the variables needed to build the various system components
+- The relative paths of the Excel input files describing the system
 - The parameters and settings that control the simulation
 
 This makes the configuration file the central reference point that connects all the input data sources with the simulation engine.
@@ -53,7 +53,7 @@ Each property has its own sheet within the Excel file, organized as follows:
 For example, while 'GMxxxx' indicates the value applies only to that specific municipality, 'NL0000' indicates a national scope and therefore applies to all municipalities.
 
 **When future values are reported** (e.g., timestamp after 2024 for the first stage), **they can be regarded as expert-driven scenarios.**
-Actual values will override these parameters in subsequent stages.
+Actual values will override these parameters in subsequent stages of the competition.
 
 ### Multi-Parameter (Static and Dynamic) Properties {.unnumbered .unlisted}
 
@@ -72,8 +72,8 @@ When a property requires multiple parameters, column headers use a dash separato
 - Entity: **State**
   - File: `configuration.yaml`
   - Properties: 
-    - Identifier (`id`) [ - ]
-    - Name (`name`) [ - ]
+    - State name (`name`) [ - ]
+    - State ID (`id`) [ - ]
 
 - Entity: **Region**
   - File: `jurisdictions/jurisdictions-static_properties.xlsx`
@@ -81,7 +81,7 @@ When a property requires multiple parameters, column headers use a dash separato
   - Properties: 
     - Region name (`name`) [ - ]
     - Region ID (`cbs_id`) [ - ]
-    - State (`state`) [ - ]
+    - State ID (`state`) [ - ]
 
 - Entity: **Province**
   - File: `jurisdictions/jurisdictions-static_properties.xlsx`
@@ -89,7 +89,7 @@ When a property requires multiple parameters, column headers use a dash separato
   - Properties:
     - Province name (`name`) [ - ]
     - Province ID (`cbs_id`) [ - ]
-    - Region (`region`) [ - ]
+    - Region ID (`region`) [ - ]
 
 - Entity: **Municipality**
   - File: `jurisdictions/jurisdictions-static_properties.xlsx`
@@ -97,16 +97,22 @@ When a property requires multiple parameters, column headers use a dash separato
   - Properties:
     - Municipality name (`name`) [ - ]
     - Municipality ID (`cbs_id`) [ - ]
-    - Municipality elevation (`elevation`) [ - ]
-    - and more...
-
+    - Province ID (`province`) [ - ]
+    - Opening date (`begin_date`) [ - ]
+    - Closure date (`end_date`) [ - ]
+    - Reason for the closure (`end_reason`) [ - ]
+    - Municipalities IDs that acquired the municipality's assets (`destination_cbs_ids`) [ - ]
+    - Coordinates (`latitude`, `longitude`, `elevation`) [ degrees, degrees, m ]
+    - Area characteristics (`touristic_area_cbs_id`, `touristic_group_cbs_id`) [ -, - ]
+    
 ##### Dynamic Properties {.unnumbered .unlisted}
 
 - Property: **Population**
   - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
   - Sheet: `population`
-  - Scope: Municipality ID
+  - Scope: Municipality ID, National
   - Unit: [ inhabitants ]
+  - Notes: National values are for future projection
 
 - Property: **Surface land**
   - File: `jurisdictions/municipalities-dynamic_properties.xlsx`
@@ -167,59 +173,99 @@ When a property requires multiple parameters, column headers use a dash separato
 
 ##### Entities {.unnumbered .unlisted}
 
-- Entity: **Municipality**
-  - File: `jurisdictions/jurisdictions-static_properties.xlsx`
-  - Sheet: `municipalities`
+- Entity: **Water Demand Pattern**
+  - File: `water_demand_model/water_demand_model-static_properties.xlsx`
+  - Sheet: `residential`, `business`
   - Properties:
-    - Municipality name (`name`) [ - ]
-    - Municipality ID (`cbs_id`) [ - ]
-    - Municipality elevation (`elevation`) [ - ]
-    - and more...
+    - Water Demand Pattern ID (`demand_pattern_id`) [ - ]
+    - Pattern values (`year_hour`) [ - ] *Dimension: hours of the year*
 
 ##### Dynamic Properties {.unnumbered .unlisted}
 
 - Property: **Business Demand**
-  - File: `jurisdictions/water_demand_model-dynamic_properties.xlsx`
+  - File: `water_demand_model/water_demand_model-dynamic_properties.xlsx`
   - Sheet: `per_business_demand`
-  - Unit: [ $m³/business/hour$ ]
+  - Scope: National
+  - Dimension: Uniform Uncertain
+  - Unit: [ $m^3/business/hour$ ]
 
 - Property: **House Demand**
-  - File: `jurisdictions/water_demand_model-dynamic_properties.xlsx`
+  - File: `water_demand_model/water_demand_model-dynamic_properties.xlsx`
   - Sheet: `per_house_demand`
-  - Unit: [ $m³/house/hour$ ]
+  - Scope: National
+  - Dimension: Uniform Uncertain
+  - Unit: [ $m^3/house/hour$ ]
 
 #### Non-Revenue Water Model {.unnumbered .unlisted}
 
-##### Dynamic Properties {.unnumbered .unlisted}
+##### Static Properties {.unnumbered .unlisted}
 
 - Property: **NRW Intervention success probability**
   - File: `configuration.yaml`
-  - Value: `nrw_model-intervention_success_prob-min`
-  - Unit: [ $\text{€}/year/km$ ]
+  - Label: `nrw_model-intervention_success_prob`
+  - Scope: National
+  - Dimension: Uniform Uncertain
+  - Unit: [ - ]
+
+##### Dynamic Properties {.unnumbered .unlisted}
 
 - Property: **NRW Intervention Unit cost**
   - File: `jurisdictions/nrw_model-dynamic_properties.xlsx`
   - Sheet: `nrw_intervention-unit_cost`
+  - Scope: National
+  - Dimension: NRW class $\times$ Municipality size class
   - Unit: [ $\text{€}/year/km$ ]
 
 #### Sources {.unnumbered .unlisted}
 
 ##### Entities {.unnumbered .unlisted}
 
-- Entity: **Water Source**
+- Entity: **Water Source** (Groundwater, Surface water, Desalination)
   - File: `sources/sources-static_properties.xlsx`
   - Sheet: `groundwater`, `surface_water`, `desalination`
   - Properties:   
+    - Source Name (`name`) [ - ]
     - Source ID (`source_id`) [ - ]
-    - Source elevation (`elevation`) [ m ]
+    - Coordinates (`latitude`, `longitude`, `elevation`) [ degrees, degrees, m ]
     - Province (`province`) [ - ]
-    - Closest municipality (`closest_municipality`)
+    - Closest municipality ID (`closest_municipality`)
     - Activation date (`activation_date`) [ - ]
     - Closure date (`closure_date`) [ - ]
     - Nominal capacity (`capacity-nominal`) [ $m^3/day$ ]
     - Specific energy (`opex-volum-energy_factor`) [ $kWh/m^3$ ]
     - Source permit (`permit`) [ m$m^3/year$ ] *Only groundwater*
     - Basin (`basin`) [ - ] *Only surface water*
+
+##### Static Properties {.unnumbered .unlisted}
+
+- Property: **Capacity Target Factor**
+  - File: `sources/sources-static_properties.xlsx`
+  - Sheet: `global`
+  - Label: `capacity-target_factor`
+  - Scope: Source Type
+  - Unit [ - ]
+
+- Property: **Operational costs - volumetric for non-energy - multiplier**
+  - File: `sources/sources-static_properties.xlsx`
+  - Sheet: `global`
+  - Label `opex-volum-other-multiplier`
+  - Scope: Source Type
+  - Unit [ - ]
+
+- Property: **Construction time**
+  - File: `sources/sources-static_properties.xlsx`
+  - Sheet: `global`
+  - Scope: Source Type
+  - Dimension: Uniform Uncertain
+  - Unit [ - ]
+
+- Property: **Operational costs - volumetric for energy (specific energy)**
+  - File: `sources/sources-static_properties.xlsx`
+  - Sheet: `global`
+  - Scope: Source Type
+  - Dimension: Uniform Uncertain
+  - Unit [ - ]
+  - Notes: sampled for new sources
 
 ##### Dynamic Properties {.unnumbered .unlisted}
 
@@ -230,7 +276,7 @@ When a property requires multiple parameters, column headers use a dash separato
   - Dimension: Source size
   - Unit: [ $\text{€}/(m^3/day)$ ]
 
-- Property: **Unit Operational costs - fixed**
+- Property: **Operational costs - fixed (unit cost)**
   - File: `sources/{source_type}-dynamic_properties.xlsx`
   - Sheet: `opex-fixed`
   - Scope: National
@@ -248,7 +294,7 @@ When a property requires multiple parameters, column headers use a dash separato
 - Property: **Availability factor**
   - File: `sources/{source_type}-dynamic_properties.xlsx`
   - Sheet: `availability_factor`
-  - Scope: National
+  - Scope: National, Basin 
   - Unit: [ - ]
 
 - Property: **Water displacement fine amount**
@@ -386,7 +432,7 @@ When a property requires multiple parameters, column headers use a dash separato
   - Scope: National
   - Unit: [ % ]
 
-- Property: **Inflation Expected**
+- Property: **Inflation Expectation**
   - File: `economy/economy-dynamic_properties.xlsx`
   - Sheet: `inflation-expected`
   - Scope: National
@@ -424,13 +470,14 @@ When a property requires multiple parameters, column headers use a dash separato
   - File: `energy/energy_system-dynamic_properties.xlsx`
   - Sheet: `electricity_price-pattern`
   - Scope: National
+  - Dimension: Hour of the week
   - Unit: [ - ]
 
 - Property: **Grid Emission factor**
   - File: `energy/energy_system-dynamic_properties.xlsx`
   - Sheet: `grid_emission_factor`
   - Scope: National
-  - Unit: [ - ]
+  - Unit: [ $kgCO_2eq/kWh$ ]
 
 - Property: **Solar Panel Unit Cost**
   - File: `energy/energy_system-dynamic_properties.xlsx`
@@ -476,8 +523,6 @@ When a property requires multiple parameters, column headers use a dash separato
   - Unit: [ $\text{€}/m^3$ ]
 
 ## Masterplan Files {.unnumbered .unlisted}
-
-This appendix describes how to complete the solution template (file named masterplan in the supplementary materials).
 
 The masterplan for each competition stage should be prepared using one of the template files provided in the supplementary materials.
 All three file formats are accepted to provide a trade-off between flexibility and usability.
