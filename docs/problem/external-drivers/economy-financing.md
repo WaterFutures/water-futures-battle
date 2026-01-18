@@ -60,12 +60,30 @@ Water transactions between utilities, however, use only a volumetric charge base
 Thus, the total revenue for a water utility $w$ in year $y$ is:
 
 $$
-\text{REV}_w(y) = \sum_{m \in \mathcal{M}_w} P_w^\text{fixed}(y) + P_w^\text{variable}(y) \cdot Q^\text{BIL}_m(y) + \sum_{w' \in \mathcal{W}^-} P_w^\text{sell}(y) \cdot Q^{w'}_w(y)
+\text{REV}_w(y) = \sum_{m \in \mathcal{M}_w} P_w^\text{fixed}(y) + P_w^\text{variable}(y) \cdot Q^\text{BIL}_m(y) + \sum_{w' \in \mathcal{W}^-} P_w^\text{sell}(y) \cdot Q^{w'+}_w(y)
 $${#eq:revenue-water-utility}
 
-where $P_w^\text{fixed}(y)$ and $P_w^\text{variable}(y)$ are the fixed and volumetric components of the retail water price, $Q^\text{BIL}_m$ is the delivered billable demand in municipality $m$, $\mathcal{M}_w$ is the set of municipalities in water utility $w$, $P_w^\text{sell}(y)$ is the volumetric charge for inter-utility water sales, and $Q^{w'}_w$ is the net volume of water sold to utility $w'$ ($\mathcal{W}^-$ is the set of water utilities excluding utility $w$).
+where $P_w^\text{fixed}(y)$ and $P_w^\text{variable}(y)$ are the fixed and volumetric components of the retail water price, $Q^\text{BIL}_m$ is the delivered billable demand in municipality $m$, $\mathcal{M}_w$ is the set of municipalities served by water utility $w$, $P_w^\text{sell}(y)$ is the volumetric charge that utility $w$ applies for inter-utility water sales, $Q^{w'+}_w(y)$ is the net positive volume of water sold by utility $w$ to utility $w'$, and $\mathcal{W}^-$ is the set of water utilities excluding utility $w$.
 
-Note that if a water utility has a negative net exchange with another utility, that will be regarded as a production cost.
+The net water exchange between utilities $w$ and $w'$ is defined as:
+
+$$
+\begin{aligned}
+\Delta Q_{w}^{w'}(y) &= \sum_{t \in \mathcal{Y}} \sum_{j \in \mathcal J _ {(w,w')}} Q_{j}(t) \\
+Q_{w}^{w'+}(y) &= \max ( \Delta Q_{w}^{w'}(y), 0 ) \\
+Q_{w}^{w'-}(y) &= - \min ( \Delta Q_{w}^{w'}(y), 0 )
+\end{aligned}
+$${#eq:inter-utility-exchange}
+
+where $t$ is the simulation timestep, $\mathcal{Y}$ is the set of timesteps in year $y$, $Q_j(t)$ the flow over connection $j$ from the set of connections between the water utilities $\mathcal J_{(w,w')}$ (with flow direction positive from $w$ to $w'$).
+
+Note that if a water utility has a negative net exchange with another utility (i.e., $\Delta Q_{w}^{w'}(y) <0$), that will be regarded as a water import cost:
+
+$$
+\text{WIC}_w(y) = \sum_{w' \in \mathcal{W}^-} P_{w'}^\text{sell}(y) \cdot Q^{w'-}_w(y)
+$${#eq:water-purchase-utility}
+
+where $P_{w'}^\text{sell}(y)$ is the volumetric charge applied by utility $w'$ for water sales.
 
 Participants must decide the water pricing adjustment strategy.
 They can either let all three quantities adjust according to inflation, or define a custom policy by specifying the yearly percentage increase for each of them independently.

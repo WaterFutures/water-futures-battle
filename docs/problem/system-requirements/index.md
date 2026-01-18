@@ -27,7 +27,9 @@ Each year ($y$), the financial balance $F_w$ of every water utility $w$ is updat
 $$
 \begin{aligned}
 F^*_{w}(y+1) &= F_{w}(y) + \text{NIB}(y) \cdot \alpha_w(y) + \text{REV}_{w}(y) \\
-&\quad - \text{CAPEX}_w(y) - \text{OPEX}_w(y) - \text{INT}_w(y) - \text{PRI}_w(y) - \text{WLR}_w(y) \\
+&\quad - \text{CAPEX}_w(y) - \text{OPEX}_w(y) \\
+&\quad - \text{WLR}_w(y) -\text{WIC}_w(y) \\
+&\quad - \text{INT}_w(y) - \text{PRI}_w(y)\\
 \text{debt}_w(y) &= \begin{cases}
 -F_{w}^{*}(y+1) & \text{if } F_{w}^{*}(y+1) < 0 \\
 0 & \text{otherwise}
@@ -38,16 +40,17 @@ $${#eq:water-utility-finance}
 
 The provisional fund balance $F_{w}^{*}(y+1)$ is calculated by accounting for all inflows and outflows:
 
-- $\text{NIB}(y) \cdot \alpha_w(y)$  is the national investment budget allocated for the water utility $w$ (see @sec:policy-budget-allocation),
-- $\text{REV}_w(y)$ the water utility's revenue from the billable water demand (see @sec:water-pricing),
-- $\text{CAPEX}_w(y)$ all the utility's interventions capital costs (i.e., the sum of @eq:capex-sources;@eq:pumping-stations-capital-cost;@eq:pipes-capital-cost;@eq:solar-capital-investment),
-- $\text{OPEX}_w(y)$ all the utility's operational costs (i.e., the sum of [@eq:op-expends;@eq:pumping-stations-opex]),
-- $\text{INT}_w(y)$ the utility's interest payments due ([@eq:bonds-payment]),
-- $\text{PRI}_w(y)$ is the principal amount due ([@eq:bonds-payment]), and
-- $\text{WLR}_w(y)$ the budget for NRW mitigation (see @sec:policy-nrw-mitigation).
+- $\text{NIB}(y) \cdot \alpha_w(y)$  is the national investment budget allocated for the water utility $w$ (see [@sec:policy-budget-allocation]),
+- $\text{REV}_w(y)$ is the water utility's revenue from the billable water demand ([@eq:revenue-water-utility]),
+- $\text{CAPEX}_w(y)$ represents all the utility's interventions capital costs (i.e., the sum of [@eq:capex-sources;@eq:pumping-stations-capital-cost;@eq:pipes-capital-cost;@eq:solar-capital-investment]),
+- $\text{OPEX}_w(y)$ accounts for all the utility's operational costs (i.e., the sum of [@eq:op-expends;@eq:pumping-stations-opex]),
+- $\text{WLR}_w(y)$ is the budget for NRW mitigation (see [@sec:policy-nrw-mitigation]),
+- $\text{WIC}_w(y)$ is the cost for imported water ([@eq:water-purchase-utility]),
+- $\text{INT}_w(y)$ the utility's interest payments due ([@eq:bonds-payment]), and
+- $\text{PRI}_w(y)$ is the principal amount due ([@eq:bonds-payment]).
 
 If the provisional balance is negative, the deficit defines the debt ($\text{debt}_w(y)$), which triggers bond issuance.
-The bond proceeds $\text{PRO}_w(y)$ are determined according to @sec:bonds and [@eq:bonds-payment;@eq:coupons-price].
+The bond proceeds $\text{PRO}_w(y)$ are determined according to [@sec:bonds] and [@eq:bonds-payment;@eq:coupons-price].
 
 The actual fund balance $F_{w}(y+1)$ is obtained by adding the bond proceeds (if any) to the provisional balance, ensuring the fund remains solvent.
 Note that while surpluses are carried forward, deficits are always financed through bond issuance automatically ensuring that the fund balance is always positive.

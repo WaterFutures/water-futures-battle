@@ -12,14 +12,19 @@ website_page_authors:
 ### Climate & Hydro-meteorological Forcing
 
 Climate is an exogenous factor beyond the control of the national water sector.
-Four meteorological variables are relevant for the national grid planning: temperature, precipitation and solar radiation and the Standardized Precipitation-Evapotranspiration Index (SPEI). 
+Four meteorological variables are relevant for the national grid planning: temperature, precipitation, solar radiation and evotranspiration.
 
-Temperature affects both water demand seasonality and river flows (Meuse and Rhine).
+The average maximum temperature affects water demand seasonality. 
+
+Temperature, precipitation, and evotranspiration influence river flows (Meuse and Rhine).
 When these flows fall below mandated environmental thresholds, surface water treatment plants must reduce operations or close, temporarily limiting available supply.
-All four variables affect groundwater availability and recharge rates, potentially reducing the permitted extraction volumes.
+
+All four variables affect groundwater availability and recharge rates, potentially reducing the permitted extraction volumes of new sources in the future.
 For a more detailed description of surface water and groundwater source dynamics, see @sec:water-sources.
 
-The review of the climate variables can be seen in @tbl:clim-properties, while the actual values for these variables can be inspected within the data files, which are mapped in Appendix A.
+Solar radiation influences the long-term electricity generation potential of solar panels, as sustained higher irradiance levels lead to greater cumulative energy yields over time.
+
+The review of the climate variables can be seen in @tbl:clim-properties, while the actual values for these variables can be inspected within the data files, which are mapped in Appendix A. Note that instead of the evotranspiration variable, we directly provide the Standardized Precipitation-Evapotranspiration Index (SPEI) as it helps to quantify the severity, duration, and frequency of droughts by indicating whether conditions are wetter or drier than normal over a specific period.
 
 | Property | Type | Scope | Unit |
 | :--- | :--- | :--- | :--- |
