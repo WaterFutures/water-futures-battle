@@ -58,6 +58,13 @@ navigation:
         url: /problem/system-interventions/
       - title: System Requirements
         url: /problem/system-requirements/
+  - title: The BWF Evaluator
+    url: /evaluator/
+    subnav:
+      - title: Installation
+        url: /evaluator/installation.html
+      - title: Basic Usage
+        url: /evaluator/basic-usage.html
   - title: Team
     url: /team.html
   - title: Contact Us
