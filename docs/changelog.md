@@ -9,7 +9,52 @@ website_page_authors:
 
 # Changelog 🕑
 
-## The Battle of the Water Futures [Data and Software - [v0.3.0](https://doi.org/10.5281/zenodo.17698299)]
+## The Battle of the Water Futures [Data and Software - [v0.4.0](https://doi.org/10.5281/zenodo.17698299)]
+
+**Release Date:** 19th January 2026
+
+This release introduces a few clarifications and fixes based on community reports and the alpha version of the evaluator.
+
+### What's New
+
+- **Data**
+  - Municipalities population: formatted national projections
+  - Climate: formatted historical climate variables
+  - Submission form: added new lever for bonds amount to debt ratio
+
+- **Code**  
+  - New: added the classes describing the system
+
+- **Problem Description (PDF and Website)**
+  - New lever: bond to amount debt ratio (Section 2.3.1.4)
+
+### What's Changed
+
+- **Data**
+  - Water demand model: fix unit in per business demand (from m^3/business/day to m^3/business/hour)
+  - Non-revenue demand model: fix unit of intervention cost (€/km/year), adjusted starting ages (municipalities average age)
+
+- **Problem Description (PDF and Website)**
+  - Fix NRW image (wrong units)
+  - Clarified final balance and water pricing
+  - Clarified source energy consumption
+  - Clarified climate variables  
+  - Numbering of the equations
+  - Review Appendix A: Describe all files purpose and clearer mapping of the properties in the Excel files.
+
+- **Rules and Information (Website)**
+  - Clarified participation rules
+  - Distinguished the submission process for the solutions and the abstract
+  - More details about the ranking and coherence with the problem description
+
+### Important Notes
+
+We are currently working on the evaluator and making sure it is ready to be made open source.  
+This will also be used to create the inp networks, as those currently available are only for visualisation purposes.
+
+---
+
+## The Battle of the Water Futures [Data and Software - [v0.3.0](https://doi.org/10.5281/zenodo.18016963)]
 
 **Release Date:** 22nd December 2025
 
@@ -68,7 +113,7 @@ This release is merely a patch release to add the missing file `water_utilities-
   - The `Makefile` has been changed to also prepare the zip of the data folder to make sure we don't miss files anymore
 
 ### What's Unchanged
--  **Problem Description PDF and Website**
+- **Problem Description PDF and Website**
 - **Website Rules and Information**
 
 ### Important Notes
