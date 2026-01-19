@@ -1,0 +1,66 @@
+[project]
+name = "water-futures-battle"
+version = "0.4.0"
+description = "Python project for the Battle of the Water Futures, originally developed to be hosted at WDSA/CCWI 2026 conference, May 18-21, Paphos, Cyprus."
+readme = "README.md"
+license = "MIT"
+license-files=["LICENSE"]
+keywords=["water", "urban water systems", "smart cities", "battle", "competition", "battle water networks", "planning", "deep uncertainties", "decision-making"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14"
+]
+authors = [
+    { name = "Dennis Zanutto", email = "dennis.zanutto@polimi.it" },
+    { name = "Christos Michalopoulos" },
+    { name = "Lydia Tsiami" },
+    { name = "André Artelt" },
+    { name = "Jasmin Brandt" },
+    { name = "Stelios Vrachimis" },
+    { name = "Stefano Alvisi" },
+    { name = "Valentina Marsili" },
+    { name = "Filippo Mazzoni" },
+    { name = "Panagiotis Samartzis" },
+    { name = "Demetrios Eliades" }
+]
+maintainers = [
+    { name = "Dennis Zanutto", email = "dennis.zanutto@polimi.it" },
+    { name = "André Artelt" },
+    { name = "Christos Michalopoulos" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "openpyxl>=3.1.5",
+    "pandas>=2.3.3",
+    "pyyaml>=6.0.3",
+    "typer",
+    "epanet-plus>=0.1.3",
+    "rich>=14.2.0",
+    "requests>=2.32.5"
+]
+
+[project.urls]
+Documentation = "https://waterfutures.github.io/water-futures-battle/"
+Repository = "https://github.com/WaterFutures/water-futures-battle"
+"Paper" = "https://arxiv.org/abs/2511.22986"
+"Zenodo" = "https://doi.org/10.5281/zenodo.17698299"
+
+[build-system]
+requires = ["uv_build>=0.8.17,<0.9.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+]
