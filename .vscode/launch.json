@@ -1,0 +1,33 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run water_futures_battle_run_eval",
+            "type": "debugpy",
+            "request": "launch",
+            // "program": "${workspaceFolder}/src/water_futures_battle/interface.py",
+            "module": "src.water_futures_battle",
+            "args": [
+                "${workspaceFolder}/data/masterplan.json",
+                "${workspaceFolder}/data/configuration.yaml"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug Current Test File",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "${file}",
+                "-v",
+                "-s"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": false
+        }
+    ]
+}
