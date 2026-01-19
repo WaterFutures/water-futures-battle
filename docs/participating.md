@@ -57,14 +57,20 @@ More information about the conference and the abstract and paper submission are 
 
 ## Submitting a solution 📩
 
-We'll provide a solution template shortly.
-We understand that addressing the problem is challenging enough, so the template will be designed to make submissions easy.
-You'll be able to check the compliance of your solution through our open-source evaluator before submitting it.
+Solutions must be submitted through a form opening during submission week, using the template from the data folder on Zenodo (file named `masterplan`).
+Participants can submit either an Excel file (simplest option with the dropdown options) or JSON/YAML files (for greater customisation and following the naming convention and structure detailed in Section 2.3 of the paper).
+An open-source evaluator will be released before the first submission deadline, enabling participants to test the compatibility of their solution in advance.
 
 ## Ranking 📊
 
-The exact ranking criteria for determining the winner are still being finalized and will be announced after the competition begins, along with further details about the problem.
+Competitor solutions will be evaluated using the four metrics detailed in the problem description: economic performance, environmental impact, reliability, and fairness.
 
-For now, be aware that we will evaluate submissions using multiple metrics—such as cost, reliability, GHG emissions (as in previous competitions), and possibly new ones like fairness.
-The final ranking will reflect the social importance of these dimensions.
-Despite the multi-objective nature of the challenge, each team must submit a single solution.
+The competition consists of multiple rounds.
+The ranking formula will blend weighted aggregation of these metrics with multi-criteria decision-making methods, reflecting changing social priorities and societal perspectives.
+This formula may vary between rounds to represent how societal values and priorities shift over time.
+
+To simulate real-world decision-making under deep uncertainty, the exact ranking formula will not be disclosed to participants before each submission deadline.
+However, the ranking methodology used will be revealed at the end of each round, before the next submission opens.
+The final winner will be announced at the conference.
+
+Despite the multi-objective nature of the challenge, each team must submit a single solution per round, requiring participants to identify their own compromise within this complex decision space.

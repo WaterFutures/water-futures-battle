@@ -3,13 +3,13 @@ layout: default
 website_title: System Interventions
 parent: /problem/
 parent_title: Problem
-prev_page_url: /problem/external-drivers/economy-financing.htmnl
+prev_page_url: /problem/external-drivers/economy-financing.html
 next_page_url: /problem/system-requirements/
 website_page_authors:
   - D. Zanutto
 ---
 
-## System Levers
+## System Levers {#sec:system-levers}
 
 Participants make two types of strategic decisions: policies and interventions.
 
@@ -22,7 +22,7 @@ Here, we consolidate this information to give participants a complete overview o
 Policies encompass regulatory and operational rules, such as pricing structures, budget allocations, and maintenance protocols.
 Once set, policies remain in effect until explicitly amended.
 
-#### National Budget Allocation (National)
+#### National Budget Allocation (National) {#sec:policy-budget-allocation}
 
 Participants must decide the strategy to allocate the national budget across the water utilities.
 The policy can be a predefined one or follow a custom allocation of the funds:
@@ -53,7 +53,7 @@ The policy can be a predefined one or follow a custom allocation of the funds:
           WU02: 0.25 # and so on... 
   ```
 
-#### Non-Revenue Water Mitigation Budget (Utility)
+#### Non-Revenue Water Mitigation Budget (Utility) {#sec:policy-nrw-mitigation}
 
 Participants must decide each water utility's yearly budget used to mitigate non-revenue water (NRW).
 This budget is used to improve the municipalities innner distribution network (IDN).
@@ -110,6 +110,21 @@ year: 2026
           selling_price: 0.05        # Annual increase for water sales to other provinces (5%) 
 ```
 
+#### Bond Issuance (Utility)
+
+Whenever the water utility is unable to cover its expenditures in a specific year, it finances the resulting deficit by issuing nationally backed bonds.
+Given that the raised amount is uncertain, participants can cover this uncertainty increasing the bond amount ratio.
+This adjustment is determined by the parameter $\kappa$, which can be any real number ranging from 1 to 2.5.
+More details are provided in @sec:bonds.
+
+```YAML
+year: 2025
+  water_utility: WU01
+    policies:
+      bond_ratio:
+        value: 2.0
+
+```
 ### Interventions
 
 Interventions are physical modifications to the system, such as infrastructure upgrades or new installations.
