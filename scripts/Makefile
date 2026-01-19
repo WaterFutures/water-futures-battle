@@ -79,7 +79,6 @@ DATA_FILES = \
 	water_demand_model/water_demand_model-static_properties.xlsx \
 	water_demand_model/water_demand_model-dynamic_properties.xlsx \
 	water_utilities/water_utilities-static_properties.xlsx \
-	raw-data/
 
 # --- Dependencies ---
 
