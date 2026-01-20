@@ -20,7 +20,8 @@ This release introduces a few clarifications and fixes based on community report
 - **Data**
   - Municipalities population: formatted national projections
   - Climate: formatted historical climate variables
-  - Submission form: added new lever for bonds amount to debt ratio
+  - Submission form: added a new lever for the bonds amount to the debt ratio
+  - Settings: added lifeline volume (Lpcd)
 
 - **Code**  
   - New: added the classes describing the system
@@ -32,7 +33,7 @@ This release introduces a few clarifications and fixes based on community report
 
 - **Data**
   - Water demand model: fix unit in per business demand (from m^3/business/day to m^3/business/hour)
-  - Non-revenue demand model: fix unit of intervention cost (€/km/year), adjusted starting ages (municipalities average age)
+  - Non-revenue demand model: fix unit of intervention cost (€/km/year), adjusted starting ages (municipalities' average age)
 
 - **Problem Description (PDF and Website)**
   - Fix NRW image (wrong units)
@@ -40,7 +41,7 @@ This release introduces a few clarifications and fixes based on community report
   - Clarified source energy consumption
   - Clarified climate variables  
   - Numbering of the equations
-  - Review Appendix A: Describe all files purpose and clearer mapping of the properties in the Excel files.
+  - Review Appendix A: Describe all files' purposes and a clearer mapping of the properties in the Excel files.
 
 - **Rules and Information (Website)**
   - Clarified participation rules
