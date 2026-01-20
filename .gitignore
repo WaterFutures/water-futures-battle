@@ -208,6 +208,7 @@ __marimo__/
 
 # MacOS
 .DS_Store
+__MACOSX/
 
 # Ruby and Jekyll websites
 _site/
@@ -215,11 +216,26 @@ _site/
 vendor/
 Gemfile.lock
 
+# Project example
+bwf-4-rnl/
+
+# Data generation
+data/jurisdictions/raw-data/70739ned-202502190000/
+data/jurisdictions/raw-data/CBS-regionale_kerncijfers_nederland/
+.temp/
+*_properties.xlsx
+
+# EPANET
+*.rpt
+
+*.inp
+
 # Pandoc
 bin/
 
 # Project
 internal-docs
+water_futures_battle-data.zip
 water_futures_battle-preprint.pdf
 water_futures_battle-source.tex
 water_futures_battle-source_cleaned.tex

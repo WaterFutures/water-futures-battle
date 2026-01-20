@@ -57,6 +57,7 @@ DATA_FILES = \
 	configuration.yaml \
 	masterplan.yaml \
 	masterplan.xlsx \
+	climate/climate-dynamic_properties.xlsx \
 	connections/connections-static_properties.xlsx \
 	economy/bonds-static_properties.xlsx \
 	economy/economy-dynamic_properties.xlsx \
@@ -79,6 +80,7 @@ DATA_FILES = \
 	water_demand_model/water_demand_model-static_properties.xlsx \
 	water_demand_model/water_demand_model-dynamic_properties.xlsx \
 	water_utilities/water_utilities-static_properties.xlsx \
+	water_utilities/water_utilities-dynamic_properties.xlsx \
 
 # --- Dependencies ---
 
@@ -128,7 +130,7 @@ PANDOC_HTML_ARGS := \
 	--resource-path=problem/system-description \
 	--filter bin/pandoc-crossref \
 	--citeproc \
-    
+
 # --- Build Targets ---
 
 .PHONY: all data latex pdf website clean preprocess-html

@@ -21,9 +21,7 @@ The solutions will be assessed using a transparent and inspectable **open-source
 
 ## Next Deadline ⏰ 
 
-> **Abstract submission**: *14th January 2025*
->
-> **Now** open on the [conference submission platform](https://cmt3.research.microsoft.com/WDSACCWI2026/).
+> **First stage solution submission**: *6th March 2026*
 
 Stay on track with all important dates on our [Timeline page]({{ site.baseurl }}/participating.html#important-dates-).
 
