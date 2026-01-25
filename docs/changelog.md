@@ -18,7 +18,7 @@ This release introduces a few clarifications and bug fixes based on community re
 ### What's New
 
 - **Data**
-  
+  - Pipes: added starting friction coefficient for pipes already existing in 2000.
 - **Code**  
 
 - **Problem Description (PDF and Website)**
@@ -28,10 +28,12 @@ This release introduces a few clarifications and bug fixes based on community re
 ### What's Changed
 
 - **Data**
+  - Connections: Corrected the ages and added the historical period changes.
   - Water prices & Inflation: Historical data now starts in 1999, as prices are adjusted every first of January based on the pricing adjustment policy, which in the historical period was "by_inflation". Thus 'prices in 2000' are 'prices in 1999' by 'inflation in 1999'.
   - Costs: Historical data now starts in 2000. Costs for subsequent years can be obtained by applying inflation.
   (Note: in the previous release, they were reported for year 2025, but were actually for year 2024, as costs in 2025 will depend on inflation in 2025, which is unknown).
   - Minor: The municipalities' associated demand patterns have been formatted like all other exogenous variables (note: in future stages, new patterns may appear and municipalities can be associated with different patterns through this variable).
+  - Overall: recalibarated pipe options and sources capacities.
 
 - **Code**  
   - Fix: Corrected Zenodo download and versioning of the data folder.
