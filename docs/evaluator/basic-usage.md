@@ -1,10 +1,10 @@
 ---
 layout: default
-website_title: Climate
+website_title: Evaluator Basic Usage
 parent: /evaluator/
 parent_title: The BWF Evaluator
 prev_page_url: /evaluator/installation.html
-next_page_url: /team.html
+next_page_url: /evaluator/running-scenarios.html
 website_page_authors:
   - D. Zanutto
   - A. Artelt
