@@ -17,7 +17,7 @@ The system configuration can be loaded and processed by calling the `water_futur
 Note that the library does't contain the input data but it can automatically download them from Zenodo.
 When calling `configure_system()`, the library checks for the data and initiates the download.
 However, Zenodo sometimes limits API calls, and this function fails.
-In this case, you need to **manually download** the `water_futures_battle-data.zip` folder and **unzip** it with the name `data` **in your working directory**.
+In this case, you need to **manually download** the `water_futures_battle-data.zip` folder from [Zenodo](https://zenodo.org/records/17698299) and **unzip** it with the name `data` **in your working directory**.
 
 Once the data and configuration files have been downloaded, the user can freely modify those and evaluate their influence on the masterplan.
 

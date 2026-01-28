@@ -12,4 +12,11 @@ website_page_authors:
 
 ## How to run different scenarios with the BWF evaluator
 
-...
+If the Python package has been installed, the CLI can be used for running and evaluating different scenarios.
+
+Assuming that the scenario data and configuration is stored in the `data` folder, and the masterplan is stored in `masterplan.yaml`, we can evaluate the masterplan by running:
+```
+water_futures_battle_run_eval masterplan.yaml data/configuration.yaml
+```
+
+This will run all simulations and evaluations of the interventions specified by the user in `masterplan.yaml`.

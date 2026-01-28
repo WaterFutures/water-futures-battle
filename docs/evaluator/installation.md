@@ -36,3 +36,13 @@ Install the package:
 ```
 pip install .
 ```
+
+## Data download
+
+The latest data describing the scenarios can either be obtained by **manually downloading** the `water_futures_battle-data.zip` folder from [Zenodo](https://zenodo.org/records/17698299) and **unzip** it with the name `data` **in your working directory**, or by using the CLI of the Python package:
+```
+water_futures_battle_configure_system
+```
+Be aware that the CLI overrides any existing data in the `data` folder -- you should backup any changes that you made before running the CLI command.
+
+Once the data and configuration files have been downloaded, the user can freely modify those and evaluate their influence on the masterplan.
