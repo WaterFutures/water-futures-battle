@@ -46,3 +46,5 @@ water_futures_battle_configure_system
 Be aware that the CLI overrides any existing data in the `data` folder -- you should backup any changes that you made before running the CLI command.
 
 Once the data and configuration files have been downloaded, the user can freely modify those and evaluate their influence on the masterplan.
+
+> **Note that we only provide the present data. If you want to run an evaluation on the future, you have to create the configuration files yourself!**

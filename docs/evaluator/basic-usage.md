@@ -21,6 +21,8 @@ In this case, you need to **manually download** the `water_futures_battle-data.z
 
 Once the data and configuration files have been downloaded, the user can freely modify those and evaluate their influence on the masterplan.
 
+> **Note that we only provide the present data. If you want to run an evaluation on the future, you have to create the configuration files yourself!**
+
 ### Quick example
 
 ```python
