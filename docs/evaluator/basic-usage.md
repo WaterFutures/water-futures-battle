@@ -12,7 +12,7 @@ website_page_authors:
 
 ## How to use the Python package
 
-The system configuration can be loaded and processed by calling the `water_futures_battle.services.configure_system` function, which returns the Python objects provding access to the parsed settings, the national context, and all water utilities.
+The system configuration can be loaded and processed by calling the `water_futures_battle.configure_system` function, which returns the Python objects provding access to the parsed settings, the national context, and all water utilities.
 
 Note that the library does't contain the input data but it can automatically download them from Zenodo.
 When calling `configure_system()`, the library checks for the data and initiates the download.
@@ -26,7 +26,7 @@ Once the data and configuration files have been downloaded, the user can freely 
 ### Quick example
 
 ```python
-from water_futures_battle.services import configure_system
+from water_futures_battle import configure_system
 
 # Load and parse all data and coniguration files
 settings, national_context, water_utilities = configure_system()
