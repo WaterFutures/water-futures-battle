@@ -1,7 +1,9 @@
 from dataclasses import dataclass
-from typing import Self, Dict
+from typing import Any, Dict, Tuple
 
 import numpy as np
+
+from .properties import WaterDemandModelDB
 
 # Entites are the patterns, which have, identifier, type/category and values (the 8760-value pattern)
 
@@ -25,4 +27,16 @@ class WaterDemandModelPattern:
     def __hash__(self):
         return hash(self.bwf_id)
 
+    def to_dict(self) -> Dict[str, Any]:
+        r = {
+            self.ID: self.bwf_id,
+        }
+
+        for val_desc, val in zip(self.VALUES, self.values):
+            r[val_desc] = val
+
+        return r
+
 WaterDemandModelPatterns = Dict[str, WaterDemandModelPattern]
+
+WaterDemandModelData = Tuple[WaterDemandModelPatterns, WaterDemandModelDB]

@@ -8,11 +8,19 @@
             "name": "Run water_futures_battle_run_eval",
             "type": "debugpy",
             "request": "launch",
-            // "program": "${workspaceFolder}/src/water_futures_battle/interface.py",
             "module": "src.water_futures_battle",
             "args": [
                 "${workspaceFolder}/data/masterplan.json",
                 "${workspaceFolder}/data/configuration.yaml"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Run water_futures_battle_configure_system",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.water_futures_battle.configure_system_cli",
+            "args": [
             ],
             "console": "integratedTerminal"
         },

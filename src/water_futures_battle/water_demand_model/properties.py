@@ -1,4 +1,4 @@
-from ..base_model import DynamicProperties, bwf_database
+from ..core.base_model import DynamicProperties, bwf_database
 
 
 @bwf_database

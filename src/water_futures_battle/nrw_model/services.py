@@ -1,26 +1,47 @@
-from numpy.random import default_rng
-RNG = default_rng(12804)
-import itertools
+from pathlib import Path
+import os
+
+from typing import Any, Dict, Tuple
+
+from ..core import Settings
 
 from .dynamic_properties import NRWModelDB
-from .enums import NRWClass
+from .entities import NRWModelSettings
 
-from ..jurisdictions.enums import MunicipalitySize
-from ..views.services import get_snapshot
-from .dynamic_properties import NRWInterventionProbabilityTable
+DEFAULT_SUCCESS_PROB_BOUND_MIN = 0.95
+DEFAULT_SUCCESS_PROB_BOUND_MAX = 1
 
+def configure_nrw_model(
+        config: dict,
+        data_path: str,
+        settings: Settings
+    ) -> Tuple[NRWModelSettings, NRWModelDB]:
+    
+    nrw_model_settings = NRWModelSettings(
+        success_proba_bounds=(
+            config.get(f"{NRWModelSettings.SUCCESS_PROBA}-min", DEFAULT_SUCCESS_PROB_BOUND_MIN),
+            config.get(f"{NRWModelSettings.SUCCESS_PROBA}-max", DEFAULT_SUCCESS_PROB_BOUND_MAX)
+        )
+    )
 
-def configure_nrw_model(config: dict) -> NRWModelDB:
-    nrw_model_db = NRWModelDB.load_from_file(config[NRWModelDB.NAME])
+    nrw_model_db = NRWModelDB.load_from_file(os.path.join(data_path, config[NRWModelDB.NAME]))
 
-    # Use layout of cost dataframe for intervention probabilities
-    df_cost = nrw_model_db[NRWModelDB.COST]
-    nrw_model_db[NRWModelDB.PROBABILITY] = df_cost.copy()
+    return nrw_model_settings, nrw_model_db
 
-    # Sample NRW intervention probabilities
-    proba_lower_bound = config["nrw_model-intervention_success_prob-min"]
-    nrw_model_db[NRWModelDB.PROBABILITY]["NL0000"] = nrw_model_db[NRWModelDB.PROBABILITY]["NL0000"].\
-        apply(lambda _: NRWInterventionProbabilityTable.from_row({f"{nrw_class.name}-{muni_size_class.name}": RNG.uniform(proba_lower_bound, 1)
-                                                                   for nrw_class, muni_size_class in itertools.product(NRWClass, MunicipalitySize)}))
+def dump_nrw_model(
+        nrw_settings: NRWModelSettings,
+        nrw_db: NRWModelDB,
+        output_dir: Path
+    )-> Dict[str, Any]:
 
-    return nrw_model_db
+    full_out_dir = output_dir / "nrw_model"
+    def as_rel_path(a_path: Path) -> str:
+        return os.path.relpath(a_path, output_dir)
+    
+    desc = nrw_settings.to_dict()
+
+    dp_path = nrw_db.dump(full_out_dir)
+
+    desc[nrw_db.NAME] = as_rel_path(dp_path)
+
+    return desc

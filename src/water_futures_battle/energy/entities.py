@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Self, Set, Union
+from typing import Any, Dict, List, Self, Set, Union
 
 import pandas as pd
 
@@ -59,3 +59,22 @@ class SolarFarm:
 
         # Register this solar farm on the connected entity
         self.connected_entity.register_solar_farm(self)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            self.ID: self.bwf_id,
+            self.CAPACITY: self.capacity,
+            self.INSTALLATION_DATE: self.installation_date,
+            self.DECOMMISSION_DATE: self.decommission_date,
+            self.CONN_ENTITY_ID: self.connected_entity.bwf_id
+        }
+    
+    @classmethod
+    def file_columns(cls) -> List[str]:
+        return [
+            cls.ID,
+            cls.CAPACITY,
+            cls.INSTALLATION_DATE,
+            cls.DECOMMISSION_DATE,
+            cls.CONN_ENTITY_ID
+        ]

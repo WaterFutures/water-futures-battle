@@ -1,17 +1,18 @@
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Self, ClassVar, Union, Optional
+from typing import Self, ClassVar, Union, Dict, Any
 import warnings
 
 import numpy as np
 import pandas as pd
 
-from .dynamic_properties import MunicipalitiesDB, MunicipalitiesResults
-from .enums import MunicipalitySize
+from ..core.base_model import bwf_entity, Location
+from ..core.utility import keyify, timestampify, BWFTimeLike
 
-from ..base_model.entities import bwf_entity, Location
 from ..nrw_model.enums import NRWClass
-from ..utility.utility import keyify, timestampify
+
+from .enums import MunicipalitySize
+from .dynamic_properties import MunicipalitiesDB, MunicipalitiesResults
 
 # Common properties names that are retrieved from the input files
 NAME = 'name'
@@ -50,6 +51,12 @@ class Jurisdiction:
                 # Name is not enough because the same name could be for a province or a municipality
             )
         return False
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "name": self._base_name,
+            "cbs_id": self.cbs_id
+        }
 
 @dataclass(frozen=True)
 class State(Jurisdiction):
@@ -126,6 +133,7 @@ class State(Jurisdiction):
                 return municipality
         raise KeyError(f"No municipality found for identifier: {identifier} in state {self.display_name}")
 
+
 @dataclass(frozen=True)
 class Region(Jurisdiction):
     """Dutch region (landsdeel)."""
@@ -187,19 +195,23 @@ class Region(Jurisdiction):
             if province.matches(identifier):
                 return province
         raise KeyError(f"No province found for identifier: {identifier} in region {self.display_name}")
-    
+
     @property
     def municipalities(self) -> set['Municipality']:
         munis = set()
         for province in self.provinces:
             munis.update(province.municipalities)
         return munis
-    
+
     def municipality(self, identifier: NameLike) -> 'Municipality':
         for municipality in self.municipalities:
             if municipality.matches(other=identifier):
                 return municipality
         raise KeyError(f"No municipality found for identifier: {identifier} in region {self.display_name}")
+
+    def to_dict(self) -> Dict[str, Any]:
+        return super().to_dict() | {"state": self.state.cbs_id}
+
 
 @dataclass(frozen=True)
 class Province(Jurisdiction):
@@ -270,12 +282,12 @@ class Province(Jurisdiction):
             .get(region_key, {})
             .get(province_key, set())
         )
-    
+
     def active_municipalities(self, when: int | str | pd.Timestamp) -> set['Municipality']:
         """
         """
         return set([muni for muni in self.municipalities if muni.is_active(when=when)])
-    
+
     def municipality(self, identifier: NameLike) -> 'Municipality':
         """
         Retrieve a Municipality instance by display_name or cbs_id.
@@ -285,12 +297,16 @@ class Province(Jurisdiction):
                 return municipality
         raise KeyError(f"No municipality found for identifier: {identifier} in province {self.display_name}")
 
+    def to_dict(self) -> Dict[str, Any]:
+        return super().to_dict() | {"region": self.region.cbs_id}
+
+
 @bwf_entity(db_type=MunicipalitiesDB, results_type=MunicipalitiesResults)
 @dataclass(frozen=True)
 class Municipality(Jurisdiction, Location):
     """Dutch municipality (gemeente)."""
     ID_PREFIX = 'GM' # Gemeente (Municipality in Dutch)
-    
+
     begin_date: pd.Timestamp
     BEGIN_DATE = 'begin_date'
     end_date: pd.Timestamp
@@ -318,7 +334,7 @@ class Municipality(Jurisdiction, Location):
     def __hash__(self):
         # Base the hash only on the unique identifier (cbs_code)
         return hash(self.cbs_id)
-    
+
     @classmethod
     def from_row(cls, row_data: dict, **kwargs) -> Self:
         """Primary static constructor from row data."""
@@ -339,7 +355,7 @@ class Municipality(Jurisdiction, Location):
             **kwargs # For parent instances like Province, Region
         )
         return instance
-    
+
     # Declaration of dynamic properties, i.e., those that have some type of time dependency
     # and how the yearlyView object will handle them
     # If they return a pd.Series, we declare the casting type (e.g., population)
@@ -377,7 +393,7 @@ class Municipality(Jurisdiction, Location):
     @property
     def population(self) -> pd.Series:
         return self._dynamic_properties[MunicipalitiesDB.POPULATION][self.cbs_id]
-    
+
     @property
     def assigned_demand_patterns(self) -> pd.Series:
         # result is a pd.Series of tuples: ((col1, col2), col3)
@@ -392,7 +408,7 @@ class Municipality(Jurisdiction, Location):
             data=[((v1, v2), v3) for v1, v2, v3 in zip(r1, r2, b)],
             index=r1.index
         )
-    
+
     @property
     def assigned_res_patterns_weights(self) -> tuple[float, float]:
         return self._res_p_weight, 1.0-self._res_p_weight
@@ -405,7 +421,7 @@ class Municipality(Jurisdiction, Location):
         mask = pop.notna()
         pop[mask] = pop[mask].apply(MunicipalitySize.determine_class)
         return pop
-    
+
     @property
     def nrw_class(self) -> pd.Series:
         # Ideally: self.dist_network_avg_age.apply(NRWClass.determine_class)
@@ -418,7 +434,7 @@ class Municipality(Jurisdiction, Location):
     @property
     def dist_network_avg_age(self) -> pd.Series:
         return self._dynamic_properties[MunicipalitiesDB.DISTNET_AVG_AGE][self.cbs_id]
-    
+
     POPULATION_TO_PIPES = 57.7/10_000
     @property
     def dist_network_length(self) -> pd.Series:
@@ -428,13 +444,19 @@ class Municipality(Jurisdiction, Location):
     def disp_income_avg(self) -> pd.Series:
         return self._dynamic_properties[MunicipalitiesDB.ADI][self.cbs_id]
 
+    def has_open(self, when: BWFTimeLike) -> bool:
+        ts = timestampify(when, errors='raise')
+        if pd.isna(self.begin_date) or ts < self.begin_date:
+            return False
+        return True
+
     def is_active(self, when: int | str | pd.Timestamp) -> bool:
         """
         Returns True if the municipality is active at the given year/date/timestamp.
         Accepts year (int or str), date string, or pd.Timestamp.
         """
         ts = timestampify(when, errors='raise')
-        if pd.isna(self.begin_date) or ts < self.begin_date:
+        if not self.has_open(when=ts):
             return False
         if pd.notna(self.end_date) and ts >= self.end_date:
             return False
@@ -455,13 +477,13 @@ class Municipality(Jurisdiction, Location):
         warning requireing immediate action.
         """
         ts = timestampify(when, errors='raise')
-        if pd.isna(self.begin_date) or ts < self.begin_date:
+        if not self.has_open(when=ts):
             raise RuntimeError(f"Requested the effective cbs id of a municipality that will open in the future: {self.display_name}")
-        
+
         if pd.isna(self.end_date) or ts < self.end_date:
             # Still open,
             return self.cbs_id
-        
+
         # It has indeed close, we should have the destination municipalities
         assert len(self.destination_cbs_ids) > 0
 
@@ -498,9 +520,9 @@ class Municipality(Jurisdiction, Location):
                 f"which is in a different province ({candidates[candidate_idx].province.display_name}) "
                 f"than the original ({self.province.display_name})"
             )
-            
+
         return candidates[candidate_idx].effective_cbs_id(when=ts)
-    
+
     def effective_entity(self, when: int | str | pd.Timestamp) -> 'Municipality':
         """
         Returns the Municipality object for the municipality at the given date 
@@ -571,7 +593,7 @@ class Municipality(Jurisdiction, Location):
     #         when=when,
     #         values=values
     #     )
-    
+
     def track_demand(self, when: int | str | pd.Timestamp, values: np.ndarray) -> Self:
         """
         Expect one value per day of nrw demand with unit CMH
@@ -582,3 +604,16 @@ class Municipality(Jurisdiction, Location):
             when=when,
             values=values
         )
+
+    def to_dict(self) -> Dict[str, Any]:
+        
+        begin_date = self.begin_date.strftime('%Y-%m-%d') if pd.notna(self.begin_date) else ''
+        end_date = self.end_date.strftime('%Y-%m-%d') if pd.notna(self.end_date) else ''
+
+        return Jurisdiction.to_dict(self) | Location.to_dict(self) | {
+            "province": self.province.cbs_id,
+            self.BEGIN_DATE: begin_date,
+            self.END_DATE: end_date,
+            self.END_REASON: self.end_reason,
+            "destination_cbs_ids": ";".join(self.destination_cbs_ids)
+        }

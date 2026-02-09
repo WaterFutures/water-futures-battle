@@ -1,6 +1,5 @@
-from water_futures_battle.services import configure_system
-from water_futures_battle.views.services import get_snapshot
-
+from water_futures_battle import configure_system
+from water_futures_battle.core import get_snapshot
 
 if __name__ == "__main__":
     # Load and parse all data files
@@ -20,5 +19,7 @@ if __name__ == "__main__":
             print(f"        Number of houses: {muni.n_houses}")
             print(f"        Number of businesses: {muni.n_businesses}")
             print(f"        Average income: {muni.disp_income_avg}")
-            print(f"        Average age of the pipe infrastructure: {muni.dist_network_avg_age}")
             print(f"        Total number of km of pipes: {muni.dist_network_length}")
+
+            # Dynamic endogenous properties (e.g., average age of the inner distribution network)
+            # can not be queried until after the evaluation
