@@ -11,7 +11,7 @@ website_page_authors:
 
 ## The Battle of the Water Futures [Data and Software - [v0.4.1](https://doi.org/10.5281/zenodo.17698299)]
 
-**Release Date:** 26th January 2026
+**Release Date:**9th February 2026
 
 This release introduces a few clarifications and bug fixes based on community reports and the webinar of Friday 23rd January.
 
@@ -19,11 +19,8 @@ This release introduces a few clarifications and bug fixes based on community re
 
 - **Data**
   - Pipes: added starting friction coefficient for pipes already existing in 2000.
-- **Code**  
-
-- **Problem Description (PDF and Website)**
-
-- **Rules and Information (Website)**
+- **Code**
+  - Evolve the dynamic properties and save the system status after the evolution.
 
 ### What's Changed
 
@@ -43,7 +40,7 @@ This release introduces a few clarifications and bug fixes based on community re
   
 ### Important Notes
 
-YOutube channel and Q&A. We will make more videos on how to use the evlauator
+Youtube channel and Q&A. We will make more videos on how to use the evaluator
 
 ---
 
