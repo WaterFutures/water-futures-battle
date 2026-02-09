@@ -21,9 +21,7 @@ The solutions will be assessed using a transparent and inspectable **open-source
 
 ## Next Deadline ⏰ 
 
-> **Abstract submission**: *14th January 2025*
->
-> **Now** open on the [conference submission platform](https://cmt3.research.microsoft.com/WDSACCWI2026/).
+> **First stage solution submission**: <span style="color:#DF3737">*27th March 2026*</span>
 
 Stay on track with all important dates on our [Timeline page]({{ site.baseurl }}/participating.html#important-dates-).
 
@@ -58,7 +56,9 @@ If you can't find an answer to your question, just <a href="mailto:battlewaterfu
  
 ## Latest Updates 📢
 
-- *22nd December 2025* - **Version 0.3.0**
+- *26th January 2026* - **Version 0.4.1**
+- *19th January 2026* - Version 0.4.0
+- *22nd December 2025* - Version 0.3.0
 - *15th December 2025* - Version 0.2.0
 - *8th December 2025* - Version 0.1.0
 - *24th November 2025* - Version 0.1.0-beta.3

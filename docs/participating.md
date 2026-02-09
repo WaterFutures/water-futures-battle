@@ -33,27 +33,31 @@ More information about the conference and the abstract and paper submission are 
 > Authors are encouraged but not required to submit a regular contribution to the conference to participate in the competition.
 
 ## Important dates 🗓️
-- **1st September 2025** Competition announcement and website launch
 
-> Subscribe for updates and let us know if you are interested in participating!
+<ul>
+<li style="color:lightgray"><em>1st September 2025</em>: Competition announcement and website launch</li>
+</ul>
 
-**Stage 1**
-- **8th December 2025** - Competition begins: Instructions and first batch of data available
-- **14th January 2026** - ___Abstract submission deadline___
-- **26th January 2026** - _Abstract acceptance notifications_
-- **6th March 2026** - First stage solution submission deadline
+> <span style="color:lightgray">Subscribe for updates and let us know if you are interested in participating!</span>
+
+<ul>
+<li style="color:lightgray"><em>8th December 2025</em> - Competition begins: Instructions and first batch of data available</li>
+</ul>
+
+<span style="color:#009344">**Stage 1**</span>
+<ul>
+<li style="color:lightgray"><strong>14th January 2026</strong>: Abstract submission deadline</li>
+<li style="color:lightgray"><em>26th January 2026</em>: Abstract acceptance notifications</li>
+<li><span style="color:#DF3737;font-weight:bold">27th March 2026</span>: First stage solution submission deadline</li>
+</ul>
 
 **Stage 2**
-- _Mid March 2026_ - Second batch of data available
-- *Late March 2026* - Second stage solution submission deadline
+- **10th April 2026**: Second stage solution submission deadline
 
 **Stage 3**
-- _Late March 2026_ - Third batch of data available.
-- *Early April 2026* - Final deadline for submission of:
-    - Third stage solution
-    - ___Short paper___
-
-- __18th May 2026__ Conference starts! 🎉
+- **24th April 2026**: Third stage solution submission deadline
+- **24th April 2026 (optional)**: Short paper submission deadline
+- **18th May 2026**: Conference starts! 🎉
 
 ## Submitting a solution 📩
 
