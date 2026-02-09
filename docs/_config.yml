@@ -65,6 +65,8 @@ navigation:
         url: /evaluator/installation.html
       - title: Basic Usage
         url: /evaluator/basic-usage.html
+      - title: Running Scenarios
+        url: /evaluator/running-scenarios.html
   - title: Team
     url: /team.html
   - title: Contact Us

@@ -4,11 +4,11 @@ from typing import Tuple
 
 import pandas as pd
 
-from ..base_model import DynamicProperties, bwf_database, bwf_results
+from ..core.base_model import DynamicProperties, bwf_database, bwf_results
 from .enums import SourceSize
 
 @dataclass(frozen=True)
-class _SourceVariableCostTable:
+class SourceUncertainCostTable:
     """
     The costs per type of source (e.g. volumetric, fixed etc for groundwater)
     will be between two bounds and vary based on size.
@@ -51,42 +51,73 @@ class _SourceVariableCostTable:
     def __getitem__(self, key: SourceSize):
         return self._lookup_dict[key]
     
+    def __mul__(self, value: float):
+        # Return a new instance with all values multiplied by value
+        new_lookup = {
+            k: (v1 * value, v2 * value) for k, (v1, v2) in self._lookup_dict.items()
+        }
+        return type(self)(new_lookup)
+
+    def __rmul__(self, value: float):
+        return self.__mul__(value)
+    
+@dataclass(frozen=True)
+class SourceCostTable:
+    """
+    The costs per type of source when deterministic
+    """
+    _lookup_dict: dict[SourceSize, float]
+
+    @classmethod
+    def from_row(cls, row_data, entity_name: str):
+        """
+        Takes a pandas dataframe row or a dictionary written like class-min class-max
+        and builds an instance of this type.
+        """
+        lookup: dict[SourceSize, float] = {}
+        for source_class in SourceSize:
+            val = row_data[f"{entity_name}-{source_class.name}"]
+            
+            # Check for None or NaN
+            if val is None or (isinstance(val, float) and math.isnan(val)):
+                val = float('inf')
+            assert isinstance(val, float)
+
+            lookup[source_class] = val
+            
+        return cls(lookup)
+
+    def __post_init__(self):
+        for a_class, value in self._lookup_dict.items():
+            if value < 0:
+                raise RuntimeError(f"Cost for source size {a_class.name} must be non-negative, got {value}.")
+            
+    def __getitem__(self, key: SourceSize):
+        return self._lookup_dict[key]
+    
+    def __mul__(self, value: float):
+        # Return a new instance with all values multiplied by value
+        new_lookup = {
+            k: v * value for k, v in self._lookup_dict.items()
+        }
+        return type(self)(new_lookup)
+
+    def __rmul__(self, value: float):
+        return self.__mul__(value)
 
 class SourcesDB(DynamicProperties):
     UNIT_COST = 'new_source-unit_cost'
     OPEX_FIXED = 'opex-fixed' # [€/year] Labour, scheduled maintenance, overhead.
     OPEX_VOLUM_OTHER = 'opex-volum-other' # [€/m$^3$] Chemicals, filters, consumables.
-
+    AVAILABILITY_FACTOR = 'availability_factor'
     
     EXOGENOUS_VARIABLES = []
     ENDOGENOUS_VARIABLES = [
         UNIT_COST,
         OPEX_FIXED,
-        OPEX_VOLUM_OTHER
+        OPEX_VOLUM_OTHER,
+        AVAILABILITY_FACTOR
     ]
-
-    
-    def variables_validation_checks(self) -> None:
-        for property, property_type in zip(
-            [self.OPEX_FIXED, self.OPEX_VOLUM_OTHER],
-            [_SourceVariableCostTable, _SourceVariableCostTable]):
-
-            # Get all the columns, so that we can undertand the first dimension (should be the source_id or similar)
-            all_cols = self.dataframes[property].columns
-            all_cols_firstdim = [col.split('-')[0] for col in all_cols]
-            unique_dims = list(set(all_cols_firstdim))
-
-            df = pd.DataFrame(index=self.dataframes[property].index, columns=unique_dims, dtype=object)
-            for ts, row in self.dataframes[property].iterrows():
-                for col in unique_dims:
-                    selected_columns = [c for c in all_cols if c.startswith(col)]
-                    df.loc[ts, col] = property_type.from_row(
-                        row_data=row[selected_columns],
-                        entity_name=col
-                    )
-            self.dataframes[property] = df
-        
-        return
     
         
 @bwf_results
@@ -96,6 +127,12 @@ class SourcesResults(DynamicProperties):
 @bwf_database
 class GroundWaterDB(SourcesDB):
     NAME = 'groundwater-dynamic_properties'
+
+    FINE_AMOUNT = 'water_displacement-fine_amount'
+    
+    EXOGENOUS_VARIABLES = [
+        FINE_AMOUNT
+    ]
 
 @bwf_database
 class SurfaceWaterDB(SourcesDB):

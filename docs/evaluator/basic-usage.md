@@ -1,10 +1,10 @@
 ---
 layout: default
-website_title: Climate
+website_title: Evaluator Basic Usage
 parent: /evaluator/
 parent_title: The BWF Evaluator
 prev_page_url: /evaluator/installation.html
-next_page_url: /team.html
+next_page_url: /evaluator/running-scenarios.html
 website_page_authors:
   - D. Zanutto
   - A. Artelt
@@ -12,16 +12,21 @@ website_page_authors:
 
 ## How to use the Python package
 
-The system configuration can be loaded and processed by calling the `water_futures_battle.services.configure_system` function, which returns the Python objects provding access to the parsed settings, the national context, and all water utilities.
+The system configuration can be loaded and processed by calling the `water_futures_battle.configure_system` function, which returns the Python objects provding access to the parsed settings, the national context, and all water utilities.
 
-Note that all necessary data and configuration files are organized in a dedicated folder, which must be passed as an argument to `configure_system()` -- if none is specified, "data" is used as a default folder. While the user may decide to manually download the data and store it anywhere on their machine, the Python package automatically downloads all necessary data and stores it in the given folder if it can not find the data and configuration files in the specified folder.
+Note that the library does't contain the input data but it can automatically download them from Zenodo.
+When calling `configure_system()`, the library checks for the data and initiates the download.
+However, Zenodo sometimes limits API calls, and this function fails.
+In this case, you need to **manually download** the `water_futures_battle-data.zip` folder from [Zenodo](https://zenodo.org/records/17698299) and **unzip** it with the name `data` **in your working directory**.
 
-Once the data and configuration files have been downloaded, the user can freely modify those and evaluate their influence on the overal policy.
+Once the data and configuration files have been downloaded, the user can freely modify those and evaluate their influence on the masterplan.
+
+> **Note that we only provide the present data. If you want to run an evaluation on the future, you have to create the configuration files yourself!**
 
 ### Quick example
 
 ```python
-from water_futures_battle.services import configure_system
+from water_futures_battle import configure_system
 
 # Load and parse all data and coniguration files
 settings, national_context, water_utilities = configure_system()

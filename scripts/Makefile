@@ -51,12 +51,15 @@ PREPRO_HTML_FILES = \
 	problem/external-drivers/energy-system.md \
 	problem/external-drivers/economy-financing.md \
 	problem/system-interventions/index.md \
-	problem/system-requirements/index.md \
+	problem/system-requirements/index.md
 	
 DATA_FILES = \
+	VERSION \
 	configuration.yaml \
 	masterplan.yaml \
+	masterplan.json \
 	masterplan.xlsx \
+	climate/climate-dynamic_properties.xlsx \
 	connections/connections-static_properties.xlsx \
 	economy/bonds-static_properties.xlsx \
 	economy/economy-dynamic_properties.xlsx \
@@ -67,6 +70,7 @@ DATA_FILES = \
 	jurisdictions/jurisdictions-static_properties.xlsx \
 	jurisdictions/municipalities-dynamic_properties.xlsx \
 	nrw_model/nrw_model-dynamic_properties.xlsx \
+	pipes/pipes-dynamic_properties.xlsx \
 	pipes/pipe_options-static_properties.xlsx \
 	pipes/pipe_options-dynamic_properties.xlsx \
 	pumping_stations/pumping_stations-static_properties.xlsx \
@@ -79,6 +83,7 @@ DATA_FILES = \
 	water_demand_model/water_demand_model-static_properties.xlsx \
 	water_demand_model/water_demand_model-dynamic_properties.xlsx \
 	water_utilities/water_utilities-static_properties.xlsx \
+	water_utilities/water_utilities-dynamic_properties.xlsx
 
 # --- Dependencies ---
 
@@ -127,8 +132,8 @@ PANDOC_HTML_ARGS := \
 	--section-divs \
 	--resource-path=problem/system-description \
 	--filter bin/pandoc-crossref \
-	--citeproc \
-    
+	--citeproc
+
 # --- Build Targets ---
 
 .PHONY: all data latex pdf website clean preprocess-html

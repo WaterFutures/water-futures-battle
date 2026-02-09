@@ -2,8 +2,6 @@ from enum import IntEnum
 from typing import Self
 import numpy as np
 from numpy.typing import NDArray
-from numpy.random import default_rng
-RNG = default_rng(128)
 
 # NRW bounds per category in cubic meter per km per day (mc/km/day)
 _NRW_CLASSES_BOUNDS_LIST = [0.2, 2., 3., 4., 8., float('inf')]
@@ -54,7 +52,7 @@ class NRWClass(IntEnum):
     def demand_factor_bounds(self) -> tuple[float, float]:
         return _NRW_CLASSES_AGES_LIST[self.value], _NRW_CLASSES_AGES_LIST[self.value+1]
 
-    def sample_demand(self, n_points: int = 1) -> NDArray[np.float64]:
+    def sample_demand(self, n_points: int, RNG: np.random.Generator) -> NDArray[np.float64]:
         """
         Returns a sampled nrw demand.
 

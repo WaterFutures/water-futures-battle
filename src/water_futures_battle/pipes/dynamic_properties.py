@@ -1,4 +1,4 @@
-from ..base_model import DynamicProperties, bwf_database, bwf_results
+from ..core.base_model import DynamicProperties, bwf_database, bwf_results
 
 @bwf_database
 class PipeOptionsDB(DynamicProperties):
@@ -15,7 +15,15 @@ class PipeOptionsDB(DynamicProperties):
         COST
     ]
 
+@bwf_database
+class PipesDB(DynamicProperties):
+    NAME = 'pipes-dynamic_properties'
 
+    FRICTIONF = 'friction_factor'
+
+    ENDOGENOUS_VARIABLES = [
+        FRICTIONF
+    ]
 
 @bwf_results
 class PipesResults(DynamicProperties):

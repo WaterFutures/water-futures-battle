@@ -1,4 +1,4 @@
-from water_futures_battle.services import configure_system
+from water_futures_battle import configure_system
 
 if __name__ == "__main__":
     # Load and parse all data files

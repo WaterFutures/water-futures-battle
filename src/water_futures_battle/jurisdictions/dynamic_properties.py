@@ -1,5 +1,4 @@
-from ..base_model import DynamicProperties, bwf_database, bwf_results
-from ..nrw_model.enums import NRWClass
+from ..core.base_model import DynamicProperties, bwf_database, bwf_results
 
 @bwf_database
 class MunicipalitiesDB(DynamicProperties):
@@ -44,6 +43,13 @@ class MunicipalitiesDB(DynamicProperties):
         DISTNET_AVG_AGE
     ]
 
+    def variables_validation_checks(self) -> None:
+
+        # Adjust distnet avg age to be a float
+        df = self.dataframes[self.DISTNET_AVG_AGE]
+        self.dataframes[self.DISTNET_AVG_AGE] = df.astype(float)
+
+        return
 
 @bwf_results
 class MunicipalitiesResults(DynamicProperties):
