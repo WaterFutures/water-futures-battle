@@ -1,7 +1,7 @@
 ---
 layout: default
 website_title: Team 🧠
-prev_page_url: /evaluator/basic-usage.html
+prev_page_url: /evaluator/running-scenarios.html
 next_page_url: /contact.html
 website_page_authors:
   - D. Zanutto

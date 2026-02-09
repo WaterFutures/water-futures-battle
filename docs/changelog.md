@@ -9,7 +9,42 @@ website_page_authors:
 
 # Changelog 🕑
 
-## The Battle of the Water Futures [Data and Software - [v0.4.0](https://doi.org/10.5281/zenodo.17698299)]
+## The Battle of the Water Futures [Data and Software - [v0.4.5](https://doi.org/10.5281/zenodo.17698299)]
+
+**Release Date:**9th February 2026
+
+This release introduces a few clarifications and bug fixes based on community reports and the webinar of Friday 23rd January.
+
+### What's New
+
+- **Data**
+  - Pipes: added starting friction coefficient for pipes already existing in 2000.
+- **Code**
+  - Evolve the dynamic properties and save the system status after the evolution.
+
+### What's Changed
+
+- **Data**
+  - Connections: Corrected the ages and added the historical period changes.
+  - Water prices & Inflation: Historical data now starts in 1999, as prices are adjusted every first of January based on the pricing adjustment policy, which in the historical period was "by_inflation". Thus 'prices in 2000' are 'prices in 1999' by 'inflation in 1999'.
+  - Costs: Historical data now starts in 2000. Costs for subsequent years can be obtained by applying inflation.
+  (Note: in the previous release, they were reported for year 2025, but were actually for year 2024, as costs in 2025 will depend on inflation in 2025, which is unknown).
+  - Minor: The municipalities' associated demand patterns have been formatted like all other exogenous variables (note: in future stages, new patterns may appear and municipalities can be associated with different patterns through this variable).
+  - Overall: recalibarated pipe options and sources capacities.
+
+- **Code**  
+  - Fix: Corrected Zenodo download and versioning of the data folder.
+
+- **Rules and Information (Website)**
+  - Updated the dates to allow for more time in the first stage, as decided during the community webinar on Friday, January 23rd, based on participant feedback.
+  
+### Important Notes
+
+Youtube channel and Q&A. We will make more videos on how to use the evaluator
+
+---
+
+## The Battle of the Water Futures [Data and Software - [v0.4.0](https://doi.org/10.5281/zenodo.18306233)]
 
 **Release Date:** 19th January 2026
 
