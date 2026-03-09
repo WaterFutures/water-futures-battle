@@ -18,7 +18,7 @@ The electricity price is assumed to vary annually, influenced by inflation but s
 On a higher resolution, prices also fluctuate hourly throughout the day.
 The electricity purchased by the grid has an associated greenhouse gas emissions factor, which can not be influcenced by the utilities but is adjusted yearly to account for the evolution of the national electricity generation mix.
 
-As an alternative to grid electricity, participants may install solar photovoltaic panels.
+As an alternative to grid electricity, participants may install solar photovoltaic panels at water sources or at pumping stations.
 The unit cost of solar energy is modeled as a dynamic variable, changing annually to reflect improvements in the technology.
 
 The capital investment associated with the installation of solar panels in water utility $w$ at year $y$ is:

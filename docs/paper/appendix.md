@@ -453,7 +453,7 @@ When a property requires multiple parameters, column headers use a dash separato
   - Sheet: `entities`
   - Properties:
     - Solar farm ID (`solar_farm_id`) [ - ]
-    - Capacity (`capacity`) [ - ]
+    - Capacity (`capacity`) [ kW ]
     - Installation date (`installation_date`) [ - ]
     - Decommission date (`decommission_date`) [ - ]
     - Connected entity ID source/pumping station (`connected_entity_id`) [ - ]
