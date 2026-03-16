@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 from typing import Any, ClassVar, Dict, Self, Tuple
 
+import numpy as np
 import pandas as pd
 
 from ..core.base_model import bwf_entity
-from ..core.utility import timestampify, BWFTimeLike
+from ..core.utility import timestampify, BWFTimeLike, OptionalTimestamp
 
 from .dynamic_properties import PumpOptionsDB, PumpsResults
 
@@ -111,13 +112,14 @@ class Pump:
 
     installation_date: pd.Timestamp
 
-    ####SEE PIPES
-    _decommission_date: pd.Timestamp
+    # Decommision date follows the same pattern explained for pipes
+    # see the class Pipe in file pipes/entities.py 
+    _decommission_date: OptionalTimestamp
     _DECOMMISSION_REGISTRY: ClassVar[Dict[str, pd.Timestamp]] = {}
     _sampled_lifetime: int
 
     @property
-    def decommission_date(self) -> pd.Timestamp:
+    def decommission_date(self) -> OptionalTimestamp:
         if pd.notna(self._decommission_date):
             return self._decommission_date
         
@@ -130,6 +132,9 @@ class Pump:
     
     def __hash__(self) -> int:
         return hash(self.bwf_id)
+    
+    def __post_init__(self):
+        assert self._results is not None
 
     def is_active(self, when: BWFTimeLike) -> bool:
         ts = timestampify(when)
@@ -138,13 +143,19 @@ class Pump:
             (pd.isna(self.decommission_date) or ts < self.decommission_date)
         )
     
-    
     def decommission(self, when: BWFTimeLike) -> Self:
         ts = timestampify(when, errors='raise')
 
-        if (ts <= self.installation_date):
+        if pd.notna(self.decommission_date):
             raise ValueError(
-                f"Decommission date {ts} must be after installation date {self.installation_date} for pump {self.bwf_id}."
+                f"Error decommisioning pump {self.bwf_id} on {ts}",
+                "The entity has already a decommission date."
+            )
+
+        if ts <= self.installation_date:
+            raise ValueError(
+                f"Error decommisioning pump {self.bwf_id} on {ts}",
+                f"The decommission date can not be before the installation date ({self.installation_date})"
             )
         
         self._DECOMMISSION_REGISTRY[self.bwf_id] = ts
@@ -162,3 +173,37 @@ class Pump:
             raise ValueError(f"Impossible to fail pump {self.bwf_id}.",
                              "This pump has no sampled lifetime because it has a decommision date.")
         return self.decommission(self.installation_date.year+self._sampled_lifetime)
+    
+    def track_ele_energy(
+            self,
+            when: BWFTimeLike,
+            values: np.ndarray
+        ) -> Self:
+        """
+        This function tracks the electrical energy consumption of a pump.
+
+        It expects an array of values at a hourly timestep
+        
+        :param self: Description
+        :param when: Description
+        :type when: BWFTimeLike
+        :param values: Description
+        :type values: np.ndarray
+        :return: Description
+        :rtype: Self
+        """
+        # We expect one year of values at hourly frequence
+        assert len(values) == 24*365
+
+        self._results.commit(
+            a_property=PumpsResults.ELE_ENERGY,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=len(values),
+                freq='h'
+            ),
+            entity=self.bwf_id,
+            values=values
+        )
+
+        return self

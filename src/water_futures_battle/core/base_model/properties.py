@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Dict, Any, Optional, List
+from typing import Callable, Dict, List, Optional, Protocol, Type, TypeVar
 
 import pandas as pd
 
@@ -55,6 +55,7 @@ class DynamicProperties(PropertiesContainer):
              alternative_name: Optional[str] = None
             ) -> Path:
         def _fix_index_dates(df: pd.DataFrame) -> pd.DataFrame:
+            df = df.copy()
             df.index = pd.to_datetime(df.index)
             df.sort_index(inplace=True)
             df.index = df.index.strftime('%Y-%m-%d')
@@ -67,7 +68,9 @@ class DynamicProperties(PropertiesContainer):
             presave_task=_fix_index_dates
         )
     
-def bwf_database(cls):
+T = TypeVar("T", bound="DynamicProperties")
+
+def bwf_database(cls: Type[T]) -> Type[T]:
     """
     Decorator for the Battle of the Water Futures object that would contain
     independent or dependent dynamic properties and results.
@@ -123,31 +126,5 @@ def bwf_database(cls):
     cls._must_contain_variables_check = _must_contain_variables_check
     if not hasattr(cls, 'variables_validation_checks'):
         cls.variables_validation_checks = variables_validation_checks
-    cls.__init__ = __init__
-    return cls
-
-def bwf_results(cls):
-    """
-    Decorator for BWF results classes.
-    Ensures the class inherits from DynamicProperties.
-    """
-
-    if not issubclass(cls, DynamicProperties):
-        raise TypeError(f"{cls.__name__} must inherit from DynamicProperties")
-    if not hasattr(cls, 'NAME'):
-        raise TypeError(f"{cls.__name__} must define a class attribute 'NAME'")
-
-    def __init__(self):
-        dataframes: Dict[str, pd.DataFrame] = {}
-        results = getattr(cls, 'TRACKED_VARIABLES', [])
-
-        for result in results:
-            dataframes[result] = pd.DataFrame(index=pd.DatetimeIndex([], name="timestamp"))
-
-        super(cls, self).__init__(
-            name=self.NAME,
-            dataframes=dataframes
-        )
-
     cls.__init__ = __init__
     return cls

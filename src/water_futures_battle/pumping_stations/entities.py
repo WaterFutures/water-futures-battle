@@ -10,10 +10,8 @@ from ..core.utility import BWFTimeLike
 from ..sources.entities import WaterSource, SourcesContainer
 from ..pumps import Pump, PumpOption
 
-from .dynamic_properties import PumpingStationResults
-
 OrderedPumpsCollection = Dict[int, Pump]
-@bwf_entity(db_type=None, results_type=PumpingStationResults)
+@bwf_entity(db_type=None, results_type=None)
 @dataclass(frozen=True)
 class PumpingStation:
     """
@@ -97,6 +95,10 @@ class PumpingStation:
     @property
     def province(self):
         return self.source.province
+    
+    def is_active(self, when: BWFTimeLike) -> bool:
+        """A pumping station is active if the source is and it has active pumps"""
+        return self.source.is_active(when=when) and self.has_active_pumps(when=when)
 
     def active_pumps(self, when: BWFTimeLike) -> OrderedPumpsCollection:
         return {
@@ -250,8 +252,14 @@ def get_pumps_collection(
             lifetime = -1
         else:
             deco_date = pd.NaT
+            # Ensure minimum lifetime so pump cannot fail before simulation start year
+            current_age = settings.start_year - pinstdate.year
+            lifetime_bounds = (
+                max(current_age, poption.lifetime[0]),
+                poption.lifetime[1]
+            )
             lifetime = settings.get_random_generator('pumps-lifetime').integers(
-                *poption.lifetime
+                *lifetime_bounds
             )
 
         pumps[i] = Pump(

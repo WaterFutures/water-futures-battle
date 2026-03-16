@@ -6,6 +6,33 @@ from .services import (
     apply_bond_to_debt_ratio,
     age_water_utility,
 )
+from ..nrw_model.policies import NRWMitigation
+from .policies import (
+    WaterPricingAdjustment,
+    BondRatioAdjustment,
+)
+
+WaterUtilityPolicies = [
+	NRWMitigation,
+	WaterPricingAdjustment,
+	BondRatioAdjustment,
+]
+
+from .interventions import (
+    OpenSource,
+    CloseSource,
+    InstallPipe,
+    InstallPumps,
+    InstallSolarFarm,
+)
+
+WaterUtilityInterventions = [
+	OpenSource,
+	CloseSource,
+	InstallPumps,
+	InstallPipe,
+	InstallSolarFarm,
+]
 
 __all__ = [
     "WaterUtility",
@@ -14,4 +41,6 @@ __all__ = [
     "apply_water_pricing_adjustments",
     "apply_bond_to_debt_ratio",
     "age_water_utility",
+    "WaterUtilityPolicies",
+    "WaterUtilityInterventions",
 ]

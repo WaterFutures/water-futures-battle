@@ -7,11 +7,12 @@ import pandas as pd
 
 from ..core import Settings
 from ..core.base_model import StaticProperties
+from ..core.utility import timestampify, BWFTimeLike
 from ..jurisdictions.entities import State
 from ..sources.entities import SourcesContainer
-from ..pipes.dynamic_properties import PipeOptionsDB, PipesDB, PipesResults
+from ..pipes.dynamic_properties import PipeOptionsDB, PipesDB
 from ..pipes.entities import Pipe, PipeOption
-from .entities import Connection, SupplyConnection, PeerConnection
+from .entities import Connection, SupplyConnection, PeerConnection, ClosedWSourceConnection, SelfLoopConnection
 
 def build_piping_infrastructure(
         desc: Dict[str, str],
@@ -42,9 +43,6 @@ def build_piping_infrastructure(
     # PIPES (objects) and CONNECTIONS (container of pipes)
     pipes_db = PipesDB.load_from_file(os.path.join(data_path, desc[PipesDB.NAME]))
     Pipe.set_dynamic_properties(pipes_db)
-
-    pipes_results = PipesResults()
-    Pipe.set_results(pipes_results)
 
     connections_data = pd.read_excel(
         os.path.join(data_path, desc['connections-static_properties']),
@@ -193,3 +191,65 @@ def dump_piping_infrastructure(
         pipe_options_properties.name: as_rel_path(sp_path_po),
         PipeOptionsDB.NAME: as_rel_path(dp_path_po)
     }
+
+def resolve_current_cnn(
+        old_connection: SupplyConnection | PeerConnection,
+        when: BWFTimeLike,
+        other_connections: Set[PeerConnection]
+) -> SupplyConnection | ClosedWSourceConnection | PeerConnection | SelfLoopConnection:
+    """
+    Given a connection at a given moment in time, resolves what is the current connection
+    based on the connection replaced_by_cnn_id property. 
+    It does so, recursively as a replacing connection could itseld be replaced.
+    Basically, the same thing that effective_cbs_id does for municipality but for connections.
+    """
+    if isinstance(old_connection, SupplyConnection):
+        # Supply connections should not get replaced. The only reason for something 
+        # different from an empty string to be in the replaced_by property should 
+        # be if the source closed.
+        if pd.isna(old_connection.from_node.closure_date):
+            return old_connection
+        
+        if old_connection.from_node.closure_date > timestampify(when):
+            return old_connection
+        
+        # source was closed in the past
+        return ClosedWSourceConnection()
+    
+    # old connection is a peer connection
+    if old_connection.replaced_by_cnn_id == "":
+        # not replaced -> self
+        return old_connection
+    
+    if old_connection.replaced_by_cnn_id == SelfLoopConnection.LABEL:
+        # check if the connection has already been self-looped. 
+        if old_connection.from_node.effective_cbs_id(when=when) == old_connection.to_node.effective_cbs_id(when=when):
+            return SelfLoopConnection()
+    
+        # not yet
+        return old_connection
+    
+    # it has been replaced by another connection, the question is: already or in the future?
+    if (
+        (
+            old_connection.from_node.end_reason == 'lifted' and
+            old_connection.from_node.end_date <= timestampify(when)
+        ) or (
+            old_connection.to_node.end_reason == 'lifted' and
+            old_connection.from_node.end_date <= timestampify(when)
+        )
+    ):
+        # it has happened already, we return the new connection effective date
+        new_connection = next(
+            c for c in other_connections
+            if c.bwf_id == old_connection.replaced_by_cnn_id
+        )
+
+        return resolve_current_cnn(
+            old_connection=new_connection,
+            when=when,
+            other_connections=other_connections
+        )
+    
+    # it has been replaced but is not time yet.
+    return old_connection

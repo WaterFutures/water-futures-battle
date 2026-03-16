@@ -1,18 +1,26 @@
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, ClassVar, Dict, List, Self, Set, Tuple, Union
 
+import numpy as np
 import pandas as pd
 
-from ..jurisdictions.entities import Province
 from ..core.base_model import bwf_entity, Location
-from .properties import SourcesDB, SourcesResults
-from ..core.utility import timestampify, BWFTimeLike
+from ..core.utility import timestampify, BWFTimeLike, OptionalTimestamp, filter_columns
+from ..jurisdictions.entities import Province
 
+from .enums import SourceSize
+from .properties import SourcesDB, SourcesResults, SourceCostTable
 @dataclass(frozen=True)
-class WaterSource(Location):
+class WaterSource(Location, ABC):
     """
     Base class for representing a water source.
     """
+    # NAME property is necessary for each derived type as we use for containers
+    @property
+    @abstractmethod
+    def NAME(self) -> str:
+        pass
     # Unique identifier of the BWF, is used also for hashing and equality purposes
     bwf_id: str
     ID = "source_id"
@@ -36,16 +44,52 @@ class WaterSource(Location):
     _closest_municipality_id: str
     CLOS_M_ID = 'closest_municipality'
     
-    nominal_capacity: float
+    # The following variables have the same pattern as explained in the Pipe class (file pipes/entities.py)
+    # I.e., "hidden" frozen value, registry and methods to set it up.
+    _nominal_capacity: float # m^3/day
     NOMINAL_CAPACITY = 'capacity-nominal'
+    _CAPACITY_REGISTRY: ClassVar[Dict[str, float]] = {}
+
+    @property
+    def nominal_capacity(self) -> float:
+        if pd.notna(self._nominal_capacity):
+            return self._nominal_capacity
+        return self._CAPACITY_REGISTRY.get(self.bwf_id, float('nan'))
     
-    activation_date: pd.Timestamp
+    # Capacity also defines the source_size_class, which is Mm^3/year
+    @property
+    def source_size_class(self) -> SourceSize:
+        return SourceSize.determine_class(self.nominal_capacity*365/1e6)
+    
+    _activation_date: OptionalTimestamp
     ACT_DATE = 'activation_date'
-    closure_date: pd.Timestamp
+    _ACTIVATION_REGISTRY: ClassVar[Dict[str, pd.Timestamp]] = {}
+
+    @property
+    def activation_date(self) -> OptionalTimestamp:
+        if pd.notna(self._activation_date):
+            return self._activation_date
+        return self._ACTIVATION_REGISTRY.get(self.bwf_id, pd.NaT)
+
+    _closure_date: OptionalTimestamp
     CLOS_DATE = 'closure_date'
+    _CLOSURE_REGISTRY: ClassVar[Dict[str, pd.Timestamp]] = {}
+
+    @property
+    def closure_date(self) -> OptionalTimestamp:
+        if pd.notna(self._closure_date):
+            return self._closure_date
+        return self._CLOSURE_REGISTRY.get(self.bwf_id, pd.NaT)
     
-    opex_vol_enfactor: float
+    _opex_vol_enfactor: float
     OPEX_VOLUM_ENERGY = 'opex-volum-energy_factor' # [kWh/m$^3$] Covers pumping, treatment, etc.
+    _OPEXVEF_REGISTRY: ClassVar[Dict[str, float]] = {}
+
+    @property
+    def opex_vol_enfactor(self) -> float:
+        if pd.notna(self._opex_vol_enfactor):
+            return self._opex_vol_enfactor
+        return self._OPEXVEF_REGISTRY.get(self.bwf_id, float('nan'))
 
     # Class Variable to store all the Pumping stations associated to the sources.
     _global_pumping_stations: ClassVar[Dict[str, 'PumpingStation']] = {}
@@ -66,14 +110,110 @@ class WaterSource(Location):
     def register_solar_farm(cls, a_solar_farm: 'SolarFarm') -> None:
         # Multiple solar farms can be associated to one element, but at each moment
         # in time only one will be active.
-        if cls.bwf_id not in cls._global_solar_farms:
-            cls._global_solar_farms[a_solar_farm.source.bwf_id] = set()
+        if a_solar_farm.connected_entity.bwf_id not in cls._global_solar_farms:
+            cls._global_solar_farms[a_solar_farm.connected_entity.bwf_id] = set()
 
-        cls._global_solar_farms[a_solar_farm.source.bwf_id].add(a_solar_farm)
+        cls._global_solar_farms[a_solar_farm.connected_entity.bwf_id].add(a_solar_farm)
         return
+    
+    # Class Variable to store the global settings, by type
+    _sources_settings: ClassVar['SourcesSettings'] = None # type: ignore
+
+    @property
+    def source_type_str(self) -> str:
+        return self.NAME # defined in derived class
+    
+    @property
+    @abstractmethod
+    def construction_size_bounds(self) -> Tuple[float, float]:
+        pass
+    
+    @property
+    def capacity_target_factor(self) -> float:
+        return self._sources_settings.capacity_target_factor[self.source_type_str]
+    
+    @property
+    def opex_volum_other_multiplier(self) -> float:
+        return self._sources_settings.opex_volum_other_multip[self.source_type_str]
+    
+    @property
+    def construction_years_bounds(self) -> Tuple[int, int]:
+        return self._sources_settings.construction_years_bounds[self.source_type_str]
+    
+    @property
+    def new_source_opex_energyf_bounds(self) -> Tuple[float, float]:
+        return self._sources_settings.new_source_opex_energyf_bounds[self.source_type_str]
+    
 
     # Constructor ("class method from row") is defined by the derived type because
     # it gets overwritten automatically by frozen class dataclass
+
+    def __post_init__(self) -> None:
+        assert self._sources_settings is not None
+
+    def open_production(
+            self,
+            when: BWFTimeLike,
+            capacity: float,
+            opex_vol_ene_factor_rng: np.random.Generator
+        ) -> Self:
+
+        ts = timestampify(when, errors='raise')
+
+        if pd.notna(self.activation_date):
+            raise ValueError(
+                f"Error opening production of source {self.bwf_id} on {ts}.",
+                f"The entity has already been opened on {self.activation_date}."
+            )
+        
+        # At this point is should not have a decommission date because it should be 
+        # impossible to decommission a non-open source.
+        assert pd.isna(self.closure_date), "Opening a source with decommission date in place but not activation date"
+
+        # Capacity check (permit and bounds are expressed in Mm^e /year)
+        # and also get the unit costs
+        capacity_lb, capacity_ub = self.construction_size_bounds
+        
+        if not (capacity_lb <= capacity <= capacity_ub):
+                raise ValueError(
+                f"Error opening production of source {self.bwf_id} on {ts}.",
+                f"Reason: capacity is outside of the allowed bounds for the source."
+                f"Bounds: [{capacity_lb}, {capacity_ub}] m^3/day"
+                f"Capacity: {capacity}"
+            ) 
+
+        self._ACTIVATION_REGISTRY[self.bwf_id] = ts
+        self._CAPACITY_REGISTRY[self.bwf_id] = capacity
+        self._OPEXVEF_REGISTRY[self.bwf_id] = opex_vol_ene_factor_rng.uniform(
+            *self.new_source_opex_energyf_bounds
+        )
+
+        return self
+    
+    def close_production(self, when: BWFTimeLike) -> Self:
+        ts = timestampify(when, errors='raise')
+
+        if pd.isna(self.activation_date):
+            raise ValueError(
+                f"Error closing production of source {self.bwf_id} on {ts}.",
+                "The entity has never been activated."
+            )
+        
+        if pd.notna(self.closure_date):
+            raise ValueError(
+                f"Error closing production of source {self.bwf_id} on {ts}.",
+                f"The entity has already been closed on {self.closure_date}."
+            )
+        
+        if ts <= self.activation_date:
+            raise ValueError(
+                f"Error closing production of source {self.bwf_id} on {ts}.",
+                f"The closure date can not be before the opening date ({self.closure_date})."
+            )
+        
+        self._CLOSURE_REGISTRY[self.bwf_id] = ts
+
+        return self
     
     def is_active(self, when: BWFTimeLike) -> bool:
         """
@@ -87,20 +227,20 @@ class WaterSource(Location):
             return False
         return True
 
-    def volumetric_opex_rate(self) -> pd.Series:
-        return self._dynamic_properties[SourcesDB.UNIT_COST][self.bwf_id]
+    @property
+    def construction_unit_costs(self) -> pd.Series:
+        costs_df = self._dynamic_properties[SourcesDB.UNIT_COST]
 
-    """
-    REDO like above...
-    def fixed_opex_rate(self) -> pd.Series:
+        costs_df = costs_df[filter_columns(costs_df, self.province.state.cbs_id)]
+        costs = costs_df.apply(
+            lambda r: SourceCostTable.from_row(
+                r,
+                entity_name=self.province.state.cbs_id
+            ),
+            axis=1
+        )
 
-        return self._dynamic_properties[self.self_type][self.bwf_id]
-
-    def unit_cost(self) -> pd.Series:
-        return self._dynamic_properties[self.self_type][self.province.region.cbs_id]
-    """
-    
-    # TODO: functions to save the results in the self._results dictionary
+        return costs
 
     def to_dict(self) -> Dict[str, Any]:
         activ_date = self.activation_date.strftime('%Y-%m-%d') if pd.notna(self.activation_date) else ''
@@ -142,8 +282,22 @@ class GroundWater(WaterSource):
     permit: float
     PERMIT = 'permit'
 
+    @property
+    def construction_size_bounds(self) -> Tuple[float, float]:
+        # Lower bound is any epsilon above zero
+        # Upper bound is the permit plus a surplus
+        # Other thing to note is that permit is in m^3/year so we convert it to m^3/day
+        return (
+            0.001,
+            self.permit/365 * (1+self._sources_settings.gw_construction_size_surplus)
+        )
+
     @classmethod
-    def from_row(cls, row_data: dict, a_province: Province, **kwargs) -> Self:
+    def from_row(
+        cls,
+        row_data: pd.Series | Dict[str, Any],
+        a_province: Province
+    ) -> Self:
         """
         Primary static constructor from row data.
         """
@@ -155,16 +309,54 @@ class GroundWater(WaterSource):
             elevation=row_data[WaterSource.ELEVATION],
             display_name=row_data[WaterSource.DISPLAY_NAME],
             _closest_municipality_id=row_data[WaterSource.CLOS_M_ID],
-            nominal_capacity=row_data[WaterSource.NOMINAL_CAPACITY],
-            activation_date=pd.to_datetime(row_data[WaterSource.ACT_DATE], errors='coerce'),
-            closure_date=pd.to_datetime(row_data[WaterSource.CLOS_DATE], errors='coerce'),
-            opex_vol_enfactor=row_data[WaterSource.OPEX_VOLUM_ENERGY],
-            permit=row_data[GroundWater.PERMIT],
-            **kwargs
+            _nominal_capacity=row_data[WaterSource.NOMINAL_CAPACITY],
+            _activation_date=pd.to_datetime(row_data[WaterSource.ACT_DATE], errors='coerce'),
+            _closure_date=pd.to_datetime(row_data[WaterSource.CLOS_DATE], errors='coerce'),
+            _opex_vol_enfactor=row_data[WaterSource.OPEX_VOLUM_ENERGY],
+            permit=row_data[GroundWater.PERMIT]
         )
+    
+    def __post_init__(self):
+        assert self._sources_settings is not None
+        assert self._dynamic_properties is not None
+        assert self._results is not None
 
     def to_dict(self) -> Dict[str, Any]:
         return super().to_dict() | {self.PERMIT: self.permit}
+    
+    def track_production(
+            self,
+            when: BWFTimeLike,
+            values: np.ndarray
+            ) -> Self:
+        """
+        This function tracks the source production (outflow).
+
+        It expects an array of values with an hourly frequency.
+        
+        :param self: Description
+        :param when: Description
+        :type when: BWFTimeLike
+        :param values: Description
+        :type values: np.ndarray
+        :return: Description
+        :rtype: Self
+        """
+        # We expect one year of values at hourly frequence
+        assert len(values) == 24*365
+
+        self._results.commit(
+            a_property=SourcesResults.PRODUCTION,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=len(values),
+                freq='h'
+            ),
+            entity=self.bwf_id,
+            values=values
+        )
+
+        return self
 
 @bwf_entity(db_type=SourcesDB, results_type=SourcesResults)
 @dataclass(frozen=True)
@@ -188,8 +380,16 @@ class SurfaceWater(WaterSource):
     basin: str
     BASIN = 'basin'
     
+    @property
+    def construction_size_bounds(self) -> Tuple[float, float]:
+        return self._sources_settings.sw_construction_size_bounds
+
     @classmethod
-    def from_row(cls, row_data: dict, a_province: Province, **kwargs) -> Self:
+    def from_row(
+        cls,
+        row_data: pd.Series | Dict[str, Any],
+        a_province: Province
+    ) -> Self:
         """
         Primary static constructor from row data.
         """
@@ -201,13 +401,16 @@ class SurfaceWater(WaterSource):
             elevation=row_data[WaterSource.ELEVATION],
             display_name=row_data[WaterSource.DISPLAY_NAME],
             _closest_municipality_id=row_data[WaterSource.CLOS_M_ID],
-            nominal_capacity=row_data[WaterSource.NOMINAL_CAPACITY],
-            activation_date=pd.to_datetime(row_data[WaterSource.ACT_DATE], errors='coerce'),
-            closure_date=pd.to_datetime(row_data[WaterSource.CLOS_DATE], errors='coerce'),
-            opex_vol_enfactor=row_data[WaterSource.OPEX_VOLUM_ENERGY],
-            basin=row_data[SurfaceWater.BASIN],
-            **kwargs
+            _nominal_capacity=row_data[WaterSource.NOMINAL_CAPACITY],
+            _activation_date=pd.to_datetime(row_data[WaterSource.ACT_DATE], errors='coerce'),
+            _closure_date=pd.to_datetime(row_data[WaterSource.CLOS_DATE], errors='coerce'),
+            _opex_vol_enfactor=row_data[WaterSource.OPEX_VOLUM_ENERGY],
+            basin=row_data[SurfaceWater.BASIN]
         )
+    
+    def __post_init__(self):
+        assert self._dynamic_properties is not None
+        assert self._results is not None
 
     def to_dict(self) -> Dict[str, Any]:
         return super().to_dict() | {self.BASIN: self.basin}
@@ -230,9 +433,17 @@ class Desalination(WaterSource):
     def __hash__(self):
         # Base the hash only on the unique identifier
         return hash(self.bwf_id)
-
+    
+    @property
+    def construction_size_bounds(self) -> Tuple[float, float]:
+        return self._sources_settings.des_construction_size_bounds
+    
     @classmethod
-    def from_row(cls, row_data: dict, a_province: Province, **kwargs) -> Self:
+    def from_row(
+        cls,
+        row_data: pd.Series | Dict[str, Any],
+        a_province: Province
+    ) -> Self:
         """
         Primary static constructor from row data.
         """
@@ -244,12 +455,15 @@ class Desalination(WaterSource):
             elevation=row_data[WaterSource.ELEVATION],
             display_name=row_data[WaterSource.DISPLAY_NAME],
             _closest_municipality_id=row_data[WaterSource.CLOS_M_ID],
-            nominal_capacity=row_data[WaterSource.NOMINAL_CAPACITY],
-            activation_date=pd.to_datetime(row_data[WaterSource.ACT_DATE], errors='coerce'),
-            closure_date=pd.to_datetime(row_data[WaterSource.CLOS_DATE], errors='coerce'),
-            opex_vol_enfactor=row_data[WaterSource.OPEX_VOLUM_ENERGY],
-            **kwargs
+            _nominal_capacity=row_data[WaterSource.NOMINAL_CAPACITY],
+            _activation_date=pd.to_datetime(row_data[WaterSource.ACT_DATE], errors='coerce'),
+            _closure_date=pd.to_datetime(row_data[WaterSource.CLOS_DATE], errors='coerce'),
+            _opex_vol_enfactor=row_data[WaterSource.OPEX_VOLUM_ENERGY]
         )
+    
+    def __post_init__(self):
+        assert self._dynamic_properties is not None
+        assert self._results is not None
 
 ValidWaterSources = Union[GroundWater, SurfaceWater, Desalination]
 GroundWaterSources = Set[GroundWater]
@@ -262,7 +476,9 @@ class SourcesContainer:
     types = WaterSourcesTypes
     types_names = [t.NAME for t in WaterSourcesTypes]
 
-    def __init__(self, sources: dict[str, Union[GroundWaterSources, SurfaceWaterSources, DesalinationSources]]):
+    def __init__(
+            self,
+            sources: Dict[str, Union[GroundWaterSources, SurfaceWaterSources, DesalinationSources]]):
         self.m_sources = sources
 
     @property
@@ -350,7 +566,7 @@ class SourcesSettings:
     opex_volum_other_multip: Dict[str, float]
     OPEX_VOL_MULT = 'opex-volum-other-multiplier'
 
-    construction_time_bounds: Dict[str, Tuple[float, float]]
+    construction_years_bounds: Dict[str, Tuple[int, int]]
     CONSTR_TIME = 'construction_time'
 
     new_source_opex_energyf_bounds: Dict[str, Tuple[float, float]]
@@ -376,10 +592,10 @@ class SourcesSettings:
                 st: global_options.loc[st, cls.OPEX_VOL_MULT].astype(float)
                 for st in SourcesContainer.types_names
             },
-            construction_time_bounds={
+            construction_years_bounds={
                 st: (
-                    global_options.loc[st, cls.CONSTR_TIME+'-min'].astype(float),
-                    global_options.loc[st, cls.CONSTR_TIME+'-max'].astype(float)
+                    global_options.loc[st, cls.CONSTR_TIME+'-min'].astype(int),
+                    global_options.loc[st, cls.CONSTR_TIME+'-max'].astype(int)
                 )
                 for st in SourcesContainer.types_names
             },
@@ -407,8 +623,8 @@ class SourcesSettings:
                 'source_type': source_type,
                 self.CAP_TARGET_FACT: self.capacity_target_factor[source_type],
                 self.OPEX_VOL_MULT: self.opex_volum_other_multip[source_type],
-                self.CONSTR_TIME+'-min': self.construction_time_bounds[source_type][0],
-                self.CONSTR_TIME+'-max': self.construction_time_bounds[source_type][1],
+                self.CONSTR_TIME+'-min': self.construction_years_bounds[source_type][0],
+                self.CONSTR_TIME+'-max': self.construction_years_bounds[source_type][1],
                 self.NEWSRC_ENERGYFACT+'-min': self.new_source_opex_energyf_bounds[source_type][0],
                 self.NEWSRC_ENERGYFACT+'-max': self.new_source_opex_energyf_bounds[source_type][1],
             })

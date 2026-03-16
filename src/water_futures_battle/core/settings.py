@@ -7,6 +7,7 @@ from .random_manager import RandomManager, FakeLifetimeGenerator
 
 _HISTORICAL_PERIOD_END = 2024
 
+
 @dataclass(frozen=True)
 class Settings:
     LABEL = 'settings'
@@ -21,7 +22,10 @@ class Settings:
 
     lifeline_volume: float
     LIFELINE_VOLUME = 'lifeline_volume'
-    
+
+    AVAILABLE_CORES = 'available_cores'
+    available_cores: int
+
     @classmethod
     def from_config(cls, config: Dict[str, Any]) -> Self:
         """Primary constructor from config object (dictionary)"""
@@ -31,18 +35,18 @@ class Settings:
             _rnd_manager=RandomManager(
                 master_seed=config[cls.SEED]
             ),
-            lifeline_volume=config[cls.LIFELINE_VOLUME]
+            lifeline_volume=config[cls.LIFELINE_VOLUME],
+            available_cores=config.get(cls.AVAILABLE_CORES, 1),
         )
-    
 
     @property
     def years_to_simulate(self) -> List[int]:
         return list(range(self.start_year, self.end_year+1))
-    
+
     @property
     def n_years_to_simulate(self) -> int:
         return len(self.years_to_simulate)
-    
+
     @property
     def _is_simulating_historical_period(self) -> bool:
         return self.end_year <= _HISTORICAL_PERIOD_END
@@ -55,6 +59,18 @@ class Settings:
             name == 'pipes-lifetime' or name == 'pumps-lifetime'
         ):
             return FakeLifetimeGenerator(fixed_value=200)  # type: ignore
-        
+
         # Else, default behaviour
         return self._rnd_manager.get(module_name=name)
+
+    @property
+    def residential_p_weight_rng(self) -> np.random.Generator:
+        return self.get_random_generator('municipalities-res_p_weight')
+
+    @property
+    def pipes_lifetime_rng(self) -> np.random.Generator:
+        return self.get_random_generator('pipes-lifetime')
+    
+    @property
+    def solar_radiation_pvlib_year_rng(self) -> np.random.Generator:
+        return self.get_random_generator('solar_radiation-pvlib_year')

@@ -17,6 +17,16 @@ class SourceSize(IntEnum):
 
     @classmethod
     def determine_class(cls, nominal_capacity: float) -> 'SourceSize':
+        """
+        Determines for a nominal capacity in Mm^3/year the corresponding source 
+        size class.
+        
+        :param cls: Description
+        :param nominal_capacity: Description
+        :type nominal_capacity: float
+        :return: Description
+        :rtype: SourceSize
+        """
         assert nominal_capacity > 0., "Nominal capacity parameter to determins Source class can't be negative"
 
         for size_class in cls:

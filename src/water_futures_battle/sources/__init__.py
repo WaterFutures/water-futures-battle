@@ -1,5 +1,5 @@
-from .entities import WaterSource, GroundWater, SurfaceWater, Desalination
-from .services import build_sources
+from .entities import WaterSource, GroundWater, SurfaceWater, Desalination, SourcesSettings
+from .services import build_sources, dump_sources
 
 __all__ = [
 	"WaterSource",
@@ -7,4 +7,6 @@ __all__ = [
 	"SurfaceWater",
 	"Desalination",
 	"build_sources",
+    "dump_sources",
+    "SourcesSettings",
 ]

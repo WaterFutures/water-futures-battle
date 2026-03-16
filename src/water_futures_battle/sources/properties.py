@@ -4,7 +4,7 @@ from typing import Tuple
 
 import pandas as pd
 
-from ..core.base_model import DynamicProperties, bwf_database, bwf_results
+from ..core.base_model import DynamicProperties, bwf_database, BWFResult
 from .enums import SourceSize
 
 @dataclass(frozen=True)
@@ -119,10 +119,14 @@ class SourcesDB(DynamicProperties):
         AVAILABILITY_FACTOR
     ]
     
-        
-@bwf_results
-class SourcesResults(DynamicProperties):
+class SourcesResults(BWFResult):
     NAME = 'sources-results'
+
+    PRODUCTION = 'production'
+
+    TRACKED_VARIABLES = [
+        PRODUCTION
+    ]
 
 @bwf_database
 class GroundWaterDB(SourcesDB):

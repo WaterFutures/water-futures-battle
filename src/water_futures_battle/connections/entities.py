@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Dict, Self, Set, Optional
+from typing import Any, Dict, List, Self, Set, Optional
 
 import numpy as np
 import pandas as pd
@@ -46,10 +46,17 @@ class Connection:
 
     # Collection of pipes installed on this connection over time
     pipes: OrderedPipesCollection
-    # Completely described by 2 properties: option, installation.
+    # Completely described by 3 properties: option, installation date, last installation date.
     # decommission date is the new pipe installation date
     P_OPTION = 'pipes-option_ids'
     P_INSTDATE = 'pipes-installation_dates'
+    P_DECODATE = 'pipes-decommission_dates'
+
+    replaced_by_cnn_id: str
+    REPLACED_BY = 'replaced_by'
+    
+    replaces_cnn_ids: List[str]
+    REPLACES = 'replaces'
 
     def is_active(self, when: BWFTimeLike) -> bool:
         """
@@ -101,17 +108,18 @@ class Connection:
         
         if decommission_date is not None and pd.notna(decommission_date):
             deco_date = decommission_date
-            lifetime = -1 # like nan but the property is an int
+            lifetime: int = -1 # like nan but the property is an int
         else:
             assert lifetime_rng is not None
             deco_date = pd.NaT
-            lifetime = lifetime_rng.integers(*pipe_option.lifetime)
+            lifetime = int(lifetime_rng.integers(*pipe_option.lifetime))
 
         # Before installing, let's see if the previously installed pipe needs to
         # be decommissioned (active pipe and with no date)
-        if (self.has_active_pipe(installation_date) and 
-            pd.isna(self.active_pipe(installation_date).decommission_date)):
-            
+        if (
+            self.has_active_pipe(installation_date) and 
+            pd.isna(self.active_pipe(installation_date).decommission_date)
+        ):    
             self.active_pipe(installation_date).decommission(when=installation_date)
 
         # "Order the pipe to the manufacturer"
@@ -128,27 +136,36 @@ class Connection:
 
         return new_pipe
     
+    def inspect(self, when: int) -> Pipe | None:
+        # Nothing to do if there is no active pipe installed
+        if not self.has_active_pipe(when=when):
+            return None
+        
+        # If there is a pipe, we get it and see if is failing this year
+        active_pipe = self.active_pipe(when=when)
+        assert active_pipe is not None
+
+        if not active_pipe._is_failing_this_year(when=when):
+            return None
+
+        # It is failing, so decommision it (we don't need to pass the time because fail uses the sampled lifetime)
+        failed_pipe = active_pipe._fail()
+
+        return failed_pipe
+
     def inspect_and_replace(
             self,
             year: int,
             lifetime_rng: np.random.Generator
         ) -> float:
 
-        # Nothing to do if there is no active pipe installed
-        if not self.has_active_pipe(when=year):
-            return 0.0
+        failed_pipe = self.inspect(when=year)
         
-        # If there is a pipe, we get it and see if is failing this year
-        active_pipe = self.active_pipe(when=year)
-        assert active_pipe is not None
-
-        if not active_pipe._is_failing_this_year(when=year):
+        if failed_pipe is None:
+            # it didn't fail, no cost
             return 0.0
 
-        # It is failing, so decommision it and open a new one
-        active_pipe._fail()
-        failed_pipe = active_pipe
-
+        # it failed, so we install a new one on its place
         new_pipe = self.install_pipe(
             pipe_option=failed_pipe._pipe_option,
             installation_date=failed_pipe.decommission_date,
@@ -161,10 +178,13 @@ class Connection:
 
         return cost
 
-
     def to_dict(self) -> Dict[str, Any]:
         install_dates = [
             p.installation_date.strftime('%Y-%m-%d')
+            for p in self.pipes.values()
+        ]
+        deco_dates = [
+            p.decommission_date.strftime('%Y-%m-%d') if pd.notna(p.decommission_date) else ''
             for p in self.pipes.values()
         ]
 
@@ -173,15 +193,18 @@ class Connection:
             self.TO_NODE: self.to_node.cbs_id,
             self.DISTANCE: self.distance,
             self.MINORLOSSC: self.minor_loss_coeff,
-            self.P_INSTDATE: ';'.join(install_dates),
             self.P_OPTION: ';'.join([p._pipe_option.bwf_id for p in self.pipes.values()]),
+            self.P_INSTDATE: ';'.join(install_dates),
+            self.P_DECODATE: ';'.join(deco_dates),
+            self.REPLACED_BY: self.replaced_by_cnn_id,
+            self.REPLACES: ';'.join(self.replaces_cnn_ids),
         }
 
         return r
 
-
 def get_pipe_collection(
     installation_dates_desc: str,
+    decommmission_dates_desc: str,
     option_ids_desc: str,
     pipe_options_map: Dict[str, PipeOption],
     bwf_id_prefix: str,
@@ -192,30 +215,41 @@ def get_pipe_collection(
         return {}
 
     pipe_options = [pipe_options_map[oid] for oid in option_ids_desc.split(';')]
-
-    # Since only one pipe can be installed on each connection, every pipe replaces the previoys one 
     install_dates = [pd.to_datetime(d, errors='raise') for d in installation_dates_desc.split(';')]
-    decomis_dates = install_dates[1:] + [pd.NaT]  # Add extra NaT at the end
+    deco_dates = [
+        pd.to_datetime(d, errors='raise') if d != '' else pd.NaT
+        for d in decommmission_dates_desc.split(';')
+    ]
+    if len(deco_dates) == len(install_dates)-1:
+        # last pipe is not decommisioned, yet
+        deco_dates.append(pd.NaT)
     
-    assert len(pipe_options) == len(install_dates) == len(decomis_dates), (
+    assert len(pipe_options) == len(install_dates) == len(deco_dates), (
         f"Lengths for pipe collecion don't match: option_ids={len(pipe_options)}, install_dates={len(install_dates)}, decomis_dates={len(decomis_dates)}"
     )
 
     pipes: Dict[int, Pipe] = {}
     for i, pipe_option in enumerate(pipe_options):
         # All pipes, except the last one are decommisioned, thus we put -1 (like we do in pipe_install)
-        if i != len(pipe_options)-1:
-            lifetime = -1
+        if pd.notna(deco_dates[i]):
+            lifetime = int(-1)
         else:
-            lifetime = settings.get_random_generator('pipes-lifetime').integers(
-                *pipe_option.lifetime
+            # Ensure minimum lifetime so pipes cannot fail before simulation start year
+            current_age = settings.start_year - install_dates[i].year
+            lifetime_bounds = (
+                max(current_age, pipe_option.lifetime[0]), 
+                pipe_option.lifetime[1]
             )
+
+            lifetime = int(settings.pipes_lifetime_rng.integers(
+                *lifetime_bounds
+            ))
 
         pipes[i] = Pipe(
             bwf_id=f"{bwf_id_prefix}-{i:02d}",
             _pipe_option=pipe_option,
             installation_date=install_dates[i],
-            _decommission_date=decomis_dates[i],
+            _decommission_date=deco_dates[i],
             _sampled_lifetime=lifetime
         )
 
@@ -250,6 +284,12 @@ class SupplyConnection(Connection):
         to_municipality = a_state.municipality(str(row_data[Connection.TO_NODE]))
         assert from_source.province == to_municipality.province
 
+        rep_by_data = row_data[Connection.REPLACED_BY]
+        rep_by = str(rep_by_data) if pd.notna(rep_by_data) else ""
+
+        replaces_data = row_data[Connection.REPLACES]
+        replaces = str(replaces_data).split(';') if pd.notna(replaces_data) else []
+
         return cls(
             bwf_id=connection_id,
             to_node=to_municipality,
@@ -257,11 +297,14 @@ class SupplyConnection(Connection):
             minor_loss_coeff=float(row_data[Connection.MINORLOSSC]),
             pipes=get_pipe_collection(
                 str(row_data[Connection.P_INSTDATE]),
+                str(row_data[Connection.P_DECODATE]),
                 str(row_data[Connection.P_OPTION]),
                 pipe_options_map=pipe_options_map,
                 bwf_id_prefix=connection_id,
                 settings=settings
             ),
+            replaced_by_cnn_id=rep_by,
+            replaces_cnn_ids=replaces,
             from_node=from_source
         )
     
@@ -279,8 +322,15 @@ class SupplyConnection(Connection):
         return self.from_node.is_active(when=when)
 
     def to_dict(self) -> Dict[str, Any]:
-        return super().to_dict() | {self.FROM_NODE: self.from_node.bwf_id}
+        base_desc = super().to_dict() | {self.FROM_NODE: self.from_node.bwf_id}
+     
+        if base_desc[Connection.REPLACED_BY] == "":
+            # if the user closed its source in the simulation period,
+            # we want to write it out
+            if pd.notna(self.from_node.closure_date):
+                base_desc[Connection.REPLACED_BY] = ClosedWSourceConnection.LABEL
 
+        return base_desc
     
 @dataclass(frozen=True, eq=False, unsafe_hash=False)  
 class PeerConnection(Connection):
@@ -310,6 +360,12 @@ class PeerConnection(Connection):
         from_municipality = a_state.municipality(str(row_data[Connection.FROM_NODE]))
         to_municipality = a_state.municipality(str(row_data[Connection.TO_NODE]))
 
+        rep_by_data = row_data[Connection.REPLACED_BY]
+        rep_by = str(rep_by_data) if pd.notna(rep_by_data) else ""
+
+        replaces_data = row_data[Connection.REPLACES]
+        replaces = str(replaces_data).split(';') if pd.notna(replaces_data) else []
+
         return cls(
             bwf_id=connection_id,
             to_node=to_municipality,
@@ -317,11 +373,14 @@ class PeerConnection(Connection):
             minor_loss_coeff=float(row_data[Connection.MINORLOSSC]),
             pipes=get_pipe_collection(
                 str(row_data[Connection.P_INSTDATE]),
+                str(row_data[Connection.P_DECODATE]),
                 str(row_data[Connection.P_OPTION]),
                 pipe_options_map=pipe_options_map,
                 bwf_id_prefix=connection_id,
                 settings=settings
             ),
+            replaced_by_cnn_id=rep_by,
+            replaces_cnn_ids=replaces,
             from_node=from_municipality
         )
     
@@ -353,3 +412,19 @@ class PeerConnection(Connection):
     
     def to_dict(self) -> Dict[str, Any]:
         return super().to_dict() | {self.FROM_NODE: self.from_node.cbs_id}
+
+class ClosedWSourceConnection:
+    """
+    Placeholder class representing a connection that has been removed
+    because its associated water source no longer exists.
+    Used to represent the connection replacement for connections that have disappeared from the network.
+    """
+    LABEL = 'CLOSED_WSOURCE'
+
+class SelfLoopConnection:
+    """
+    Placeholder class representing a connection that has been removed
+    because its associated water source no longer exists.
+    Used to represent the connection replacement for connections that have disappeared from the network.
+    """
+    LABEL = 'SELF_LOOP'

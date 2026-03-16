@@ -1,7 +1,8 @@
 import os
 from pathlib import Path
-from typing import Dict, Set, Tuple
+from typing import Any, Dict, Set, Tuple
 
+import pandas as pd
 import requests
 from rich.progress import Progress
 import tempfile
@@ -21,6 +22,8 @@ from .energy import configure_energy_system
 from .connections import build_piping_infrastructure
 from .water_utilities import WaterUtility, configure_water_utilities
 from .national_context import NationalContext
+from .services.evaluation import escalate_costs, age_water_utilities
+
 
 def get_package_version():
     version_file = os.path.join(os.path.dirname(__file__), 'VERSION')
@@ -215,9 +218,28 @@ def configure_system_ex(
         )
         progress.update(config_task, advance=1)
 
+        if settings.start_year > 2000:
+            # Unless you use the original data folder (which starts with 2000),
+            # the input files have been generated using the evaluator, which doens't 
+            # update the costs and ages the utilities in the last year because it 
+            # assumes it's missing some info to do it (e..g inlfation in year+1). 
+            # In the follow up stage, however this info will be there.
+            escalate_costs(
+                year=settings.start_year-1,
+                national_context=national_context,
+                water_utilities=water_utilities
+            )
+
+            age_water_utilities(
+                year=settings.start_year-1,
+                national_context=national_context,
+                water_utilities=water_utilities,
+                settings=settings
+            )
+
         return settings, national_context, water_utilities
 
-from .core.base_model import DynamicProperties
+from .core.base_model import DynamicProperties, BWFResult
 from .jurisdictions.services import dump_state
 from .water_demand_model.services import dump_water_demand_model
 from .nrw_model.services import dump_nrw_model
@@ -328,7 +350,8 @@ def save_system_status(
             settings.END_YEAR: settings.end_year + len(settings.years_to_simulate),
             'national_budget': 0,
             settings.LIFELINE_VOLUME: settings.lifeline_volume,
-            settings.SEED: 128
+            settings.SEED: 128,
+            settings.AVAILABLE_CORES: settings.available_cores,
         }
 
         config_path = results_dir / "configuration.yaml"
@@ -350,6 +373,224 @@ def save_metrics(
         print(f"You can visualize this stage metrics at '{results_dir}/metrics.xlsx'")
 
         return
+
+def save_results(
+        result_dir: Path,
+        settings: Settings,
+        national_context: NationalContext,
+        water_utilities: Set[WaterUtility],
+        save_results_config: Dict[str, Any],
+    ) -> None:
+
+    # Nothing to save, it happens
+    if not save_results_config:
+        return
+    
+    save_entities_results(
+        result_dir=result_dir,
+        settings=settings,
+        national_context=national_context,
+        water_utilities=water_utilities,
+        save_results_config=save_results_config.get('entities', {})
+    )
+
+    save_analytics_results(
+        result_dir=result_dir,
+        settings=settings,
+        national_context=national_context,
+        water_utilities=water_utilities,
+        save_results_config=save_results_config.get('analytics', {})
+    )
+
+    save_epanet_networks_results(
+        result_dir=result_dir,
+        settings=settings,
+        national_context=national_context,
+        water_utilities=water_utilities,
+        save_results_config=save_results_config.get('epanet_networks', {}),
+    )
+    
+    return
+
+def save_entities_results(
+        result_dir: Path,
+        settings: Settings,
+        national_context: NationalContext,
+        water_utilities: Set[WaterUtility],
+        save_results_config: Dict[str, Any]
+    ) -> None:
+
+    if not save_results_config:
+        return
+
+    with Progress() as progress:
+        saving_task = progress.add_task("[red]Saving out entities results ", total=5)
+
+        def dump_if_enabled(entity: str, results_obj: BWFResult) -> Path | None: 
+            if not save_results_config.get(entity, False):
+                return
+            
+            if isinstance(save_results_config[entity], bool):
+                return results_obj.dump(
+                    path=result_dir
+                )
+
+            if isinstance(save_results_config[entity], dict) and save_results_config[entity].get('enabled', False):
+                return
+            
+            return results_obj.dump(
+                    path=result_dir,
+                    subset=save_results_config[entity].get('fields', [])
+                )
+
+        dump_if_enabled('municipalities', national_context.municipalities_results)
+        progress.update(saving_task, advance=1)
+
+        dump_if_enabled('sources', national_context.sources_results)
+        progress.update(saving_task, advance=1)
+
+        dump_if_enabled('pumps', national_context.pumps_results)
+        progress.update(saving_task, advance=1)
+
+        dump_if_enabled('solar_farms', national_context.solar_farms_results)
+        progress.update(saving_task, advance=1)
+
+        dump_if_enabled('water_utilities', national_context.water_utilities_results)
+        progress.update(saving_task, advance=1)
+
+    return
+
+def save_analytics_results(
+        result_dir: Path,
+        settings: Settings,
+        national_context: NationalContext,
+        water_utilities: Set[WaterUtility],
+        save_results_config: Dict[str, Any]
+    ) -> None:
+
+    if not save_results_config:
+        return
+
+    with Progress() as progress:
+        saving_task = progress.add_task("[red]Saving out analytics results", total=1)
+
+        if save_results_config.get('peak_demands', False):
+            # Take the global database for total demand of every municipality
+            total_dem_df = national_context.municipalities_results['demand-total']
+
+            # Output the peak (max) per year
+            peak_dem_df = total_dem_df.groupby(total_dem_df.index.year).max().rename_axis('year')
+
+            peak_dem_df.to_excel(
+                result_dir / "peak_demands.xlsx"
+            )
+
+        progress.update(saving_task, advance=1)
+
+    return
+
+from .services.epanet_utils import (
+    build_epanet_network,
+    apply_demand_patterns,
+    apply_electricity_info,
+)
+
+def save_epanet_networks_results(
+        result_dir: Path,
+        settings: Settings,
+        national_context: NationalContext,
+        water_utilities: Set[WaterUtility],
+        save_results_config: Dict[str, Any],
+    ) -> None:
+
+    if not save_results_config:
+        return
+
+    pumping_station_representation = "free_parallel_pumps"
+    if "pumping_stations_as_gpv" in save_results_config and \
+            "limit_sources_outflow" in save_results_config:
+        if save_results_config["pumping_stations_as_gpv"] is True:
+            pumping_station_representation = "single_gpv"
+        elif save_results_config["limit_sources_outflow"] is True:
+            pumping_station_representation = "chocked_parallel_pumps"
+
+    if save_results_config['mode'] == 'average_week':
+        weeks_to_save = [-1]
+    elif save_results_config['mode'] == 'specific_weeks':
+        weeks_to_save = save_results_config.get('weeks', [])
+    else:
+        raise ValueError(f"Unknown epanet_networks results mode: {save_results_config.get('mode')}")
+    
+    networks_dir = result_dir / "epanet_networks"
+    os.makedirs(networks_dir, exist_ok=True)
+
+    with Progress() as progress:
+        saving_task = progress.add_task(
+            "[red]Saving out epanet networks   ",
+            total=settings.n_years_to_simulate * len(water_utilities) * len(weeks_to_save)
+        )
+
+        for year in settings.years_to_simulate:
+            for cluster in national_context.get_wu_clusters(year):
+
+                cluster.network = build_epanet_network(
+                    year=year,
+                    water_utilities=cluster.water_utilities,
+                    cross_utility_connections=cluster.cross_utility_connections,
+                    pumping_station_representation=pumping_station_representation
+                )
+
+                # Let's extract the demands to make the job of the apply demands function easier.
+                # Select this year and cluster demands
+                nation_demands_df = national_context.municipalities_results['demand-total']
+                municipalities_cluster = [m.cbs_id 
+                    for wu in cluster.water_utilities
+                    for m in wu.active_municipalities(when=year)
+                ]
+                cluster_demands_df = nation_demands_df.loc[
+                    nation_demands_df.index.year == year,
+                    municipalities_cluster
+                ].copy()
+
+                # The demands have a fixed behaviour across the years, they 
+                # don't follow the calendar. The first week starts on the second
+                # day of the year, every year.
+                # So the first day is a holiday, the second day is a always a monday
+                cluster_demands_df['n'] = list(range(len(cluster_demands_df)))
+                cluster_demands_df['h_o_week'] = cluster_demands_df['n'].apply(
+                    lambda x: (x+6*24) % 168 # +6*24 is because every year the first week starts on Monday
+                )
+                cluster_demands_df['week_n'] = cluster_demands_df['n'].apply(
+                    lambda x: (x+6*24) // 168 # +6*24 is because every year the first week starts on Monday
+                )
+
+                for week in weeks_to_save:
+
+                    if week == -1:
+                        week_demands = cluster_demands_df.groupby('h_o_week').mean()
+                        ele_info_ts = pd.Timestamp(year=year, month=1, day=1)
+                    else: 
+                        week_demands = cluster_demands_df[cluster_demands_df['week_n']==week]
+                        ele_info_ts = week_demands.index[0]
+
+                    apply_demand_patterns(
+                        cluster.network,
+                        week_demands
+                    )
+
+                    apply_electricity_info(
+                        cluster.network,
+                        national_context.electricity_price.asof(ele_info_ts),
+                        national_context.electricity_price_pattern.asof(ele_info_ts)    
+                    )
+
+                    cluster.network.saveinpfile(
+                        str(networks_dir / (cluster.filename + '.inp'))
+                    )
+
+                    progress.update(saving_task, advance=1)
+
+    return
 
 import typer
 from typing_extensions import Annotated
@@ -389,6 +630,7 @@ def run_eval_from_file(
     with open(config_file, 'r') as f_yaml:
         config = yaml.safe_load(f_yaml)
         scenario_name = config.get('scenario_name', None)
+        save_results_config = config.get('save_results', {})
 
     if scenario_name:
         results_dir = data_parent_dir / f"bwf_results-{scenario_name}"
@@ -407,6 +649,14 @@ def run_eval_from_file(
     save_metrics(
         results_dir=results_dir,
         metrics=metrics
+    )
+
+    save_results(
+        result_dir=results_dir,
+        settings=settings,
+        national_context=national_context,
+        water_utilities=water_utilities,
+        save_results_config=save_results_config,
     )
 
     return
