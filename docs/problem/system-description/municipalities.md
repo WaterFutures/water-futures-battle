@@ -28,16 +28,24 @@ Second, the network topology itself is dynamic: municipalities can merge or be a
 **Excursus on the Modelling Approach**
 
 To model this administrative restructuring, municipalities can only open or close on January 1st of each year.
-When a municipality closes, its delivery point disappears from the network.
+When a municipality closes, its delivery point disappears from the network and its assets (population, land area, housing stock, etc.) are redistributed between the "destination municipalities", with the "main destination municipality" inheriting also the hydraulic connections to other municipalities and water sources.
+Extensive properties (e.g., population, number of houses) are accumulated, while intensive properties (e.g., average age of the inner distribution network) are distributed using a weighted mean.
+Besides renaming, @fig:municipality-dissolution illustrates the two possible cases for dissolved municipalities^[Dissolved municipalities are referred to as 'lifted' ('opgeheven') in the input data.], which are:
 
-*Absorption by existing municipalities*: When a municipality is absorbed by a larger neighbor that already exists, all attributes of the closing municipality (population, land area, housing stock, etc.) transfer to the destination municipality.
-Any pipe that previously connected these two entities becomes hidden, as it formally becomes part of the destination municipality's internal distribution network.
+1. *Absorption by existing municipalities*: When a municipality is absorbed by a larger neighbor that already exists, all attributes of the closing municipality transfer to the destination municipality.
+Any pipe that previously connected these two entities becomes hidden, as it formally becomes part of the destination municipality's internal distribution network^[These connections have the "SELF_LOOP" label in the "replaced_by" column in the input data.].
 
-*Clustering into new municipalities*: When multiple municipalities close and cluster together to form a new entity, all their delivery points disappear and a new supply point emerges at the location of the newly formed municipality.
-The new municipality inherits all pipeline connections and attributes from the closing municipalities.
+2. *Clustering into new municipalities*: When multiple municipalities close and cluster together to form a new entity, all their delivery points disappear and a new supply point emerges at the location of the newly formed municipality.
+Of course, the new municipality attributes are computed by aggregating those of its constituent municipalities.
+Internal connections between merging municipalities become hidden as for the "Absorption by existing municipalities" case.
+External connections to neighbour municipalities are replaced by new connections routed to the new city centre.
+While it's not possible to operate on the original connections anymore, the old connection remains active as a fallback to preserve network connectivity.
+
 This modelling approach mirrors real-world dynamics in densely populated countries like the Netherlands.
-When a new municipality forms through clustering, typically a new city center is established while former city centers become secondary neighborhoods.
+For example, when a new municipality forms through clustering, typically a new city center is established while former city centers become secondary neighborhoods.
 These moments of urban reorganization present natural opportunities for water utilities to lay new connections and redesign substantial portions of the distribution system.
+
+![Network topology before and after municipal dissolution (dissolved entities are greyed out). Case 1 shows absorption of GM0004 by the existing municipality GM0003: the inter-municipal connection CG0003 becomes a self-loop and is hidden. Case 2 illustrates the clustering of GM0003 and GM0004 into the new municipality GM2001, where CG1001 replaces CG0001 as a one-to-one substitution, while CG1002 consolidates the previously separate connections CG0002 and CG0004 into a single new link.](../../assets/img/municipality-dissolution.png){#fig:municipality-dissolution width=80%}
 
 ---
 
@@ -100,7 +108,7 @@ Phase II. In the second phase, representative hourly consumption profiles are as
 In greater detail, for each municipality, two residential profiles are selected from the library according to municipality population class, while a single non-residential profile is drawn from a dedicated set.
 
 Phase III. The third phase produces the final hourly time series by applying a Fourier series-based approach which combines seasonal modulation, climate-related adjustments (accounting for the maximum yearly temperature), and random perturbations to capture temporal variability.
-The two residential profiles associated with each municipality are aggregated through weighted combinations, and both residential and non-residential profiles are scaled to match the previously estimated yearly volumes.
+The two residential profiles associated with each municipality are aggregated through weighted combinations (with the weights being uncertain), and both residential and non-residential profiles are scaled to match the previously estimated yearly volumes.
 
 Therefore, the total billable demand of municipality $m$ at time $t$ (within year $y$) is defined as:
 
