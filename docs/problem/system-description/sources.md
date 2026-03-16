@@ -23,6 +23,7 @@ Instead, groundwater sources have an extraction permit (expressed in $m^3$ per y
 This is not a hard physical constraint such as the nominal production capacity, but rather a "soft" legislative constraint checked by the government at the end of each year.
 This penalty effectively represents compensation for the hydrological displacement affecting farmers and natural areas due to the overextraction.
 The fine amount is set by law and can therefore change at any time based on political decisions.
+The displacement thresholds for the application of the fine are presented in @tbl:gwsources-permit-violation.
 
 The cost of water production at every source $s$ is a combination of four components:
 
@@ -118,6 +119,15 @@ The actual values for these variables can be inspected within the data files, wh
 | Construction time | Static [Uncertain] | Source Type | years
 | Availability factor | Dynamic Exogenous | Surface water sources | 
 | Permit | Static | Groundwater sources | $m^3/year$
-| Fine amount | Dynamic Exogenous | Groundwater source permit excedance Severity Class | $\text{€}$
+| Fine amount | Dynamic Exogenous | Groundwater source permit violation Severity Class | $\text{€}$
 
 : Sources' properties review. {#tbl:sources-properties}
+
+| Permit violation [$Mm^3/year$] | Severity Class 
+| --- | --- | 
+| 0.0 | COMPLIANT
+| < 0.1 | MILD
+| < 8.0 | SEVERE
+| > 8.0 | EXTREME
+
+: Groundwater sources' permit violation severity classes. {#tbl:gwsources-permit-violation}
