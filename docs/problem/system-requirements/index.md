@@ -28,7 +28,7 @@ $$
 \begin{aligned}
 F^*_{w}(y+1) &= F_{w}(y) + \text{NIB}(y) \cdot \alpha_w(y) + \text{REV}_{w}(y) \\
 &\quad - \text{CAPEX}_w(y) - \text{OPEX}_w(y) \\
-&\quad - \text{WLR}_w(y) -\text{WIC}_w(y) \\
+&\quad - \text{WLR}_w(y) -\text{WIC}_w(y) - \text{FIN}_w(y) \\
 &\quad - \text{INT}_w(y) - \text{PRI}_w(y)\\
 \text{debt}_w(y) &= \begin{cases}
 -F_{w}^{*}(y+1) & \text{if } F_{w}^{*}(y+1) < 0 \\
@@ -46,6 +46,7 @@ The provisional fund balance $F_{w}^{*}(y+1)$ is calculated by accounting for al
 - $\text{OPEX}_w(y)$ accounts for all the utility's operational costs (i.e., the sum of [@eq:op-expends;@eq:pumping-stations-opex]),
 - $\text{WLR}_w(y)$ is the budget for NRW mitigation (see [@sec:policy-nrw-mitigation]),
 - $\text{WIC}_w(y)$ is the cost for imported water from other water utilities ([@eq:water-purchase-utility]),
+- $\text{FIN}_w(y)$ is the water displacement fine incurred due to groundwater overextraction ([@tbl:gwsources-permit-violation]),
 - $\text{INT}_w(y)$ the utility's interest payments due ([@eq:bonds-payment]), and
 - $\text{PRI}_w(y)$ is the principal amount due ([@eq:bonds-payment]).
 

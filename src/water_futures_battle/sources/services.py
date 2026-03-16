@@ -26,36 +26,14 @@ def build_sources(
     """
     Build all the sources specified startign from a config dictionary.
     """
-
-    # Each water source type has its own database, but they have a common results object
+    # Each water source type has its own database, but they have a common results
+    # object.
+    # They also have a common settings object.
+    # Let's allocate the result object and the dictionary to hold the sources by type
     sources_results = SourcesResults()
-    for ws_type, db_type in zip([GroundWater, SurfaceWater, Desalination],
-                                [GroundWaterDB, SurfaceWaterDB, DesalinationDB]):
-        sources_db = db_type.load_from_file(os.path.join(data_path, Path(properties_desc.get(db_type.NAME, ""))))
-        ws_type.set_dynamic_properties(sources_db)
-
     
-    # Now we can start building for each type
-    all_sources: Dict[str, Set[WaterSource]] = {
-        GroundWater.NAME: set(),
-        SurfaceWater.NAME: set(),
-        Desalination.NAME: set()
-    }
-    dfs = pd.read_excel(
-        Path(data_path)/Path(properties_desc.get('sources-static_properties', "")),
-        sheet_name=SourcesContainer.types_names
-    )
-    for ws_type in [GroundWater, SurfaceWater, Desalination]:
-        for _, a_source_data in dfs[ws_type.NAME].iterrows():
-            source_s_province = a_state.province(a_source_data['province'])
-            a_source = ws_type.from_row(
-                row_data=a_source_data.to_dict(),
-                a_province=source_s_province
-            )
-            all_sources[ws_type.NAME].add(a_source)
-
     global_options_df = pd.read_excel(
-        Path(data_path)/Path(properties_desc.get('sources-static_properties', "")),
+        Path(data_path) / Path(properties_desc.get('sources-static_properties', "")),
         sheet_name='global',
         index_col='source_type'
     )
@@ -65,6 +43,41 @@ def build_sources(
         config=properties_desc,
         global_options=global_options_df
     )
+    WaterSource._sources_settings = src_settings
+
+    all_sources: Dict[str, Set[WaterSource]] = {}
+    for ws_type, db_type in zip(
+        [GroundWater, SurfaceWater, Desalination],
+        [GroundWaterDB, SurfaceWaterDB, DesalinationDB]
+        ):
+        
+        sources_db = db_type.load_from_file(
+            Path(data_path) / Path(properties_desc.get(db_type.NAME, ""))
+        )
+        
+        ws_type.set_dynamic_properties(sources_db)
+        ws_type.set_results(sources_results)
+
+        entities_df = pd.read_excel(
+            Path(data_path) / Path(properties_desc.get('sources-static_properties', "")),
+            sheet_name=ws_type.NAME
+        )
+
+        sources = []
+        for _, a_source_data in entities_df.iterrows():
+
+            source_s_province = a_state.province(a_source_data['province'])
+            
+            sources.append(
+                ws_type.from_row(
+                    row_data=a_source_data.to_dict(),
+                    a_province=source_s_province
+                )
+            )
+
+        all_sources[ws_type.NAME] = set(sources)
+    
+    
 
     return SourcesContainer(all_sources), src_settings
 

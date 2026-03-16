@@ -1,4 +1,4 @@
-from ..core.base_model import DynamicProperties, bwf_database
+from ..core.base_model import DynamicProperties, bwf_database, BWFResult
 
 @bwf_database
 class EnergySysDB(DynamicProperties):
@@ -16,3 +16,11 @@ class EnergySysDB(DynamicProperties):
         SOLAR_COST
     ]
 
+class SolarFarmsResults(BWFResult):
+    NAME = 'solar_farms-results'
+
+    YIELD = 'yield'
+
+    TRACKED_VARIABLES = [
+        YIELD
+    ]

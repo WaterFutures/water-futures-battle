@@ -9,7 +9,51 @@ website_page_authors:
 
 # Changelog 🕑
 
-## The Battle of the Water Futures [Data and Software - [v0.4.5](https://doi.org/10.5281/zenodo.17698299)]
+## The Battle of the Water Futures [Data and Software - [v0.5.0](https://doi.org/10.5281/zenodo.17698299)]
+
+**Release Date:* 16th March 2026
+
+This release addresses the community's feedback on the dynamic topology and introduces several new features for the evaluator.
+It also fixes the municipality elevation values that were incorrect in the previous release.
+
+### What's New
+
+- **Data**
+  - Municipalities: added `main_destination_municipality` column, representing the municipality inheriting the connections/pipes.
+  - Connections: added `pipes_decommission_dates`, `replaced_by`, and `replaces` columns to fully describe pipe and connection presence over time.
+  - Connections: added `usable_in_2025` column, indicating which connections are available for participant interventions.
+
+- **Code**
+  - Export intermediate results for modelled entities (demands, solar yields, etc.)
+  - Export EPANET network files with selected week demands or weekly average demands
+  - Export peak demands
+  - Apply interventions and policies
+
+### What's Changed
+
+- **Data**
+  - Municipalities: reduced elevations for some municipalities to improve tractability.
+  - Sources: adjusted capacities to better reflect proximity to demand centres.
+  - Connections/Pipes: revised pipe options for several connections; disabled connections between high- and low-elevation areas in Gelderland and Limburg.
+  - Connections/Pipes: new ID naming convention — IDs below 2000 are defined from the start; IDs between 2000–3000 exist only in the historical period; IDs above 3000 are defined for 2025 onwards.
+  - EPANET networks: updated to reflect current values and all possible interventions (disconnected sources are possible future sources, pipes with 0.0001 diameter are possible connections).
+
+- **Problem Description (PDF and Website)**
+  - Minor clarifications addressing the most frequently asked questions.
+  - Expanded the section on municipality dissolution and connection inheritance.
+  - Updated the appendix to reflect input file changes.
+
+- **Rules and Information (Website)**
+  - First deadline extended by one week.
+  
+### Important Notes
+
+The evaluator is still incomplete.
+Future patch releases of the Python library (0.5.x) will add the remaining features (e.g. complete hydraulic simulations).
+
+---
+
+## The Battle of the Water Futures [Data and Software - [v0.4.5](https://doi.org/10.5281/zenodo.18550978)]
 
 **Release Date:**9th February 2026
 

@@ -1,18 +1,26 @@
 from typing import Dict, Set, Tuple
+import os
+import tempfile
 
 import pandas as pd
 from rich.progress import Progress
+import threading
+from joblib import Parallel, delayed
 
 from ..core import Settings
 from ..core.utility import timestampify
+from ..jurisdictions import Municipality
 from ..water_utilities import WaterUtility
 from ..national_context import NationalContext
 from ..masterplan import Masterplan
 
 from ..water_utilities import services as wu_actions
 from ..national_context import services as nat_actions
+from ..energy.services import get_solar_radiation_of_year
 
 from .metrics import MetricsT, compute_metrics
+from .epanet_utils import build_epanet_network, run_sim, apply_demand_patterns
+
 
 def run_eval(
         settings: Settings,
@@ -28,13 +36,13 @@ def run_eval(
     # We evaluate the system received in input one year at the time.
     # We use a progress bar to track the evaluation across years
     with Progress() as progress:
-        task_years = progress.add_task("[green]Years", total=settings.n_years_to_simulate)
+        task_years = progress.add_task("[green]Evaluating the system across the years", total=settings.n_years_to_simulate)
 
         for year in settings.years_to_simulate:
 
             # We add a second progress bar for the application of interventions, 
             # we consider one extra utility for the interventions at national level
-            task_utilities = progress.add_task("[cyan]Applying intervention to the utilities", total=len(water_utilities)+1)
+            task_utilities = progress.add_task("[cyan]  Applying policies and working on intervention", total=len(water_utilities)+1)
 
             # Retrieve and apply the national policies:
             # - budget allocation
@@ -56,21 +64,13 @@ def run_eval(
                 national_context=national_context,
                 year=year,
                 intervention_desc=national_interventions['install_pipe'],
-                pipe_options=national_context.pipe_options
+                pipe_options=national_context.pipe_options,
+                settings=settings
             )
 
             # We completed national interventions, we can move to by utility actions
             progress.update(task_utilities, advance=1)
             
-
-
-            # Extract this year mean max temperature. As we get it by season, 
-            # let's take the maximum over the year.
-            # The mean max temperature (and not the max max) captures both the 
-            # durationand severity of the extreme.
-            mean_tempmax = national_context.average__maximum_temperature
-            maxtemp_year = mean_tempmax.loc[mean_tempmax.index.year == year].max()
-
             for water_utility in sorted(water_utilities, key=lambda x: x.bwf_id):
 
                 # Retrieve and apply the utility's policies:
@@ -157,25 +157,25 @@ def run_eval(
                     wus_national_capex[water_utility.bwf_id]
                 )
                 #water_utility.track_capex(when=year, value=wu_capex)
-                
-                # compute the missing dependent dynamic properties (demand)
-                wu_actions.realise_demands(
-                    water_utility=water_utility,
-                    year=year,
-                    water_demand_model_data=national_context.water_demand_model_data,
-                    nrw_model_data=national_context.nrw_model_data,
-                    temperature=maxtemp_year,
-                    settings=settings
-                )
 
                 # end water utilities for loop
                 progress.update(task_utilities, advance=1)
-
-            run_hydraulic_simulation(
+                
+            # compute the missing dependent dynamic properties (demand, etc)
+            realise_uncertainties(
                 year=year,
                 national_context=national_context,
                 water_utilities=water_utilities,
-                settings=settings
+                settings=settings,
+                progress=progress
+            )
+
+            run_hydraulic_simulations(
+                year=year,
+                national_context=national_context,
+                water_utilities=water_utilities,
+                settings=settings,
+                progress=progress
             )
             
             # Update endogenous dynamic properties (inflation, electricity market, components costs)
@@ -214,30 +214,170 @@ def run_eval(
         metrics
     )
 
-def run_hydraulic_simulation(
+
+def realise_uncertainties(
         year: int,
         national_context: NationalContext,
         water_utilities: Set[WaterUtility],
-        settings: Settings
+        settings: Settings,
+        progress: Progress
     )-> None:
-    # Get how many disconnected water utilities are there, we will run one simulation for each indepdent network
-    wutilities_groups = {}
-    wutilities_groups_epanes = {}
-    # Use the shared national resources to understand which are indepdent and which are not
-    #task_simu = progress.add_task("[cyan]Simulating the networks", total=len(wutilities_groups))
-    for idx, wutilities_group in wutilities_groups:
-        # Build the network
-        wutilities_groups_epanes[idx] = EpaneObject()
+     
+    task_uncertainties = progress.add_task("[cyan]  Realising uncertainties", total=len(water_utilities)+1)
 
-        # Run the simulation 
-        run(wutilities_groups_epanes[idx])
+    # Extract this year mean max temperature. As we get it by season, 
+    # let's take the maximum over the year.
+    # The mean max temperature (and not the max max) captures both the 
+    # durationand severity of the extreme.
+    mean_tempmax = national_context.average__maximum_temperature
+    maxtemp_year = mean_tempmax.loc[mean_tempmax.index.year == year].max()
 
-    # Wait for all simulations to end
-    
-    # Save the results!
-    for idx, wutilities_group in wutilities_groups:
-        for water_utility in wutilities_group:
-            water_utility.track_results(when=year, epyt_instance=wutilities_groups_epanes[idx])
+    for water_utility in sorted(water_utilities, key=lambda x: x.bwf_id):
+        wu_actions.realise_demands(
+            water_utility=water_utility,
+            year=year,
+            water_demand_model_data=national_context.water_demand_model_data,
+            nrw_model_data=national_context.nrw_model_data,
+            temperature=maxtemp_year,
+            settings=settings
+        )
+
+        progress.update(task_uncertainties, advance=1)
+
+    solar_yields = {}
+    solar_radiation = get_solar_radiation_of_year(
+        year=year,
+        state=national_context.state,
+        observed_avg_solar_radiation=national_context.average_solar_irradiance,
+        settings=settings
+    )
+
+    for water_utility in sorted(water_utilities, key=lambda x: x.bwf_id):
+        wu_solar_yields = wu_actions.realise_solar_yields(
+            water_utility=water_utility,
+            year=year,
+            solar_irradiance=solar_radiation,
+            settings=settings
+        )
+
+        solar_yields.update(wu_solar_yields)
+
+    national_context.track_solar_farms_yields(
+        when=year,
+        values=pd.DataFrame(solar_yields)
+    )
+
+    progress.update(task_uncertainties, advance=1)
+
+def run_hydraulic_simulations(
+        year: int,
+        national_context: NationalContext,
+        water_utilities: Set[WaterUtility],
+        settings: Settings,
+        progress: Progress,
+        pumping_station_representation: str = "free_parallel_pumps"
+    )-> None:
+
+    # Get how many disconnected water utilities are there, each one will have its own simulation
+    # Use the shared national resources to understand which are independent and which are not
+    wutilities_clusters = national_context.get_wu_clusters(year=year)
+    # print(f"Number of utility clusters: {len(wutilities_clusters)} -- Number of utilities: {len(water_utilities)}")
+
+    for cluster in wutilities_clusters:
+
+        cluster.network = build_epanet_network(
+            year=year,
+            water_utilities=cluster.water_utilities,
+            cross_utility_connections=cluster.cross_utility_connections,
+            pumping_station_representation=pumping_station_representation
+        )
+
+    # Now we are ready for simulation, we apply the demands, simulate and save and repeat in a parralel fashion
+    task_simu = progress.add_task("[cyan]  Extracting the hydraulic results", total=len(water_utilities))
+
+    lock = threading.Lock()
+
+    def compute_hydraulic_results(cluster):
+        # Apply demands
+        date_range = pd.date_range("2000-01-01 00:00:00", "2000-01-30 23:00:00", freq="h")
+        apply_demand_patterns(
+            cluster.network,
+            national_context.municipalities_results["demand-total"].loc[date_range]
+        )
+
+        # Run the simulation
+        temp_inp_file = os.path.join(tempfile.gettempdir(), cluster.filename+'.inp')
+        cluster.network.saveinpfile(temp_inp_file)    # TEMP only!
+        cluster.network.close()
+
+        cross_utility_pipes_id = [c.active_pipe(year).bwf_id
+                                  for c in cluster.cross_utility_connections
+                                  if c.is_active(year)]
+
+        dict_results = run_sim(
+            f_inp_in=temp_inp_file,
+            cluster_sources=cluster.water_sources,
+            cross_utility_pipes_id=cross_utility_pipes_id,
+            date_range=date_range,
+            pumping_station_representation=pumping_station_representation
+        )
+
+        with lock:
+            # Save results (kind of, we would need to do it for every week we simulate and track only the cimulative result)
+            # Undelivered demand = demand-total minus demand out of results (delivered)
+            # TODO: if we simulate only a part of the year, we need to extrapolate 
+            # the whole year
+            delivered_demands = dict_results['juncs_demands'].fillna(0)
+            requested_demands = national_context.municipalities_results['demand-total'].loc[date_range, delivered_demands.columns]
+            undeliver_demands = requested_demands - delivered_demands
+
+            national_context.track_municipalities_undelivered_demand(
+                when=year,
+                values=undeliver_demands.sum(axis=0)
+            )
+
+            # Energy consumed by the pumps,
+            national_context.track_pumps_electrical_energy(
+                when=year,
+                values=dict_results['pumps_energyconsumption']
+            )
+
+            # TODO: we are not tracking the water out of the sources ('production')
+            # add to dict of run sim the following variable 'production'
+            # national_context.track_sources_production(
+            #     when=year,
+            #     values= missing_df
+            # )
+
+            # Utilities water exchanges
+            # let's sort them to save the results always in order
+            sorted_wus = sorted((wu for wu in cluster.water_utilities), key= lambda x: x.bwf_id)
+            net_exchanges = dict_results['cross_utilities_flows'].sum(axis=0, skipna=True)
+            for i, wu_from in enumerate(sorted_wus):
+                for j, wu_to in enumerate(sorted_wus[i+1:]):
+
+                    cnns_sign_map = cluster.get_connections_sign_map_between(wu_from, wu_to)
+
+                    # Change the sign of the inverted pipes (from wu_to to wu_from)
+                    net_value = 0.0
+                    for c_id, x in cnns_sign_map.items():
+                        net_value += x * net_exchanges[c_id]
+
+                    wu_from.track_net_wat_exchange(
+                        when=year,
+                        to=wu_to,
+                        value=net_value
+                    )
+
+            progress.advance(task_simu, advance=cluster.n_water_utilities)
+
+    if settings.available_cores > 2:
+        # Always leave one core out to avoid going bottlenecks
+        Parallel(n_jobs=settings.available_cores-1, prefer="threads")(delayed(compute_hydraulic_results)(cluster)
+                                              for cluster in wutilities_clusters)
+    else:
+        for cluster in wutilities_clusters:
+            compute_hydraulic_results(cluster)
 
     return
 

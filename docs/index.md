@@ -21,7 +21,7 @@ The solutions will be assessed using a transparent and inspectable **open-source
 
 ## Next Deadline ⏰ 
 
-> **First stage solution submission**: <span style="color:#DF3737">*27th March 2026*</span>
+> **First stage solution submission**: <span style="color:#DF3737">*3rd April 2026*</span>
 
 Stay on track with all important dates on our [Timeline page]({{ site.baseurl }}/participating.html#important-dates-).
 
@@ -56,7 +56,9 @@ If you can't find an answer to your question, just <a href="mailto:battlewaterfu
  
 ## Latest Updates 📢
 
-- *26th January 2026* - **Version 0.4.1**
+- *16th March 2026* - **Version 0.5.0**
+- *9th February 2026* - Version 0.4.5
+- *26th January 2026* - Version 0.4.1
 - *19th January 2026* - Version 0.4.0
 - *22nd December 2025* - Version 0.3.0
 - *15th December 2025* - Version 0.2.0

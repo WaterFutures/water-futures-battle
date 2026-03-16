@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run water_futures_battle_run_eval",
+            "name": "Run eval on historical stage",
             "type": "debugpy",
             "request": "launch",
             "module": "src.water_futures_battle",
@@ -16,7 +16,7 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Run water_futures_battle_configure_system",
+            "name": "Run configure on historical stage",
             "type": "debugpy",
             "request": "launch",
             "module": "src.water_futures_battle.configure_system_cli",
@@ -36,6 +36,17 @@
             ],
             "console": "integratedTerminal",
             "justMyCode": false
+        },
+        {
+            "name": "Run eval on stage 1",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.water_futures_battle",
+            "args": [
+                "${workspaceFolder}/bwf_results-historical_stage/masterplan.json",
+                "${workspaceFolder}/bwf_results-historical_stage/configuration.yaml"
+            ],
+            "console": "integratedTerminal"
         }
     ]
 }

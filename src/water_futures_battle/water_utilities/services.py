@@ -30,19 +30,25 @@ from ..pumping_stations.entities import PumpingStation
 from ..pumps.entities import PumpOption
 from ..economy.entities import BondIssuance
 from ..energy.entities import SolarFarm
+from ..energy.services import get_solar_radiation_of_year, get_solar_yield
 from ..pipes.dynamic_properties import PipeOptionsDB
 from ..pipes.entities import PipeOption
-from ..connections.entities import Connection, SupplyConnection, PeerConnection
-from ..connections.services import age_pipes
+from ..connections.entities import Connection, SupplyConnection, PeerConnection, SelfLoopConnection, ClosedWSourceConnection
+from ..connections.services import age_pipes, resolve_current_cnn
 
 
 from ..nrw_model.policies import NRWMitigation
-from ..connections.interventions import InstallPipe
-from ..pumping_stations.interventions import InstallPumps
 
-from .dynamic_properties import WaterUtilityDB
+from .dynamic_properties import WaterUtilityDB, WaterUtilityResults
 from .entities import WaterUtility
 from .policies import WaterPricingAdjustment
+from .interventions import (
+    OpenSource,
+    CloseSource,
+    InstallPipe,
+    InstallPumps,
+    InstallSolarFarm,
+)
 
 def configure_water_utilities(
         desc: Dict,
@@ -59,6 +65,7 @@ def configure_water_utilities(
     # First of all, let's setup the common database for the dyn prop.
     wu_db = WaterUtilityDB.load_from_file(os.path.join(data_path, desc[WaterUtilityDB.NAME]))
     WaterUtility.set_dynamic_properties(wu_db)
+    WaterUtility.set_results(WaterUtilityResults())
 
     # Then, let's start creating the entities
     wu_st_properties = desc['water_utilities-static_properties']
@@ -234,7 +241,7 @@ def apply_water_pricing_adjustments(
         policy_desc: Dict[str, Any],
         settings: Settings,
         inflation: pd.Series
-    ) -> None:
+    ) -> Tuple[float, float, float]:
 
     # To set the water prices in this year, we need to take the previous year prices.
     # We are assuming that they are already there
@@ -263,7 +270,7 @@ def apply_water_pricing_adjustments(
 
     water_utility.set_water_prices(year, *new_values)
 
-    return
+    return new_values
 
 def apply_bond_to_debt_ratio(
         water_utility: WaterUtility,
@@ -271,7 +278,14 @@ def apply_bond_to_debt_ratio(
         policy_desc: Dict[str, Any]
     ) -> float:
 
-    return 0.0
+    value = policy_desc["value"]
+    #check if the given value is between 1 and 2.5
+    if value > 2.5 or value < 1:
+        raise ValueError(f"Invalid bond to debt ratio: {value}. It must be between 1 and 2.5.")
+    
+    water_utility.set_bond_ratio(year, value)
+    
+    return value
 
 def work_on_sources(
         water_utility: WaterUtility,
@@ -282,7 +296,28 @@ def work_on_sources(
         pipe_options: Set[PipeOption],
         settings: Settings
     ) -> float:
-    return 0.0
+
+    capex = 0.0
+
+    for intervention in interventions_open_desc:
+        capex += OpenSource.execute(
+            water_utility=water_utility,
+            year=year,
+            intervention_desc=intervention,
+            pipe_options=pipe_options,
+            pump_options=pump_options,
+            settings=settings
+        )
+
+    for intervention in interventions_close_desc:
+        capex += CloseSource.execute(
+            water_utility=water_utility,
+            year=year,
+            intervention_desc=intervention,
+            settings=settings
+        )
+
+    return capex
 
 def work_on_connections(
         water_utility: WaterUtility,
@@ -292,7 +327,66 @@ def work_on_connections(
         settings: Settings
     ) -> float:
     
-    return 0.0
+    capex = 0.0
+
+    # First, install new pipes, like asked by the masterplan.
+    # If a pipe replaces an already existing pipe on the same connection, we change 
+    # the end_date of the old pipe (handled at the connection level).
+    # However, if such a pipe that is being replaced has the same diameter and 
+    # was installed in the last 25 years, we assume it failed before being 
+    # replaced and so we skip the intervention (handled at the intervention level).
+    
+    for intervention in interventions_desc:
+        capex += InstallPipe.execute(
+            water_utility=water_utility,
+            year=year,
+            intervention_desc=intervention,
+            pipe_options=pipe_options,
+            settings=settings
+        )
+
+    # Once, we have installed of the utility pipes, we can see if there are pipes 
+    # that are failing this year and for which we need emergency interevention.
+    for connection in sorted(water_utility.connections, key=lambda c: c.bwf_id):
+        
+        if connection.replaced_by_cnn_id == "":
+            # the connection doesn't get replaced, if it fails we re-install a pipe here
+            capex += connection.inspect_and_replace(
+                year=year,
+                lifetime_rng=settings.pipes_lifetime_rng
+            )
+
+        else:
+            # the connection does get replaced, if it fails we install a new one on the new connection
+            failed_pipe = connection.inspect(when=year)
+            if failed_pipe is None:
+                # status is ok, we didn't do anything on it, move on
+                continue
+            # status is not ok, the pipe failed and the connection is not active anymore.
+            # get the current connection (recursively in case the new connection also got replaced)
+            new_connection = resolve_current_cnn(connection, year, water_utility.m_peer_connections)
+
+            if isinstance(new_connection, SelfLoopConnection) or isinstance(new_connection, ClosedWSourceConnection):
+                # the connection basically disappeared, we don't need to replace it
+                continue
+
+            # if everything goes to plan, new connection is another connection bu not yet used.
+            # however if one connection replaces more than one, it could be that the first one failing
+            # installs the new pipe. we don't want that, when a connection replaces more than one, we need 
+            # to deal with all of them at the same time... 
+            assert len(new_connection.replaces_cnn_ids) < 2, "A pipe that gets replaced by a connection replacing more than one failed."
+
+            new_pipe = new_connection.install_pipe(
+                pipe_option=failed_pipe._pipe_option,
+                installation_date=failed_pipe.decommission_date,
+                lifetime_rng=settings.pipes_lifetime_rng
+            )
+
+            pipe_unit_cost = new_pipe._pipe_option.unit_cost.loc[new_pipe.installation_date]
+
+            capex += pipe_unit_cost * new_connection.distance
+    
+    return capex
 
 def work_on_pumps(
         water_utility: WaterUtility,
@@ -302,7 +396,24 @@ def work_on_pumps(
         settings: Settings
     ) -> float:
     
-    return 0.0
+    capex = 0.0
+
+    for intervention in interventions_desc:
+        capex += InstallPumps.execute(
+            water_utility=water_utility,
+            year=year,
+            intervention_desc=intervention,
+            pump_options=pump_options,
+            settings=settings
+        )
+
+    for pumping_station in sorted(water_utility.pumping_stations, key=lambda ps: ps.bwf_id):
+        capex += pumping_station.inspect_and_replace(
+            year=year,
+            lifetime_rng=settings.get_random_generator('pumps-lifetime')
+        )
+
+    return capex
 
 def work_on_solar_farms(
         water_utility: WaterUtility,
@@ -310,7 +421,18 @@ def work_on_solar_farms(
         interventions_desc: List[Dict[str, Any]],
         settings: Settings
     ) -> float:
-    return 0.0
+
+    capex = 0.0 
+
+    for intervention in interventions_desc:
+        capex += InstallSolarFarm.execute(
+            water_utility=water_utility,
+            year=year,
+            intervention_desc=intervention,
+            settings=settings
+        )
+
+    return capex
 
 def realise_demands(
         water_utility: WaterUtility,
@@ -344,11 +466,38 @@ def realise_demands(
 
         total_demand = bill_demand + np.repeat(nrw_demand, 24, axis=0)
         
-        municipality.track_demand(when=year, values=total_demand)
+        municipality.track_total_demand(when=year, values=total_demand)
+        municipality.track_billable_demand(when=year, values=bill_demand)
 
         # end municipalities for loop
 
     return {} 
+
+def realise_solar_yields(
+        water_utility: WaterUtility,
+        year: int,
+        solar_irradiance: np.ndarray,
+        settings: Settings
+    ) -> Dict[str, np.ndarray]:
+
+    solar_farms = water_utility.active_solar_farms(when=year)
+    solar_yields = {}
+
+    for solar_farm in sorted(solar_farms, key=lambda x: x.bwf_id):
+
+        solar_yield = get_solar_yield(
+            solar_farm=solar_farm,
+            solar_radiation=solar_irradiance,
+            settings=settings
+        )
+        solar_yields[solar_farm.bwf_id] = solar_yield
+
+        # solar_farm.track_yield(
+        #     when=year,
+        #     values=solar_yield
+        # )
+
+    return solar_yields
 
 def age_water_utility(
         wu: WaterUtility,

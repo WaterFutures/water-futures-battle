@@ -1,4 +1,4 @@
-from ..core.base_model import DynamicProperties, bwf_database, bwf_results
+from ..core.base_model import DynamicProperties, bwf_database, BWFResult
 
 @bwf_database
 class PumpOptionsDB(DynamicProperties):
@@ -10,12 +10,11 @@ class PumpOptionsDB(DynamicProperties):
         COST
     ]
 
-@bwf_results
-class PumpsResults(DynamicProperties):
+class PumpsResults(BWFResult):
     NAME = 'pumps-results'
 
-    ENERGY = 'electrical_energy'
+    ELE_ENERGY = 'electrical_energy'
 
     TRACKED_VARIABLES = [
-        ENERGY
+        ELE_ENERGY
     ]

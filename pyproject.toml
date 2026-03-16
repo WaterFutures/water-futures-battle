@@ -1,6 +1,6 @@
 [project]
 name = "water-futures-battle"
-version = "0.4.5"
+version = "0.5.0"
 description = "Python project for the Battle of the Water Futures, originally developed to be hosted at WDSA/CCWI 2026 conference, May 18-21, Paphos, Cyprus."
 readme = "README.md"
 license = "MIT"
@@ -44,10 +44,13 @@ dependencies = [
     "pandas>=2.3.3",
     "pyyaml>=6.0.3",
     "typer",
-    "epanet-plus>=0.1.3",
+    "epanet-plus>=0.2.1",
+    "epyt-flow>=0.16.1",
     "rich>=14.2.0",
     "requests>=2.32.5",
     "pydantic>=2.12.5",
+    "geopy>=2.4.1",
+    "pvlib>=0.15.0",
 ]
 
 [project.urls]

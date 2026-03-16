@@ -5,9 +5,9 @@ import numpy as np
 import pandas as pd
 
 from ..core.base_model import bwf_entity
-from ..core.utility import BWFTimeLike, timestampify
+from ..core.utility import BWFTimeLike, timestampify, OptionalTimestamp
 
-from .dynamic_properties import PipeOptionsDB, PipesDB, PipesResults
+from .dynamic_properties import PipeOptionsDB, PipesDB
 
 @bwf_entity(db_type=PipeOptionsDB, results_type=None)
 @dataclass(frozen=True)
@@ -66,7 +66,7 @@ class PipeOption:
             self.MATERIAL: self.material,
             self.DFF_NEW: self.dff_new,
             self.DFF_DECAYRATE+'-min': self.dff_decay_rate[0],
-            self.DFF_DECAYRATE+'-max': self.dff_decay_rate[0],
+            self.DFF_DECAYRATE+'-max': self.dff_decay_rate[1],
             self.LIFETIME+'-min': self.lifetime[0],
             self.LIFETIME+'-max': self.lifetime[1]
         }
@@ -75,7 +75,7 @@ class PipeOption:
     def unit_cost(self) -> pd.Series:
         return self._dynamic_properties[PipeOptionsDB.COST][self.bwf_id]
     
-@bwf_entity(db_type=PipesDB, results_type=PipesResults)
+@bwf_entity(db_type=PipesDB, results_type=None)
 @dataclass(frozen=True)
 class Pipe:
     """
@@ -97,20 +97,27 @@ class Pipe:
     #   or if the pipe arrives at failure
     # - '_sampled_lifetime' set at creation time, tells what is the lifetime if
     #   the element doesn't get replaced first, otherwise ignored
-    _decommission_date: pd.Timestamp
+    _decommission_date: OptionalTimestamp
     _DECOMMISSION_REGISTRY: ClassVar[Dict[str, pd.Timestamp]] = {}
     _sampled_lifetime: int
 
     @property
-    def decommission_date(self) -> pd.Timestamp:
+    def decommission_date(self) -> OptionalTimestamp:
         if pd.notna(self._decommission_date):
             return self._decommission_date
         
         return self._DECOMMISSION_REGISTRY.get(self.bwf_id, pd.NaT)
     
+    @property
+    def friction_factor(self) -> pd.Series:
+        return self._dynamic_properties[PipesDB.FRICTIONF][self.bwf_id]
+    
+    DYNAMIC_PROPERTIES = {
+        'friction_factor': float
+    }
+    
     def __post_init__(self):
         assert self._dynamic_properties is not None
-        assert self._results is not None
 
         #--- Register this pipe in the databases
 
@@ -138,11 +145,18 @@ class Pipe:
     def decommission(self, when: BWFTimeLike) -> Self:
         ts = timestampify(when, errors='raise')
 
-        if (ts <= self.installation_date):
+        if pd.notna(self.decommission_date):
             raise ValueError(
-                f"Decommission date {ts} must be after installation date {self.installation_date} for pipe {self.bwf_id}."
+                f"Error decommisioning pipe {self.bwf_id} on {ts}",
+                "The entity has already a decommission date."
             )
 
+        if ts <= self.installation_date:
+            raise ValueError(
+                f"Error decommisioning pipe {self.bwf_id} on {ts}",
+                f"The decommission date can not be before the installation date ({self.installation_date})"
+            )
+        
         self._DECOMMISSION_REGISTRY[self.bwf_id] = ts
 
         return self

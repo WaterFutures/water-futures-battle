@@ -6,8 +6,9 @@ import warnings
 import numpy as np
 import pandas as pd
 
+from ..core import Settings
 from ..core.base_model import bwf_entity, Location
-from ..core.utility import keyify, timestampify, BWFTimeLike
+from ..core.utility import keyify, timestampify, BWFTimeLike, OptionalTimestamp
 
 from ..nrw_model.enums import NRWClass
 
@@ -57,11 +58,37 @@ class Jurisdiction:
             "name": self._base_name,
             "cbs_id": self.cbs_id
         }
+    
+    def named(self, s: pd.Series) -> pd.Series:
+        """
+        Applies to a series the Jurisdiction id, so that they can be easily concatenated.
+        Helpful for properties series that are generated from entities contained in this class.
+        :param self: Description
+        :param s: Description
+        :type s: pd.Series
+        :return: Description
+        :rtype: Series[Any]
+        """
+        s.name = self.cbs_id
+        return s
 
 @dataclass(frozen=True)
 class State(Jurisdiction):
     """State / national level"""
     
+    @property
+    def time_zone(self) -> str:
+        return 'UTC'
+
+    @property
+    def location(self) -> Location:
+        assert self.cbs_id == 'NL0000'
+        return Location(
+            latitude=52.1552,
+            longitude=5.3872,
+            elevation=0.0
+        )
+
     def __eq__(self, other):
         if not isinstance(other, Jurisdiction):
             return NotImplemented
@@ -140,6 +167,7 @@ class Region(Jurisdiction):
     ID_PREFIX = 'LD' # Landsdeel (region in Dutch)
     
     state: State
+    STATE = 'state'
 
     def __post_init__(self):
         self.state.register_region(self)
@@ -155,16 +183,18 @@ class Region(Jurisdiction):
         return hash(self.cbs_id)
 
     @classmethod
-    def from_row(cls, row_data: dict, **kwargs) -> Self:
+    def from_row(
+        cls,
+        row_data: pd.Series | Dict[str, Any],
+        state: State    
+    ) -> Self:
         """Primary static constructor from row data."""
- 
-        instance = cls(
+        assert row_data[Region.STATE] == state.cbs_id
+        return cls(
             _base_name=row_data[NAME],
             cbs_id=row_data[CBS_ID],
-            **kwargs
+            state=state
         )
-            
-        return instance
     
     # property self.state
 
@@ -210,7 +240,7 @@ class Region(Jurisdiction):
         raise KeyError(f"No municipality found for identifier: {identifier} in region {self.display_name}")
 
     def to_dict(self) -> Dict[str, Any]:
-        return super().to_dict() | {"state": self.state.cbs_id}
+        return super().to_dict() | {Region.STATE: self.state.cbs_id}
 
 
 @dataclass(frozen=True)
@@ -219,6 +249,7 @@ class Province(Jurisdiction):
     ID_PREFIX = 'PV' # Province
 
     region: Region
+    REGION = 'region'
 
     @property
     def outfiles_name(self) -> str:
@@ -239,16 +270,17 @@ class Province(Jurisdiction):
         return hash(self.cbs_id)
 
     @classmethod
-    def from_row(cls, row_data: dict, **kwargs) -> Self:
+    def from_row(
+        cls,
+        row_data: pd.Series | Dict[str, Any],
+        state: State
+    ) -> Self:
         """Primary static constructor from row data."""
-        
-        instance = cls(
+        return cls(
             _base_name=row_data[NAME],
             cbs_id=row_data[CBS_ID],
-            **kwargs
+            region=state.region(row_data[Province.REGION])   
         )
-            
-        return instance
 
     @property
     def state(self) -> State:
@@ -297,9 +329,22 @@ class Province(Jurisdiction):
                 return municipality
         raise KeyError(f"No municipality found for identifier: {identifier} in province {self.display_name}")
 
-    def to_dict(self) -> Dict[str, Any]:
-        return super().to_dict() | {"region": self.region.cbs_id}
+    @property
+    def population(self) -> pd.Series:
+        return self.named(sum([m.population.fillna(0) for m in self.municipalities])) # pyright: ignore[reportArgumentType]
+        
+    @property
+    def disp_income_avg(self) -> pd.Series:
+        # Computed weighted sum by population
+        weighted_sum = sum([
+            m.disp_income_avg.fillna(0) * m.population.fillna(0)
+            for m in self.municipalities
+        ])
+        total_population = self.population
+        return self.named(weighted_sum / total_population)
 
+    def to_dict(self) -> Dict[str, Any]:
+        return super().to_dict() | {Province.REGION: self.region.cbs_id}
 
 @bwf_entity(db_type=MunicipalitiesDB, results_type=MunicipalitiesResults)
 @dataclass(frozen=True)
@@ -309,19 +354,26 @@ class Municipality(Jurisdiction, Location):
 
     begin_date: pd.Timestamp
     BEGIN_DATE = 'begin_date'
-    end_date: pd.Timestamp
+
+    end_date: OptionalTimestamp
     END_DATE = 'end_date'
+
     end_reason: str | None
     END_REASON = 'end_reason'
-    destination_cbs_ids: set[str]
-    END_CBSIDS = 'destination_cbs_ids'
-    province: Province
 
-    _res_p_weight: np.float64
+    destination_municipality_cbs_id: str | None
+    END_CBS_ID = 'main_destination_municipality'
+    
+    province: Province
+    PROVINCE = 'province'
+
+    _res_p_weight: float
     # assigned randomly from the service
 
     def __post_init__(self):
         assert self._dynamic_properties is not None
+        assert self._results is not None
+
         # Register this municipality in its province
         self.province.register_municipality(self)
 
@@ -336,13 +388,14 @@ class Municipality(Jurisdiction, Location):
         return hash(self.cbs_id)
 
     @classmethod
-    def from_row(cls, row_data: dict, **kwargs) -> Self:
+    def from_row(
+        cls,
+        row_data: pd.Series | Dict[str, Any],
+        state: State,
+        settings: Settings
+    ) -> Self:
         """Primary static constructor from row data."""
-        raw_ids = row_data.get(Municipality.END_CBSIDS)
-        end_cbs_ids = set()
-        if raw_ids is not None and str(raw_ids).strip().lower() not in ('', 'none', 'nan'):
-            end_cbs_ids = set(str(raw_ids).split(';'))
-        instance = cls(
+        return cls(
             _base_name=row_data[NAME],
             cbs_id=row_data[CBS_ID],
             latitude=row_data[Municipality.LATITUDE],
@@ -351,10 +404,10 @@ class Municipality(Jurisdiction, Location):
             begin_date=pd.to_datetime(row_data[Municipality.BEGIN_DATE], errors='raise'),
             end_date=pd.to_datetime(row_data[Municipality.END_DATE], errors='raise'),
             end_reason=row_data[Municipality.END_REASON],
-            destination_cbs_ids=end_cbs_ids,
-            **kwargs # For parent instances like Province, Region
+            destination_municipality_cbs_id=row_data[Municipality.END_CBS_ID],
+            province=state.province(row_data[Municipality.PROVINCE]),
+            _res_p_weight=settings.residential_p_weight_rng.uniform(low=0, high=1, size=1).item()
         )
-        return instance
 
     # Declaration of dynamic properties, i.e., those that have some type of time dependency
     # and how the yearlyView object will handle them
@@ -462,6 +515,12 @@ class Municipality(Jurisdiction, Location):
             return False
         return True
 
+    @property
+    def destination_municipality(self) -> 'Municipality':
+        if self.destination_municipality_cbs_id is None or self.destination_municipality_cbs_id == '':
+            return self
+        return self.province.municipality(self.destination_municipality_cbs_id)
+
     def effective_cbs_id(self, when: int | str | pd.Timestamp) -> str:
         """
         Returns the effective CBS ID(s) for the municipality at the given date.
@@ -469,12 +528,6 @@ class Municipality(Jurisdiction, Location):
         If not active and yet to be opened, raises an error.
         If not active and closed (lifted or renamed), it resolves to the 
         municipality's CBS id to which it belongs at that time.
-        If the municipality has been lifted and there is one municipality opening
-         in that year between the destination municipalities, that municipality 
-         is the destination municipality.
-        Otherwise, it is simply the most populous one.
-        If the destination municipality is in another province, it will print a
-        warning requireing immediate action.
         """
         ts = timestampify(when, errors='raise')
         if not self.has_open(when=ts):
@@ -484,44 +537,8 @@ class Municipality(Jurisdiction, Location):
             # Still open,
             return self.cbs_id
 
-        # It has indeed close, we should have the destination municipalities
-        assert len(self.destination_cbs_ids) > 0
-
-        # If it has close and one of the destination municipalities is a new one
-        # opening that year, that is the destination municipality.
-        # It has close, but became part of an already existing municipality,
-        # we find the most popoulos in-province municipality between those and
-        # return its cbs id.
-        dest_munis: list[Municipality] = []
-        dest_newidxs: list[int] = []
-        dest_populations: list[float] = []
-        for i, dest_id in enumerate(self.destination_cbs_ids):
-            dest_muni = self.state.municipality(dest_id)
-            dest_pop = dest_muni.population.asof(ts)
-
-            dest_munis.append(dest_muni)
-            dest_populations.append(dest_pop)
-            if dest_muni.begin_date == self.end_date:
-                dest_newidxs.append(i)
-
-        # Decision making point, by default they can all be destination municipality
-        # if there is a new one, we restrict the search.
-        candidates = dest_munis
-        candidates_pops = dest_populations
-        if len(dest_newidxs):
-            candidates = [dest_munis[i] for i in dest_newidxs]
-            candidates_pops = [dest_populations[i] for i in dest_newidxs]
-
-        candidate_idx = int(np.argmax(candidates_pops))
-
-        if candidates[candidate_idx].province != self.province:
-            warnings.warn(
-                f"Municipality {self.display_name} closes to {candidates[candidate_idx].display_name}, "
-                f"which is in a different province ({candidates[candidate_idx].province.display_name}) "
-                f"than the original ({self.province.display_name})"
-            )
-
-        return candidates[candidate_idx].effective_cbs_id(when=ts)
+        # It has indeed close, we should have the destination municipality
+        return self.destination_municipality.effective_cbs_id(ts)
 
     def effective_entity(self, when: int | str | pd.Timestamp) -> 'Municipality':
         """
@@ -555,55 +572,97 @@ class Municipality(Jurisdiction, Location):
 
         return self
 
-    # Setters for results
-    def _track(
+    def track_total_demand(
             self,
-            property: str,
-            frequency: str,
-            when: int | str | pd.Timestamp,
+            when: BWFTimeLike,
             values: np.ndarray
         ) -> Self:
-        res_df = self._results[property]
-
-        time_index = pd.date_range(
-            start=timestampify(when),
-            periods=len(values),
-            freq=frequency
-        )
-
-        # let's make space for them in case indexes and columns are not there
-        res_df = res_df.reindex(res_df.index.union(time_index))
-        if self.cbs_id not in res_df.columns:
-            res_df[self.cbs_id] = np.nan
-
-        res_df.loc[time_index, self.cbs_id] = values
-
-        # We modified only the local instance so assign it back
-        self._results[property] = res_df
-
-        return self
-
-    # def track_nrw_demand(self, when: int | str | pd.Timestamp, values: np.ndarray) -> Self:
-    #     """
-    #     Expect one value per day of nrw demand with unit CMH
-    #     """
-    #     return self._track(
-    #         property=MunicipalitiesResults.NRW_DEMAND,
-    #         frequency='D',
-    #         when=when,
-    #         values=values
-    #     )
-
-    def track_demand(self, when: int | str | pd.Timestamp, values: np.ndarray) -> Self:
         """
-        Expect one value per day of nrw demand with unit CMH
+        This function tracks total demand, which is defined as the sum of billable
+        demand (residential and business) plus non-revenue water demand.
+
+        It expects an array of values with a hourly frequency.
+        
+        :param self: Description
+        :param when: Description
+        :type when: BWFTimeLike
+        :param values: Description
+        :type values: np.ndarray
+        :return: Description
+        :rtype: Self
         """
-        return self._track(
-            property=MunicipalitiesResults.DEMAND,
-            frequency='h',
-            when=when,
+        # We expect one year of values at hourly frequence
+        assert len(values) == 24*365
+
+        self._results.commit(
+            a_property=MunicipalitiesResults.DEMAND_TOTAL,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=len(values),
+                freq='h'
+            ),
+            entity=self.cbs_id,
             values=values
         )
+
+        return self
+    
+    def track_billable_demand(
+            self, 
+            when: BWFTimeLike,
+            values: np.ndarray
+        ) -> Self:
+        """
+        This function tracks billable demand (not consumption) for a municipality
+        in a given year.
+
+        The only information we need is the aggregated value, so we track the sum.
+        
+        :param self: Description
+        :param when: Description
+        :type when: BWFTimeLike
+        :param values: Description
+        :type values: np.ndarray
+        :return: Description
+        :rtype: Self
+        """
+        # We expect one year of values at hourly frequence
+        assert len(values) == 24*365
+    
+        self._results.commit(
+            a_property=MunicipalitiesResults.DEMAND_BILLABLE,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=1,
+                freq='YS'
+            ),
+            entity=self.cbs_id,
+            values=np.sum(values)
+        )
+
+        return self
+    
+    def track_undelivered_demand(
+            self,
+            when: BWFTimeLike,
+            values: np.ndarray
+        ) -> Self:
+
+        # I don't put the assert because I don't know how we are going to track
+        # undelivered, demand for now.
+
+        self._results.commit(
+            a_property=MunicipalitiesResults.DEMAND_UNDELIVERED,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=1,
+                freq='YS'
+            ),
+            entity=self.cbs_id,
+            values=np.sum(values)
+        )
+
+        return self
 
     def to_dict(self) -> Dict[str, Any]:
         
@@ -611,9 +670,9 @@ class Municipality(Jurisdiction, Location):
         end_date = self.end_date.strftime('%Y-%m-%d') if pd.notna(self.end_date) else ''
 
         return Jurisdiction.to_dict(self) | Location.to_dict(self) | {
-            "province": self.province.cbs_id,
+            self.PROVINCE: self.province.cbs_id,
             self.BEGIN_DATE: begin_date,
             self.END_DATE: end_date,
             self.END_REASON: self.end_reason,
-            "destination_cbs_ids": ";".join(self.destination_cbs_ids)
+            self.END_CBS_ID: self.destination_municipality_cbs_id
         }

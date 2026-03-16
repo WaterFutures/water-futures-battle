@@ -36,9 +36,7 @@ def build_state(
     """
     name = config['name']
     identifier = config['id']
-
-    # This module need a random generator, let's get it from the settings
-    RNG_RES_P_WEIGHT = settings.get_random_generator('municipalities-res_p_weight')
+    assert identifier == 'NL0000', "states different from the NL0000 are not supported yet"
 
     # Get the dynamic properties search within the `files` properties, the following:
     # - municipalities-dynamic_properties
@@ -53,27 +51,31 @@ def build_state(
     # Every Jurisdictions will register itself to the correct parent automatically
 
     # Let's upload the static properties explaining the jurisdictions
-    jurisdictions_sheets = pd.read_excel(os.path.join(data_path, Path(config['jurisdictions-static_properties'])), sheet_name=None)    
+    jurisdictions_sheets = pd.read_excel(
+        os.path.join(data_path, Path(config['jurisdictions-static_properties'])),
+        sheet_name=['regions', 'provinces', 'municipalities']
+    )
 
     # Assume we uploaded the 'state' and it only has this:
     a_state = State(name, identifier)
 
     for _, a_region_data in jurisdictions_sheets['regions'].iterrows():
-        assert a_region_data['state'] == identifier
-        Region.from_row(row_data=a_region_data.to_dict(), state=a_state)
+        Region.from_row(
+            row_data=a_region_data,
+            state=a_state
+        )
 
     for _, a_province_data in jurisdictions_sheets['provinces'].iterrows():
-        province_s_region = a_state.region(a_province_data['region'])
-        Province.from_row(row_data=a_province_data.to_dict(), region=province_s_region)
+        Province.from_row(
+            row_data=a_province_data,
+            state=a_state    
+        )
 
     for _, a_municipality_data in jurisdictions_sheets['municipalities'].iterrows():
-
-        municipality_s_province = a_state.province(a_municipality_data['province'])
         Municipality.from_row(
-            row_data=a_municipality_data.to_dict(),
-            province=municipality_s_province,
-            _res_p_weight=RNG_RES_P_WEIGHT.uniform(low=0, high=1, size=1).item()
-        
+            row_data=a_municipality_data,
+            state=a_state,
+            settings=settings
         )
 
     return a_state
@@ -215,22 +217,20 @@ def age_distribution_networks(
         nrw_info_db: NRWModelDB
     ) -> List[Municipality]:
 
-    # Get where the closing municipalities go, we split equally the kms of pipes
+    # Get where the closing municipalities go, a new municipality could receive more than one 
     destination_municipalities_map: Dict[Municipality, List[Tuple[float, float]]] = {}
     for closing_municipality in closing_municipalities:
-        n_destinations = len(closing_municipality.destination_cbs_ids)
-        for destination_id in closing_municipality.destination_cbs_ids:
-            destination = closing_municipality.province.municipality( destination_id
-                ).effective_entity(year+1)
+        
+        destination = closing_municipality.destination_municipality
             
-            if destination not in destination_municipalities_map:
-                destination_municipalities_map[destination] = []
+        if destination not in destination_municipalities_map:
+            destination_municipalities_map[destination] = []
 
-            m = get_snapshot(closing_municipality, year)
-            destination_municipalities_map[destination].append((
-                m.dist_network_length/n_destinations,
-                m.dist_network_avg_age
-                ))
+        m = get_snapshot(closing_municipality, year)
+        destination_municipalities_map[destination].append((
+            m.dist_network_length,
+            m.dist_network_avg_age
+            ))
         
     opening_municipalities = [m for m in destination_municipalities_map if m not in alive_municipalities]
     alive_and_receiving_municipalities = [m for m in destination_municipalities_map if m in alive_municipalities]

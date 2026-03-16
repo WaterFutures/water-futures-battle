@@ -1,7 +1,9 @@
 import pandas as pd
-from typing import List, TypeAlias
+from typing import List, TypeAlias, Union
 
 BWFTimeLike: TypeAlias = int | str | pd.Timestamp
+
+OptionalTimestamp = Union[pd.Timestamp, type(pd.NaT)]
 
 def timestampify(a_value: BWFTimeLike, **kwargs) -> pd.Timestamp:
     """
@@ -23,7 +25,8 @@ def filter_columns(df: pd.DataFrame, logical_part: str) -> List[str]:
     The bWF convention is that the dash separator ('-') is used to seprate logical 
     parts, e.g., state-size-min, the underscore separator ('_') is to replace spaces
     in words. 
-    So a column state-municipality_class-min has a counterpart ... 
+    So a column state-municipality_class-min has a counterpart state-municipality_class-max
+    and using filter_columns(df, 'municipaliy_class') I only get the ones I care
     
     :param df: Description
     :type df: pd.DataFrame
@@ -33,4 +36,3 @@ def filter_columns(df: pd.DataFrame, logical_part: str) -> List[str]:
     :rtype: List[str]
     """
     return [c for c in df.columns if logical_part in c.split('-')]
-    

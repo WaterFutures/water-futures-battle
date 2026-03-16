@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Optional, Tuple, Dict, Any
 
+import pvlib
+
 def bwf_entity(
         db_type: Optional[type] = None,
         results_type: Optional[type] = None
@@ -51,6 +53,14 @@ class Location:
             self.LONGITUDE: self.longitude,
             self.ELEVATION: self.elevation
         }
+    
+    def to_pvlib(self) -> pvlib.location.Location:
+        return pvlib.location.Location(
+            latitude=self.latitude,
+            longitude=self.longitude,
+            tz='UTC',
+            altitude=self.elevation
+        )
 
 
 class Lever:

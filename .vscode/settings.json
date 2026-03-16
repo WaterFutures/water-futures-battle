@@ -1,4 +1,72 @@
 {
-    "makefile.makefilePath": "scripts",
-    "makefile.configureOnOpen": false
+    "jupyter.debugJustMyCode": false,
+    "python.useEnvironmentsExtension": true,
+    "python.terminal.useEnvFile": true,
+    "python-envs.pythonProjects": [
+        {
+            "path": "data/jurisdictions/preprocessing-scripts",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "data/epanet-networks/preprocessing-scripts",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "data/connections/preprocessing-scripts",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "data/sources/preprocessing-scripts",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "data/water_demand_model/preprocessing-scripts",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "data/pipes/preprocessing-scripts",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "data/pumping_stations/preprocessing-scripts",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "data/pumps/preprocessing-scripts",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "data/nrw_model/preprocessing-scripts",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "data/water_utilities/preprocessing-scripts",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "data/economy/preprocessing-steps",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "data/energy/preprocessing-scripts",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "data/climate/preprocessing-scripts",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        }
+    ]
 }

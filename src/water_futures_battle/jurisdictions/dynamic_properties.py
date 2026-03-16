@@ -1,4 +1,4 @@
-from ..core.base_model import DynamicProperties, bwf_database, bwf_results
+from ..core.base_model import DynamicProperties, bwf_database, BWFResult
 
 @bwf_database
 class MunicipalitiesDB(DynamicProperties):
@@ -51,13 +51,15 @@ class MunicipalitiesDB(DynamicProperties):
 
         return
 
-@bwf_results
-class MunicipalitiesResults(DynamicProperties):
+class MunicipalitiesResults(BWFResult):
     NAME = 'municipalites-results'
 
-    NRW_DEMAND = 'non_revenue_water-demand'
-    DEMAND = 'demand'
+    DEMAND_TOTAL = 'demand-total'
+    DEMAND_BILLABLE = 'demand-billable'
+    DEMAND_UNDELIVERED = 'demand-undelivered'
 
     TRACKED_VARIABLES = [
-        DEMAND
+        DEMAND_TOTAL,
+        DEMAND_BILLABLE,
+        DEMAND_UNDELIVERED
     ]

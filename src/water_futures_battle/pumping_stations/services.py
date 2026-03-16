@@ -10,7 +10,6 @@ from ..sources.entities import SourcesContainer, WaterSource
 from ..pumps.dynamic_properties import PumpOptionsDB, PumpsResults
 from ..pumps.entities import Pump, PumpOption
 
-from .dynamic_properties import PumpingStationResults
 from .entities import PumpingStation
 
 def build_pumping_infrastructure(
@@ -53,9 +52,6 @@ def build_pumping_infrastructure(
     # Once we created the database of pump options we can start building the Pumps and Pumping Stations
     pumps_results = PumpsResults()
     Pump.set_results(pumps_results)
-
-    pumping_stations_results = PumpingStationResults()
-    PumpingStation.set_results(pumping_stations_results)
 
     pumping_stations_data = pd.read_excel(
         os.path.join(data_path, desc['pumping_stations-static_properties']),

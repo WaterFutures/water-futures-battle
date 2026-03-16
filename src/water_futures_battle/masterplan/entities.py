@@ -1,27 +1,7 @@
 from typing import Any, Dict, Optional, Tuple
 
-from ..nrw_model.policies import NRWMitigation
-from ..sources.interventions import OpenSource, CloseSource
-from ..pumping_stations.interventions import InstallPumps
-from ..connections.interventions import InstallPipe
-from ..energy.interventions import InstallSolarFarm
-from ..water_utilities.policies import WaterPricingAdjustment, BondRatioAdjustment
-from ..national_context.policies import BudgetAllocation
-
-NationalPolicies = [BudgetAllocation]
-NationalInterventions = [InstallPipe]
-WaterUtilityPolicies = [
-	NRWMitigation,
-	WaterPricingAdjustment,
-	BondRatioAdjustment
-]
-WaterUtilityInterventions = [
-	OpenSource,
-	CloseSource,
-	InstallPumps,
-	InstallPipe,
-	InstallSolarFarm
-]
+from ..water_utilities import WaterUtilityPolicies, WaterUtilityInterventions
+from ..national_context import NationalPolicies, NationalInterventions
 
 class Masterplan:
 	def __init__(self, data: Dict[str, Any]):

@@ -11,6 +11,9 @@ class RandomManager:
         'pipes-fric_f_decay',
         'pipes-lifetime',
         'pumps-lifetime',
+        'new_sources-construction_time',
+        'new_sources-opex_vol_ene_factor',
+        'solar_radiation-pvlib_year',
     ]
     
     def __init__(self, master_seed: int):
