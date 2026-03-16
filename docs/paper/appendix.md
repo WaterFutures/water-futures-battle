@@ -15,7 +15,7 @@ When using a library based on an outdated version of EPANET, the hydraulic resul
 For these compatibility reason and to ensure consistency between results, the solutions will be submitted through an ad-hoc form and inp files will be rejected.
 The sole reference for correctness is the evaluator's computations, which uses the latest EPANET 2.3 library.
 
-At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to visualize the networks overlaid on a map of the Netherlands, while for hydraulic computations, we recommend using the EPANET-PLUS Python library, as it is currently the only one offering EPANET 2.3 support [@github:epanetplus].
+At the time of writing, we suggest using [EPANET.js](https://epanetjs.com) to visualize the networks overlaid on a map of the Netherlands, while for hydraulic computations, we recommend using the EPANET-PLUS Python library, as it offers full EPANET 2.3 support [@github:epanetplus].
 
 ## Configuration File {.unnumbered .unlisted}
 
@@ -24,6 +24,7 @@ Specifically, it indicates:
 
 - The relative paths of the Excel input files describing the system
 - The parameters and settings that control the simulation
+- The interface to control which results to save
 
 This makes the configuration file the central reference point that connects all the input data sources with the simulation engine.
 By modifying these parameters (e.g., switching input files), participants can quickly simulate the system under different scenarios.
@@ -32,6 +33,7 @@ By modifying these parameters (e.g., switching input files), participants can qu
   - Start year (`start_year`) [ - ]
   - End year (`end_year`) [ - ]
   - National budget (`national_budget`) [€]
+  - Lifeline volume (`lifeline_volume`) [L/day/person]
 
 ## Evaluator Input Files {.unnumbered .unlisted}
 
@@ -101,7 +103,8 @@ When a property requires multiple parameters, column headers use a dash separato
     - Opening date (`begin_date`) [ - ]
     - Closure date (`end_date`) [ - ]
     - Reason for the closure (`end_reason`) [ - ]
-    - Municipalities IDs that acquired the municipality's assets (`destination_cbs_ids`) [ - ]
+    - Municipality ID that inherits the hydraulic connections (`main_destination_municipality`) [ - ]
+    - Municipality IDs that acquired the municipality's assets (`destination_cbs_ids`) [ - ]
     - Coordinates (`latitude`, `longitude`, `elevation`) [ degrees, degrees, m ]
     - Area characteristics (`touristic_area_cbs_id`, `touristic_group_cbs_id`) [ -, - ]
     
@@ -358,6 +361,9 @@ When a property requires multiple parameters, column headers use a dash separato
     - Minor loss coefficient (`minor_loss_coeff`) [ - ]
     - Installed pipes - options IDs (`pipes-option_ids`) [ - ]
     - Installed pipes - installation date (`pipes-installation_dates`) [ - ]
+    - Installed pipes - decommission date (`pipes-decommission_dates`) [ - ]
+    - Replaced by connection ID (`replaced_by`) [ - ]
+    - Replaced connection IDs (`replaces`) [ - ]
 
 - Entity: **Pipe Options**
   - File: `pipes/pipe_options-static_properties.xlsx`
