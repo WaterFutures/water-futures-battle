@@ -9,7 +9,35 @@ website_page_authors:
 
 # Changelog 🕑
 
-## The Battle of the Water Futures [Data and Software - [v0.5.0](https://doi.org/10.5281/zenodo.17698299)]
+## The Battle of the Water Futures [Data and Software - [v0.5.1](https://doi.org/10.5281/zenodo.17698299)]
+
+**Release Date:* 23rd March 2026
+
+This patch release introduces the calculation of the key variables in the Python library, e.g., capex, debts, etc. 
+The data, the problem description (PDF and website), and the rules and information (website) are unchanged.
+
+### What's New
+
+- **Code**
+  - Calculate water utilities' results (capex, balance, etc)
+
+### What's Changed
+
+- **Code**
+  - Bug fix: bond issuance interest calculation (bond coupon is in percent points)
+  - Bug fix: added missing ageing of the inter-utility connections
+  - Bug fix: saved epanet networks filenames (now the week number appears in the name)
+  - Bug fix: fairness metric calculation (unit of measurement of lifeline volume is L/day/person)
+  - Plus other minor bugs
+  
+### Important Notes
+
+The evaluator is still incomplete.
+A future patch releases of the Python library (0.5.x) will add the last missing feature (complete hydraulic simulations and opex).
+
+---
+
+## The Battle of the Water Futures [Data and Software - [v0.5.0](https://doi.org/10.5281/zenodo.19049692)]
 
 **Release Date:* 16th March 2026
 
