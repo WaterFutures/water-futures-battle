@@ -19,7 +19,7 @@ class InstallPipe:
         intervention_desc: Dict[str, Any],
         pipe_options: Set[PipeOption],
         settings: Settings
-    ) -> Tuple[float, Tuple[WaterUtility, WaterUtility]]:
+    ) -> Tuple[float, float, Tuple[WaterUtility, WaterUtility]]:
         
         cnn_id = intervention_desc[Connection.ID]
         pipe_option_id = intervention_desc[PipeOption.ID]
@@ -51,9 +51,11 @@ class InstallPipe:
         # Calculate this new pipe cost because it will immediately influence the 
         # w. utility balance, while emission are calculated at the end of simulation
         # because they are independent
-        pipe_unit_cost = pipe_option.unit_cost.loc[pipe_inst_date]
+        pipe_unit_cost = float(pipe_option.unit_cost.loc[pipe_inst_date])
+        pipe_emb_ghg = float(pipe_option.embodied_emssions.asof(pipe_inst_date))
         
         cost = pipe_unit_cost * connection.distance
+        emiss = pipe_emb_ghg * connection.distance
 
         #find which water utilities are connected 
         wu_from = next((wu
@@ -66,4 +68,4 @@ class InstallPipe:
                     if connection.to_node in wu.municipalities
         ))
 
-        return cost, (wu_from, wu_to)
+        return cost, emiss, (wu_from, wu_to)

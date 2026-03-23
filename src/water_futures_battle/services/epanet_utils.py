@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Set, Tuple
+from typing import Dict, NamedTuple, Optional, Set, Tuple
 
 import itertools
 from epanet_plus import EPyT, EpanetConstants
@@ -38,6 +38,11 @@ class FlowControlValve(CustomControlModule):
             self.__productions[self.__t_idx % 23] = cur_flow
             self.__t_idx += 1
 
+class BWFHydraulicSimReults(NamedTuple):
+    municipalities_outflow: pd.DataFrame
+    pumps_energy_consumption: pd.DataFrame
+    cross_utilities_flows: pd.DataFrame
+    sources_production: pd.DataFrame
 
 def run_sim(
         f_inp_in,
@@ -45,11 +50,12 @@ def run_sim(
         cross_utility_pipes_id: list[str],
         date_range: pd.DatetimeIndex,
         pumping_station_representation: str
-    ) -> Dict[str, pd.DataFrame]:
+    ) -> BWFHydraulicSimReults:
 
     with ScenarioSimulator(f_inp_in=f_inp_in) as sim:
         pumps_id = sim.epanet_api.get_all_pumps_id()
         juncs_id = [j for j in sim.epanet_api.get_all_junctions_id() if j.startswith('GM')]
+        sources_id = sim.epanet_api.get_all_reservoirs_id()
 
         sim.place_demand_sensors_everywhere()
         sim.place_flow_sensors_everywhere()
@@ -91,19 +97,20 @@ def run_sim(
             columns=cross_utility_pipes_id,
             index=date_range
         )
-        MEASUREMENTS_KEYS = [
-            "juncs_demands",
-            "pumps_energyconsumption",
-            "cross_utilities_flows"
-        ]
+        df_sources_prod = pd.DataFrame(
+            np.full((len(date_range), len(sources_id)), np.nan),
+            columns=sources_id,
+            index=date_range
+        )
 
         scada_data = sim.run_simulation()
         if len(scada_data.warnings_code) <= 1: # Smth. went wrong when running the simulation (e.g., Error 233: network has unconnected nodes)
-            return dict(zip(MEASUREMENTS_KEYS, [
-                df_juncs_demands,
-                df_pumps_energyconsumption,
-                df_cross_utilities_flows
-            ]))
+            return BWFHydraulicSimReults(
+                municipalities_outflow=df_juncs_demands,
+                pumps_energy_consumption=df_pumps_energyconsumption,
+                cross_utilities_flows=df_cross_utilities_flows,
+                sources_production=df_sources_prod
+            )
 
         junc_demands = scada_data.get_data_demands(juncs_id)
         n_sim_steps = len(junc_demands)
@@ -118,11 +125,14 @@ def run_sim(
 
             df_cross_utilities_flows.iloc[:n_sim_steps, :] = scada_data.get_data_flows(cross_utility_pipes_id)
 
-        return dict(zip(MEASUREMENTS_KEYS, [
-                df_juncs_demands,
-                df_pumps_energyconsumption,
-                df_cross_utilities_flows
-            ]))
+            df_sources_prod.iloc[:n_sim_steps, :] =  scada_data.get_data_demands(sources_id)
+
+        return BWFHydraulicSimReults(
+                municipalities_outflow=df_juncs_demands,
+                pumps_energy_consumption=df_pumps_energyconsumption,
+                cross_utilities_flows=df_cross_utilities_flows,
+                sources_production=df_sources_prod
+            )
 
 
 def apply_demand_patterns(

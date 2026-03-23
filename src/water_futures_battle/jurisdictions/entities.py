@@ -422,7 +422,12 @@ class Municipality(Jurisdiction, Location):
         "n_houses": int,
         "n_businesses": int,
         'disp_income_avg': float,
-        "assigned_demand_patterns": tuple
+        "assigned_demand_patterns": tuple,
+        # from results
+        'total_demand': float,
+        'billable_demand': float,
+        'undelivered_demand': float,
+        'billable_consumption': float,
     }
 
     @property
@@ -546,6 +551,18 @@ class Municipality(Jurisdiction, Location):
         taking advantage of the effective_cbs_id. See behaviour of effective_cbs_id.
         """
         return self.province.municipality(self.effective_cbs_id(when=when))
+
+    @property
+    def billable_demand(self) -> pd.Series:
+        return self._results[MunicipalitiesResults.DEMAND_BILLABLE][self.cbs_id]
+    
+    @property
+    def undelivered_demand(self) -> pd.Series:
+        return self._results[MunicipalitiesResults.DEMAND_UNDELIVERED][self.cbs_id]
+    
+    @property
+    def billable_consumption(self) -> pd.Series:
+        return (self.billable_demand - self.undelivered_demand).clip(lower=0)
 
     # Setters for endogenous variables
     def update_dist_net_age(

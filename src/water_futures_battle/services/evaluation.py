@@ -7,9 +7,10 @@ from rich.progress import Progress
 import threading
 from joblib import Parallel, delayed
 
-from ..core import Settings
+from ..core import Settings, get_snapshot
 from ..core.utility import timestampify
 from ..jurisdictions import Municipality
+from ..economy.services import raise_amount
 from ..water_utilities import WaterUtility
 from ..national_context import NationalContext
 from ..masterplan import Masterplan
@@ -60,7 +61,7 @@ def run_eval(
             # - pipe installation
             national_interventions = masterplan.national_interventions(year=year)
 
-            wus_national_capex = nat_actions.work_on_connections(
+            wus_national_capex, wus_national_ghg = nat_actions.work_on_connections(
                 national_context=national_context,
                 year=year,
                 intervention_desc=national_interventions['install_pipe'],
@@ -116,7 +117,7 @@ def run_eval(
                     year=year
                 )
 
-                sources_capex = wu_actions.work_on_sources(
+                sources_capex, sources_ghg = wu_actions.work_on_sources(
                     water_utility=water_utility,
                     year=year,
                     interventions_open_desc=wutil_interven['open_source'],
@@ -126,7 +127,7 @@ def run_eval(
                     settings=settings
                 )
 
-                pipes_capex = wu_actions.work_on_connections(
+                pipes_capex, pipes_ghg = wu_actions.work_on_connections(
                     water_utility=water_utility,
                     year=year,
                     interventions_desc=wutil_interven['install_pipe'],
@@ -134,7 +135,7 @@ def run_eval(
                     settings=settings
                 )
 
-                pumps_capex = wu_actions.work_on_pumps(
+                pumps_capex, pumps_ghg = wu_actions.work_on_pumps(
                     water_utility=water_utility,
                     year=year,
                     interventions_desc=wutil_interven['install_pumps'],
@@ -142,7 +143,7 @@ def run_eval(
                     settings=settings
                 )
 
-                solar_capex = wu_actions.work_on_solar_farms(
+                solar_capex, solar_ghg = wu_actions.work_on_solar_farms(
                     water_utility=water_utility,
                     year=year,
                     interventions_desc=wutil_interven['install_solar'],
@@ -156,7 +157,16 @@ def run_eval(
                     solar_capex +
                     wus_national_capex[water_utility.bwf_id]
                 )
-                #water_utility.track_capex(when=year, value=wu_capex)
+                water_utility.track_capex(when=year, value=wu_capex)
+
+                wu_ghg = (
+                    sources_ghg +
+                    pipes_ghg +
+                    pumps_ghg +
+                    solar_ghg +
+                    wus_national_ghg[water_utility.bwf_id]
+                )
+                water_utility.track_embodied_emissions(when=year, value=wu_ghg)
 
                 # end water utilities for loop
                 progress.update(task_utilities, advance=1)
@@ -189,6 +199,13 @@ def run_eval(
                 )
             
                 age_water_utilities(
+                    year=year,
+                    national_context=national_context,
+                    water_utilities=water_utilities,
+                    settings=settings
+                )
+
+                age_national_context_assets(
                     year=year,
                     national_context=national_context,
                     water_utilities=water_utilities,
@@ -274,8 +291,7 @@ def run_hydraulic_simulations(
         national_context: NationalContext,
         water_utilities: Set[WaterUtility],
         settings: Settings,
-        progress: Progress,
-        pumping_station_representation: str = "free_parallel_pumps"
+        progress: Progress
     )-> None:
 
     # Get how many disconnected water utilities are there, each one will have its own simulation
@@ -283,13 +299,14 @@ def run_hydraulic_simulations(
     wutilities_clusters = national_context.get_wu_clusters(year=year)
     # print(f"Number of utility clusters: {len(wutilities_clusters)} -- Number of utilities: {len(water_utilities)}")
 
+    PUMPING_STATION_REPRESENTATION: str = "free_parallel_pumps"
     for cluster in wutilities_clusters:
 
         cluster.network = build_epanet_network(
             year=year,
             water_utilities=cluster.water_utilities,
             cross_utility_connections=cluster.cross_utility_connections,
-            pumping_station_representation=pumping_station_representation
+            pumping_station_representation=PUMPING_STATION_REPRESENTATION
         )
 
     # Now we are ready for simulation, we apply the demands, simulate and save and repeat in a parralel fashion
@@ -314,12 +331,12 @@ def run_hydraulic_simulations(
                                   for c in cluster.cross_utility_connections
                                   if c.is_active(year)]
 
-        dict_results = run_sim(
+        sim_results = run_sim(
             f_inp_in=temp_inp_file,
             cluster_sources=cluster.water_sources,
             cross_utility_pipes_id=cross_utility_pipes_id,
             date_range=date_range,
-            pumping_station_representation=pumping_station_representation
+            pumping_station_representation=PUMPING_STATION_REPRESENTATION
         )
 
         with lock:
@@ -327,7 +344,7 @@ def run_hydraulic_simulations(
             # Undelivered demand = demand-total minus demand out of results (delivered)
             # TODO: if we simulate only a part of the year, we need to extrapolate 
             # the whole year
-            delivered_demands = dict_results['juncs_demands'].fillna(0)
+            delivered_demands = sim_results.municipalities_outflow.fillna(0)
             requested_demands = national_context.municipalities_results['demand-total'].loc[date_range, delivered_demands.columns]
             undeliver_demands = requested_demands - delivered_demands
 
@@ -336,23 +353,20 @@ def run_hydraulic_simulations(
                 values=undeliver_demands.sum(axis=0)
             )
 
-            # Energy consumed by the pumps,
             national_context.track_pumps_electrical_energy(
                 when=year,
-                values=dict_results['pumps_energyconsumption']
+                values=sim_results.pumps_energy_consumption.fillna(0)
             )
 
-            # TODO: we are not tracking the water out of the sources ('production')
-            # add to dict of run sim the following variable 'production'
-            # national_context.track_sources_production(
-            #     when=year,
-            #     values= missing_df
-            # )
+            national_context.track_sources_production(
+                when=year,
+                values=sim_results.sources_production.fillna(0)
+            )
 
             # Utilities water exchanges
             # let's sort them to save the results always in order
             sorted_wus = sorted((wu for wu in cluster.water_utilities), key= lambda x: x.bwf_id)
-            net_exchanges = dict_results['cross_utilities_flows'].sum(axis=0, skipna=True)
+            net_exchanges = sim_results.cross_utilities_flows.sum(axis=0, skipna=True)
             for i, wu_from in enumerate(sorted_wus):
                 for j, wu_to in enumerate(sorted_wus[i+1:]):
 
@@ -495,6 +509,21 @@ def age_water_utilities(
 
     return
 
+def age_national_context_assets(
+        year: int,
+        national_context: NationalContext,
+        water_utilities: Set[WaterUtility],
+        settings: Settings
+    )-> None:
+
+    nat_actions.age_connections(
+        national_context,
+        year,
+        settings
+    )
+
+    return
+
 def update_financial_balances(
         year: int,
         national_context: NationalContext,
@@ -504,8 +533,63 @@ def update_financial_balances(
 
     for water_utility in sorted(water_utilities, key= lambda wu: wu.bwf_id):
         
-        # TODO: magical calculations
+        water_utility_yv = get_snapshot(water_utility, year=year)
+        balance = water_utility_yv.balance
 
-        water_utility.set_balance(when=year, value=0.0)
+        nib_alpha = water_utility_yv.investment_budget # NIV(y) \cdot \alpha_w(y)
+
+        revenue = wu_actions.collect_revenue(
+            water_utility=water_utility,
+            year=year
+        )
+
+        capex = water_utility_yv.capex
+
+        # TODO: magical calculations
+        opex = 0.0
+
+        wlr = water_utility_yv.nrw_mitigation_budget
+
+        wic = wu_actions.pay_water_imports(
+            water_utility=water_utility,
+            year=year
+        )
+
+        int_pri = water_utility.get_debt_service(year=year)
+
+        # Eq 21.a 
+        provisional_balance = (
+            balance + nib_alpha + revenue
+            - capex - opex
+            - wlr - wic
+            - int_pri
+        )
+
+        # Eq 21.b
+        debt = -provisional_balance if provisional_balance < 0.0 else 0.0
+
+        water_utility.track_debt(when=year, value=debt)
+
+        if debt:
+            ba2d_ratio = water_utility_yv.bond_ratio
+
+            pro, bonds = raise_amount(
+                economy_data=(
+                    national_context.bonds_settings,
+                    national_context.economy
+                ),
+                value=debt * ba2d_ratio,
+                year=year,
+                water_utility=water_utility
+            )
+
+            water_utility.m_bonds.add(bonds)
+        else:
+            pro = 0.0
+
+        # Eq 21.c
+        updated_balance = provisional_balance + pro
+
+        water_utility.set_balance(when=year+1, value=updated_balance)
 
     return

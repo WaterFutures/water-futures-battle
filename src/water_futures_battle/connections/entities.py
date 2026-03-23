@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Dict, List, Self, Set, Optional
+from typing import Any, Dict, List, Optional, Self, Set, Tuple
 
 import numpy as np
 import pandas as pd
@@ -157,13 +157,13 @@ class Connection:
             self,
             year: int,
             lifetime_rng: np.random.Generator
-        ) -> float:
+        ) -> Tuple[float, float]:
 
         failed_pipe = self.inspect(when=year)
         
         if failed_pipe is None:
             # it didn't fail, no cost
-            return 0.0
+            return 0.0, 0.0
 
         # it failed, so we install a new one on its place
         new_pipe = self.install_pipe(
@@ -172,11 +172,13 @@ class Connection:
             lifetime_rng=lifetime_rng
         )
 
-        pipe_unit_cost = new_pipe._pipe_option.unit_cost.loc[failed_pipe.decommission_date]
+        pipe_unit_cost = float(new_pipe._pipe_option.unit_cost.loc[failed_pipe.decommission_date])
+        pipe_emb_ghg = float(new_pipe._pipe_option.embodied_emssions.asof(new_pipe.installation_date))
         
         cost = pipe_unit_cost * self.distance
+        emiss = pipe_emb_ghg * self.distance
 
-        return cost
+        return cost, emiss
 
     def to_dict(self) -> Dict[str, Any]:
         install_dates = [

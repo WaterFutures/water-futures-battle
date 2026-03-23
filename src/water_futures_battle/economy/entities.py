@@ -54,7 +54,7 @@ class BondIssuance:
     @property
     def interest(self) -> float:
         """Calculate total annual coupon payment for all bonds."""
-        return self.n_bonds * self.FACE_VALUE * self.coupon_rate
+        return self.n_bonds * self.FACE_VALUE * self.coupon_rate / 100 # coupon rate is in %
 
     @property
     def principal(self) -> float:
@@ -82,13 +82,33 @@ class BondIssuance:
             payment += self.principal
 
         return payment
+    
+    def interest_due(self, year: int) -> float:
+        """
+        Calculate the interest due in a given year.
+        Returns coupon payment
+        """
+        current_year = timestampify(year, errors='raise')
+
+        if current_year < self.issue_date or current_year > self.maturity_year:
+            return 0.0
+        
+        return self.interest
+    
+    def principal_due(self, year: int) -> float:
+        current_year = timestampify(year, errors='raise')
+
+        if current_year == self.maturity_year:
+            return self.principal
+        
+        return 0.0
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             self.ID: self.bwf_id,
             self.N_BONDS: self.n_bonds,
-            self.ISSUE_DATE: self.issue_date,
-            self.MATURITY_DATE: self.maturity_year,
+            self.ISSUE_DATE: self.issue_date.strftime('%Y-%m-%d'),
+            self.MATURITY_DATE: self.maturity_year.strftime('%Y-%m-%d'),
             self.COUPON_RATE: self.coupon_rate,
         }
 

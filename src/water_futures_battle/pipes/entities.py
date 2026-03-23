@@ -75,6 +75,10 @@ class PipeOption:
     def unit_cost(self) -> pd.Series:
         return self._dynamic_properties[PipeOptionsDB.COST][self.bwf_id]
     
+    @property
+    def embodied_emssions(self) -> pd.Series:
+        return self._dynamic_properties[PipeOptionsDB.EMISSION][self.bwf_id]
+    
 @bwf_entity(db_type=PipesDB, results_type=None)
 @dataclass(frozen=True)
 class Pipe:

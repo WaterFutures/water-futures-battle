@@ -17,7 +17,7 @@ class WaterUtilityDB(DynamicProperties):
     ]
 
 class WaterUtilityResults(BWFResult):
-    NAME = 'water_utilities-dynamic_properties'
+    NAME = 'water_utilities-results'
 
     NET_WATER_EXCHANGE = 'net_water_exchange'
 

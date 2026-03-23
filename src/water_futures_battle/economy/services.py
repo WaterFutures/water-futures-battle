@@ -1,3 +1,4 @@
+from __future__ import annotations
 import os
 from pathlib import Path
 from typing import Any, Dict, Set, Tuple
@@ -64,19 +65,19 @@ def raise_amount(
         economy_data: Tuple[BondsSettings, EconomyDB],
         value: float,
         year: int,
-        wutility_name: str
+        water_utility: 'WaterUtility'
     ) -> Tuple[float, BondIssuance]:
 
     ts = timestampify(year, errors='raise')
 
     # Inflation expectation
-    cs = economy_data[1][EconomyDB.INFEXPECT]['NL0000'].asof(ts)
+    cs = economy_data[1][EconomyDB.INFEXPECT][water_utility.state.cbs_id].asof(ts)
 
     # Coupon = r + cs
     c = economy_data[0].risk_free_rate + cs
 
     a = economy_data[0].spread_sensitivity
-    d = economy_data[1][EconomyDB.INVDEMAND]['NL0000'].asof(ts)
+    d = economy_data[1][EconomyDB.INVDEMAND][water_utility.state.cbs_id].asof(ts)
 
     # Yield rate 
     y = c + a * (1-d) 
@@ -93,7 +94,7 @@ def raise_amount(
     actual_amount_raised = num_bonds * bp  # Might be slightly more than needed because of ceil operation
 
     bonds = BondIssuance(
-        bwf_id="-".join([BondIssuance.ID_PREFIX, wutility_name, str(year)]),
+        bwf_id="-".join([BondIssuance.ID_PREFIX, water_utility.bwf_id, str(year)]),
         n_bonds=num_bonds,
         issue_date=ts,
         maturity_year=ts+pd.DateOffset(years=economy_data[0].maturity),
@@ -178,6 +179,5 @@ def dump_economy(
 
     return {
         economy_db.NAME: as_rel_path(dp_path),
-        bonds_properties.name: as_rel_path(sp_path),
         "bonds": bonds_desc
     }

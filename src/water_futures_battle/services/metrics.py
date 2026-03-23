@@ -22,13 +22,18 @@ def service_reliability_metric(a_municipality: Municipality) -> pd.Series:
 
 def affordability_metric(a_water_utility: WaterUtility, Dlife: float) -> pd.Series:
     
+    # We should do a weighted quantile calculation for income, but the difference is minimal
     avg_disposable_incomes = pd.concat([
         m.disp_income_avg for m in a_water_utility.municipalities
     ], axis=1)
 
+    # Dlife is in L/person/day -> *365*0.001 to get m^3/person/year
+    # Costs are in €/household/year (or person in this case)
+    # and €/m^3. Thus we get €/year.
+    # Income is in k€
     return (
-        (a_water_utility.price_fix_comp + a_water_utility.price_var_comp * Dlife) / 
-        avg_disposable_incomes.quantile(0.2, axis=1)
+        (a_water_utility.price_fix_comp + a_water_utility.price_var_comp * Dlife*365*0.001) / 
+        (avg_disposable_incomes.quantile(0.2, axis=1)*1000)
     )
 
 

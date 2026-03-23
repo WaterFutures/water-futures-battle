@@ -1,4 +1,4 @@
-from typing import Any, Dict, Set
+from typing import Any, Dict, Set, Tuple
 
 import pandas as pd
 
@@ -24,7 +24,7 @@ class OpenSource:
         pipe_options: Set[PipeOption],
         pump_options: Set[PumpOption],
         settings: Settings
-    ) -> float:
+    ) -> Tuple[float, float]:
         
         # Let's get the mandatory arguements
         source_id = intervention_desc[WaterSource.ID]
@@ -99,6 +99,7 @@ class OpenSource:
             unit_cost = table_unit_costs[source.source_size_class]
 
             cost = source.nominal_capacity * unit_cost
+            emissions = 0.0 # no emission associated with opening a source
 
             for _ in range(n_pumps):
                 new_pump = pumping_station.install_pump(
@@ -109,6 +110,7 @@ class OpenSource:
                 )
 
                 cost += new_pump._pump_option.unit_cost.loc[constr_start_date]
+                emissions += 0.0 # no emission associated with pumps
         
             
             new_pipe = connection.install_pipe(
@@ -118,10 +120,13 @@ class OpenSource:
                 lifetime_rng=settings.get_random_generator('pipes-lifetime')
             )
 
-            pipe_unit_cost = new_pipe._pipe_option.unit_cost.loc[constr_start_date]
-            cost += pipe_unit_cost + connection.distance
+            pipe_unit_cost = float(new_pipe._pipe_option.unit_cost.loc[constr_start_date])
+            cost += pipe_unit_cost * connection.distance
 
-            return cost
+            pipe_emb_ghg = float(new_pipe._pipe_option.embodied_emssions.asof(constr_start_date))
+            emissions += pipe_emb_ghg *connection.distance
+
+            return cost, emissions
 
         # If we are here, it means we could not find the source. let's raise an error
         raise ValueError(f"Impossible to find source with ID '{source_id}' in water utility {water_utility.bwf_id} for opening it.")
@@ -136,7 +141,7 @@ class CloseSource:
         year: int,
         intervention_desc: Dict[str, Any],
         settings: Settings
-    ) -> float:
+    ) -> Tuple[float, float]:
         
         # Let's get the mandatory arguements
         source_id = intervention_desc[WaterSource.ID]
@@ -168,8 +173,8 @@ class CloseSource:
 
             source.close_production(when=year)
 
-            # Done, no cost associated with closing a source
-            return 0.0
+            # Done, no cost or emission associated with closing a source
+            return 0.0, 0.0
 
         # If we are here, it means we could not find the source. let's raise an error
         raise ValueError(f"Impossible to find source with ID '{source_id}' in water utility {water_utility.bwf_id} for closing it.")
@@ -187,7 +192,7 @@ class InstallPipe:
         intervention_desc: Dict[str, Any],
         pipe_options: Set[PipeOption],
         settings: Settings
-    ) -> float:
+    ) -> Tuple[float, float]:
         
         cnn_id = intervention_desc[Connection.ID]
         pipe_option_id = intervention_desc[PipeOption.ID]
@@ -226,10 +231,12 @@ class InstallPipe:
         # w. utility balance, while emission are calculated at the end of simulation
         # because they are independent
         pipe_unit_cost = pipe_option.unit_cost.loc[pipe_inst_date]
+        pipe_emb_ghg = float(pipe_option.embodied_emssions.asof(pipe_inst_date))
         
         cost = pipe_unit_cost * connection.distance
+        emiss = pipe_emb_ghg * connection.distance
         
-        return cost
+        return cost, emiss
 
 from ..sources import WaterSource
 from ..pumps import PumpOption
@@ -247,7 +254,7 @@ class InstallPumps:
         intervention_desc: Dict[str, Any],
         pump_options: Set[PumpOption],
         settings: Settings
-        ) -> float:
+        ) -> Tuple[float, float]:
 
         source_id = intervention_desc[WaterSource.ID]
         pump_option_id = intervention_desc[PumpOption.ID]
@@ -269,6 +276,7 @@ class InstallPumps:
                 pump.decommission(pump_option_id)
                 
         cost = 0.0
+        emiss = 0.0
         for _ in range(intervention_desc["n_pumps"]):
             
             pump = pump_station.install_pump(
@@ -278,8 +286,9 @@ class InstallPumps:
             )
             
             cost += pump._pump_option.unit_cost.loc[pump_inst_date]
+            emiss += 0.0 # no emission associated with pumps
         
-        return cost
+        return cost, emiss
     
 from ..pumping_stations import PumpingStation
 
@@ -293,7 +302,7 @@ class InstallSolarFarm:
         year: int,
         intervention_desc: Dict[str, Any],
         settings: Settings
-        ) -> float:
+        ) -> Tuple[float, float]:
             
             entity = None
             # Option 1, solar farm is connected to a Source
@@ -337,7 +346,8 @@ class InstallSolarFarm:
             )
 
             cost = solar_farm.capacity * solar_farm.construction_unit_costs.loc[solar_inst_date]
+            emiss = 0.0 # no emission associated with solar panels
 
-            return cost 
+            return cost, emiss
     
 

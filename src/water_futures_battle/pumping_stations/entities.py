@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, ClassVar, Dict, List, Self, Set, Optional
+from typing import Any, ClassVar, Dict, Optional, Self, Set, Tuple
 
 import numpy as np
 import pandas as pd
@@ -170,15 +170,16 @@ class PumpingStation:
             self,
             year: int,
             lifetime_rng: np.random.Generator
-    ) -> float:
+    ) -> Tuple[float, float]:
 
         if not self.has_active_pumps(when=year):
-            return 0.0
+            return 0.0, 0.0
         
         active_pumps = self.active_pumps(when=year)
         assert active_pumps is not None
 
         cost = 0.0
+        emiss = 0.0
         for active_pump in active_pumps.values():
             if not active_pump._is_failing_this_year(when=year):
                 continue
@@ -187,7 +188,6 @@ class PumpingStation:
             active_pump._fail()
             failed_pump = active_pump
 
-        
             new_pump = self.install_pump(
                 pump_option=failed_pump._pump_option,
                 installation_date=failed_pump.decommission_date,
@@ -196,7 +196,9 @@ class PumpingStation:
             pump_unit_cost = new_pump._pump_option.unit_cost.loc[failed_pump.decommission_date]
             cost += pump_unit_cost
 
-        return cost
+            emiss += 0.0 # no emission associated with pumps
+
+        return cost, emiss
         
     def to_dict(self) -> Dict[str, Any]:
         install_dates = [

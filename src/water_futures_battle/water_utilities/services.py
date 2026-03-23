@@ -233,6 +233,11 @@ def apply_nrw_interventions(
         budget_spent += budget_muni
         muni.update_dist_net_age(when=year, by=-1 * budget_to_years(budget_muni, muni))
 
+    water_utility.track_nrw_mitigation_budget(
+        when=year,
+        value=budget_spent
+    )
+
     return budget_spent
 
 def apply_water_pricing_adjustments(
@@ -295,12 +300,13 @@ def work_on_sources(
         pump_options: Set[PumpOption],
         pipe_options: Set[PipeOption],
         settings: Settings
-    ) -> float:
+    ) -> Tuple[float, float]:
 
     capex = 0.0
+    emissions = 0.0
 
     for intervention in interventions_open_desc:
-        capex += OpenSource.execute(
+        cost, emiss = OpenSource.execute(
             water_utility=water_utility,
             year=year,
             intervention_desc=intervention,
@@ -309,15 +315,61 @@ def work_on_sources(
             settings=settings
         )
 
+        capex += cost
+        emissions += emiss
+
     for intervention in interventions_close_desc:
-        capex += CloseSource.execute(
+        cost, emiss = CloseSource.execute(
             water_utility=water_utility,
             year=year,
             intervention_desc=intervention,
             settings=settings
         )
 
-    return capex
+        capex += cost
+        emissions += emiss
+
+    # Just for sources, pumps, and connections, in the historical period, they are 
+    # defined in the input files and not in the masterplan. With this function 
+    # we account for their costs.
+    if settings._is_simulating_historical_period:
+        cost, emiss = _work_on_historical_sources(
+            water_utility=water_utility,
+            year=year
+        )
+
+        capex += cost
+        emissions += emiss
+
+    return capex, emissions
+
+def _work_on_historical_sources(
+        water_utility: WaterUtility,
+        year: int    
+    ) -> Tuple[float, float]:
+
+    # simply check which sources went online on this year and add their cost.
+    # we don't count their pipes and pumps as we will leave the respcetive 
+    # _work_on_historical_* functions account for them.
+    capex = 0.0
+    emissions = 0.0
+
+    for source in water_utility.sources:
+        if source.activation_date.year == year:
+            
+            # only difference with future is the sources are paied in the year the
+            # construction starts
+            constr_date = source.activation_date
+            assert pd.notna(constr_date)
+            table_unit_costs = source.construction_unit_costs.loc[constr_date]
+            unit_cost = table_unit_costs[source.source_size_class]
+
+            capex += source.nominal_capacity * unit_cost
+            emissions += 0.0 # no emission associated with opening a source
+
+    # While there is no cost associated with closure
+
+    return capex, emissions
 
 def work_on_connections(
         water_utility: WaterUtility,
@@ -325,9 +377,10 @@ def work_on_connections(
         interventions_desc: List[Dict[str, Any]],
         pipe_options: Set[PipeOption],
         settings: Settings
-    ) -> float:
+    ) -> Tuple[float, float]:
     
     capex = 0.0
+    emissions = 0.0
 
     # First, install new pipes, like asked by the masterplan.
     # If a pipe replaces an already existing pipe on the same connection, we change 
@@ -337,7 +390,7 @@ def work_on_connections(
     # replaced and so we skip the intervention (handled at the intervention level).
     
     for intervention in interventions_desc:
-        capex += InstallPipe.execute(
+        cost, emiss = InstallPipe.execute(
             water_utility=water_utility,
             year=year,
             intervention_desc=intervention,
@@ -345,13 +398,16 @@ def work_on_connections(
             settings=settings
         )
 
+        capex += cost
+        emissions += emiss
+
     # Once, we have installed of the utility pipes, we can see if there are pipes 
     # that are failing this year and for which we need emergency interevention.
     for connection in sorted(water_utility.connections, key=lambda c: c.bwf_id):
         
         if connection.replaced_by_cnn_id == "":
             # the connection doesn't get replaced, if it fails we re-install a pipe here
-            capex += connection.inspect_and_replace(
+            cost, emiss = connection.inspect_and_replace(
                 year=year,
                 lifetime_rng=settings.pipes_lifetime_rng
             )
@@ -383,10 +439,46 @@ def work_on_connections(
             )
 
             pipe_unit_cost = new_pipe._pipe_option.unit_cost.loc[new_pipe.installation_date]
+            pipe_emb_ghg = float(new_pipe._pipe_option.embodied_emssions.asof(new_pipe.installation_date))
 
-            capex += pipe_unit_cost * new_connection.distance
+            cost = pipe_unit_cost * new_connection.distance
+            emiss = pipe_emb_ghg * new_connection.distance
     
-    return capex
+        capex += cost
+        emissions += emiss
+
+    # Just for sources, pumps, and connections, in the historical period, they are 
+    # defined in the input files and not in the masterplan. With this function 
+    # we account for their costs.
+    if settings._is_simulating_historical_period:
+        cost, emiss = _work_on_historical_connections(
+            water_utility=water_utility,
+            year=year
+        )
+
+        capex += cost
+        emissions += emiss
+
+    return capex, emissions
+
+def _work_on_historical_connections(
+        water_utility: WaterUtility,
+        year: int    
+    ) -> Tuple[float, float]:
+
+    # simply check which pipes were installed in this year and add their cost.
+    # with this approach we account also for pipes and pumps installed together 
+    # with a new source
+    capex = 0.0
+    emissions = 0.0
+
+    for connection in water_utility.connections:
+        for pipe in connection.pipes.values():
+            if pipe.installation_date.year == year:
+                capex += float(pipe._pipe_option.unit_cost.loc[pipe.installation_date]) * connection.distance
+                emissions += float(pipe._pipe_option.embodied_emssions.asof(pipe.installation_date)) * connection.distance
+
+    return capex, emissions
 
 def work_on_pumps(
         water_utility: WaterUtility,
@@ -394,12 +486,13 @@ def work_on_pumps(
         interventions_desc: List[Dict[str, Any]],
         pump_options: Set[PumpOption],
         settings: Settings
-    ) -> float:
+    ) -> Tuple[float, float]:
     
     capex = 0.0
+    emissions = 0.0
 
     for intervention in interventions_desc:
-        capex += InstallPumps.execute(
+        cost, emiss = InstallPumps.execute(
             water_utility=water_utility,
             year=year,
             intervention_desc=intervention,
@@ -407,32 +500,73 @@ def work_on_pumps(
             settings=settings
         )
 
+        capex += cost
+        emissions += emiss
+
     for pumping_station in sorted(water_utility.pumping_stations, key=lambda ps: ps.bwf_id):
-        capex += pumping_station.inspect_and_replace(
+        cost, emiss = pumping_station.inspect_and_replace(
             year=year,
             lifetime_rng=settings.get_random_generator('pumps-lifetime')
         )
 
-    return capex
+        capex += cost
+        emissions += emiss
+
+    # Just for sources, pumps, and connections, in the historical period, they are 
+    # defined in the input files and not in the masterplan. With this function 
+    # we account for their costs.
+    if settings._is_simulating_historical_period:
+        cost, emiss = _work_on_historical_pumps(
+            water_utility=water_utility,
+            year=year
+        )
+
+        capex += cost
+        emissions += emiss
+
+    return capex, emissions
+
+def _work_on_historical_pumps(
+        water_utility: WaterUtility,
+        year: int    
+    ) -> Tuple[float, float]:
+
+    # simply check which pumps were installed in this year and add their cost
+    # with this approach we account also for pipes and pumps installed together 
+    # with a new source
+    capex = 0.0
+    emissions = 0.0
+
+    for pumping_station in water_utility.pumping_stations:
+        for pump in pumping_station.pumps.values():
+            if pump.installation_date.year == year:
+                capex += float(pump._pump_option.unit_cost.loc[pump.installation_date])
+                emissions += 0.0
+
+    return capex, emissions
 
 def work_on_solar_farms(
         water_utility: WaterUtility,
         year: int,
         interventions_desc: List[Dict[str, Any]],
         settings: Settings
-    ) -> float:
+    ) -> Tuple[float, float]:
 
-    capex = 0.0 
+    capex = 0.0
+    emissions = 0.0
 
     for intervention in interventions_desc:
-        capex += InstallSolarFarm.execute(
+        cost, emiss = InstallSolarFarm.execute(
             water_utility=water_utility,
             year=year,
             intervention_desc=intervention,
             settings=settings
         )
 
-    return capex
+        capex += cost
+        emissions += emiss
+
+    return capex, emissions
 
 def realise_demands(
         water_utility: WaterUtility,
@@ -526,10 +660,57 @@ def age_water_utility(
     age_pipes(
         wu_y.connections,
         year,
-        settings.get_random_generator('pipes-fric_f_decay')
+        settings.pipes_frict_f_decay_rng
     )
 
     #------ Other
+    return
+
+def collect_revenue(
+        water_utility: WaterUtility,
+        year: int
+    ) -> float:
+
+    revenue = 0.0
+
+    # Eq 16
+    water_utility_yv = get_snapshot(water_utility, year=year)
+    for municipality in water_utility.active_municipalities(when=year):
+        municipality_yv = get_snapshot(municipality, year=year)
+        
+        # Fixed component (per household and per business)
+        revenue += municipality_yv.n_houses * water_utility_yv.price_fix_comp
+        revenue += municipality_yv.n_businesses * water_utility_yv.price_fix_comp
+
+        # Volumetric component
+        revenue += municipality_yv.billable_consumption * water_utility_yv.price_var_comp
+
+    # Water sell
+    nwe = water_utility_yv.net_water_exported
+    revenue += float(nwe.sum()) * water_utility_yv.price_sel_comp
+
+    water_utility.track_revenue(
+        when=year,
+        value=revenue
+    )
+
+    return revenue
+
+def pay_water_imports(
+        water_utility: WaterUtility,
+        year: int
+    ) -> float:
+
+    water_utility_yv = get_snapshot(water_utility, year=year)
+    # Eq 18
+    wic = float(water_utility_yv.net_water_imported.sum()) * water_utility_yv.price_sel_comp
+
+    water_utility.track_water_import_cost(
+        when=year,
+        value=wic
+    )
+
+    return wic
 
 def dump_water_utilities(
         water_utilities: Set[WaterUtility],
