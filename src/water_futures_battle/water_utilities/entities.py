@@ -6,7 +6,7 @@ import pandas as pd
 
 from ..core.base_model import bwf_entity
 from ..core.utility import BWFTimeLike, timestampify
-from ..jurisdictions.entities import Province, Municipality
+from ..jurisdictions.entities import State, Region, Province, Municipality
 from ..sources.entities import WaterSource, GroundWater, SurfaceWater, Desalination
 from ..pumping_stations.entities import PumpingStation
 from ..connections.entities import Connection, PeerConnection, SupplyConnection
@@ -68,8 +68,33 @@ class WaterUtility():
         'balance': float,
         'price_fix_comp': float,
         'price_var_comp': float,
-        'price_sel_comp': float
+        'price_sel_comp': float,
+        'balance': float,
+        'net_water_exchange': 'net_water_exchange_at',
+        'net_water_exported': 'net_water_exported_at',
+        'net_water_imported': 'net_water_imported_at',
+        'debt': float,
+        'bond_ratio': float,
+        'investment_budget': float,
+        'capex': float,
+        'nrw_mitigation_budget': float
     }
+
+    @property
+    def state(self) -> State:
+        # We assume a water utility operates only inside one state
+        states = {pv.state for pv in self.m_provinces}
+        assert len(states) == 1, "All provinces must belong to the same state"
+        return next(iter(states))
+    
+    @property
+    def regions(self) -> Set[Region]:
+        # One w.u. can span multiple regions
+        return {pv.region for pv in self.m_provinces}
+    
+    @property
+    def provinces(self) -> Set[Province]:
+        return self.m_provinces
 
     @property
     def municipalities(self) -> Set[Municipality]:
@@ -192,6 +217,123 @@ class WaterUtility():
         weighted_sum = sum([inc * pop for inc, pop in zip(pv_incomes, pv_populations)])
         total_population = sum(pv_populations)
         return weighted_sum / total_population
+    
+    @property
+    def net_water_exchange(self) -> pd.DataFrame:
+        """
+        Returns the net water echange of this utility to all other utilities.
+        Positive, means this utility is sending the water out, negative getting it in.
+        """
+
+        full_df = self._results[WaterUtilityResults.NET_WATER_EXCHANGE]
+
+        int_columns = [ col
+            for col in full_df.columns
+            if self.bwf_id in col
+        ]
+        
+        values = {}
+        for col in int_columns:
+            wu_from, wu_to = col.split('-')
+
+            if self.bwf_id == wu_from:
+                # The values was from this utility to another, leave the sign unotuched
+                values[wu_to] = full_df[col]
+            else:
+                # The values are TO THIS w.u., thus we invert the value
+                assert self.bwf_id == wu_to
+                values[wu_from] = -full_df[col]
+
+        return pd.DataFrame(values).fillna(0.0)
+
+    def net_water_exchange_at(self, when: BWFTimeLike) -> pd.Series:
+        """
+        Returns the net water exchange for a specific timestamp (row) or an empty series if not found.
+        The returned series is named with the timestamp.
+        """
+        df = self.net_water_exchange
+        ts = timestampify(when)
+        if ts in df.index:
+            return df.loc[ts]
+        
+        # Return empty series with correct name
+        return pd.Series(dtype=float, name=ts)
+
+    @property
+    def net_water_exported(self) -> pd.DataFrame:
+        """
+        Water exported to other utilities (positive net exchanges only).
+        """
+        net = self.net_water_exchange
+        return net.where(net > 0, 0.0)
+
+    def net_water_exported_at(self, when: BWFTimeLike) -> pd.Series:
+        """
+        Water exported to other utilities for a specific timestamp (positive net exchanges only).
+        Returns empty series if timestamp not found.
+        """
+        net = self.net_water_exchange_at(when)
+        return net.where(net > 0, 0.0)
+
+    @property
+    def net_water_imported(self) -> pd.DataFrame:
+        """
+        Water imported from other utilities (negative net exchanges only, as positive values).
+        """
+        net = self.net_water_exchange
+        return net.where(net < 0, 0.0).abs()
+
+    def net_water_imported_at(self, when: BWFTimeLike) -> pd.Series:
+        """
+        Water imported from other utilities for a specific timestamp (negative net exchanges only, as positive values).
+        Returns empty series if timestamp not found.
+        """
+        net = self.net_water_exchange_at(when)
+        return net.where(net < 0, 0.0).abs()
+
+    @property
+    def debt(self) -> pd.Series:
+        return self._results[WaterUtilityResults.DEBT][self.bwf_id]
+    
+    @property
+    def bond_ratio(self) -> pd.Series:
+        return self._results[WaterUtilityResults.BA2D_RATIO][self.bwf_id]
+
+    @property
+    def investment_budget(self) -> pd.Series:
+        return self._results[WaterUtilityResults.WUIB][self.bwf_id]
+    
+    @property
+    def capex(self) -> pd.Series:
+        return self._results[WaterUtilityResults.CAPEX][self.bwf_id]
+
+    @property
+    def nrw_mitigation_budget(self) -> pd.Series:
+        return self._results[WaterUtilityResults.WLR][self.bwf_id]
+    
+    def get_debt_service(
+            self,
+            year: int
+        ) -> float:
+
+        interests = 0.0
+        princ_amounts = 0.0
+
+        for bond_issuance in self.m_bonds:
+            interests += bond_issuance.interest_due(year=year)
+            princ_amounts += bond_issuance.principal_due(year=year)
+
+        self.track_interests(
+            when=year,
+            value=interests
+        )
+
+        self.track_principal_amounts(
+            when=year,
+            value=princ_amounts
+        )
+
+        return interests + princ_amounts
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -231,6 +373,166 @@ class WaterUtility():
                 freq='YS'
             ),
             entity=f'{self.bwf_id}-{to.bwf_id}', # for the columns {w.id}-{w'.id}
+            values=value
+        )
+
+        return self
+    
+    def track_debt(
+            self,
+            when: BWFTimeLike,
+            value: float
+        ) -> Self:
+        assert np.ndim(value) == 0, "Value for debt is not a scalar"
+
+        self._results.commit(
+            a_property=WaterUtilityResults.DEBT,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=1,
+                freq='YS'
+            ),
+            entity=f'{self.bwf_id}',
+            values=value
+        )
+
+        return self
+
+    def track_capex(
+            self,
+            when: BWFTimeLike,
+            value: float
+        ) -> Self:
+        assert np.ndim(value) == 0, "Value for capex is not a scalar"
+
+        self._results.commit(
+            a_property=WaterUtilityResults.CAPEX,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=1,
+                freq='YS'
+            ),
+            entity=f'{self.bwf_id}',
+            values=value
+        )
+
+        return self
+
+    def track_revenue(
+            self,
+            when: BWFTimeLike,
+            value: float
+        ) -> Self:
+        assert np.ndim(value) == 0, "Value for revenue is not a scalar"
+
+        self._results.commit(
+            a_property=WaterUtilityResults.REV,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=1,
+                freq='YS'
+            ),
+            entity=f'{self.bwf_id}',
+            values=value
+        )
+
+        return self
+
+    def track_nrw_mitigation_budget(
+            self,
+            when: BWFTimeLike,
+            value: float
+        ) -> Self:
+        assert np.ndim(value) == 0, "Value for nrw mitigation is not a scalar"
+
+        self._results.commit(
+            a_property=WaterUtilityResults.WLR,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=1,
+                freq='YS'
+            ),
+            entity=f'{self.bwf_id}',
+            values=value
+        )
+
+        return self
+
+    def track_water_import_cost(
+            self,
+            when: BWFTimeLike,
+            value: float
+        ) -> Self:
+        assert np.ndim(value) == 0, "Value for wic is not a scalar"
+
+        self._results.commit(
+            a_property=WaterUtilityResults.WIC,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=1,
+                freq='YS'
+            ),
+            entity=f'{self.bwf_id}',
+            values=value
+        )
+
+        return self
+    
+    def track_interests(
+            self,
+            when: BWFTimeLike,
+            value: float
+        ) -> Self:
+        assert np.ndim(value) == 0, "Value for interests is not a scalar"
+
+        self._results.commit(
+            a_property=WaterUtilityResults.INT,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=1,
+                freq='YS'
+            ),
+            entity=f'{self.bwf_id}',
+            values=value
+        )
+
+        return self
+    
+    def track_principal_amounts(
+            self,
+            when: BWFTimeLike,
+            value: float
+        ) -> Self:
+        assert np.ndim(value) == 0, "Value for principal amounts is not a scalar"
+
+        self._results.commit(
+            a_property=WaterUtilityResults.PRI,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=1,
+                freq='YS'
+            ),
+            entity=f'{self.bwf_id}',
+            values=value
+        )
+
+        return self
+    
+    def track_embodied_emissions(
+            self,
+            when: BWFTimeLike,
+            value: float
+        ) -> Self:
+        assert np.ndim(value) == 0, "Value for emissions is not a scalar"
+
+        self._results.commit(
+            a_property=WaterUtilityResults.GHG_EMB,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=1,
+                freq='YS'
+            ),
+            entity=f'{self.bwf_id}',
             values=value
         )
 

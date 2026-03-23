@@ -22,13 +22,16 @@ from .energy import configure_energy_system
 from .connections import build_piping_infrastructure
 from .water_utilities import WaterUtility, configure_water_utilities
 from .national_context import NationalContext
-from .services.evaluation import escalate_costs, age_water_utilities
+from .services.evaluation import escalate_costs, age_water_utilities, age_national_context_assets
 
 
 def get_package_version():
     version_file = os.path.join(os.path.dirname(__file__), 'VERSION')
     with open(version_file, encoding="utf-8") as f:
         return f.read().strip()
+
+def parse_version(ver):
+    return tuple(int(x) for x in ver.lstrip('v').split('.')[:3])
 
 # Zenodo concept DOI (resolves to latest)
 ZENODO_CONCEPT_ID = "17698299"
@@ -87,8 +90,18 @@ def configure_system(
     if os.path.isfile(data_version_file_path):
         with open(data_version_file_path) as f:
             data_version = f.read().strip()
+        pkg_version = get_package_version()
+        
+        pkg_version_tuple = parse_version(pkg_version)
+        data_version_tuple = parse_version(data_version)
 
-            if data_version != get_package_version():
+        # Before v0.5.0: require exact match
+        if pkg_version_tuple < (0, 5, 0):
+            if data_version != pkg_version:
+                data_outdated = True
+        else:
+            # v0.5.0 and after: only require major/minor match
+            if data_version_tuple[:2] != pkg_version_tuple[:2]:
                 data_outdated = True
     else:
         data_outdated = True
@@ -237,6 +250,13 @@ def configure_system_ex(
                 settings=settings
             )
 
+            age_national_context_assets(
+                year=settings.start_year-1,
+                national_context=national_context,
+                water_utilities=water_utilities,
+                settings=settings
+            )
+
         return settings, national_context, water_utilities
 
 from .core.base_model import DynamicProperties, BWFResult
@@ -323,7 +343,7 @@ def save_system_status(
         configuration['economy'] = dump_economy(
             national_context.bonds_settings,
             national_context.economy,
-            {},
+            {wu.bwf_id: wu.m_bonds for wu in water_utilities},
             results_dir
         )
         progress.update(saving_task, advance=1)
@@ -584,8 +604,9 @@ def save_epanet_networks_results(
                         national_context.electricity_price_pattern.asof(ele_info_ts)    
                     )
 
+                    week_name = f'{week:2d}' if week > 0 else 'avg'
                     cluster.network.saveinpfile(
-                        str(networks_dir / (cluster.filename + '.inp'))
+                        str(networks_dir / (cluster.filename + '-W'+week_name+'.inp'))
                     )
 
                     progress.update(saving_task, advance=1)

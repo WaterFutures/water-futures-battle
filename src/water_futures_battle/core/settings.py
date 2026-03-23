@@ -68,6 +68,10 @@ class Settings:
         return self.get_random_generator('municipalities-res_p_weight')
 
     @property
+    def pipes_frict_f_decay_rng(self) -> np.random.Generator:
+        return self.get_random_generator('pipes-fric_f_decay')
+
+    @property
     def pipes_lifetime_rng(self) -> np.random.Generator:
         return self.get_random_generator('pipes-lifetime')
     
