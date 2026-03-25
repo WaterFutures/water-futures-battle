@@ -9,6 +9,31 @@ website_page_authors:
 
 # Changelog 🕑
 
+## The Battle of the Water Futures [Data and Software - [v0.5.2](https://doi.org/10.5281/zenodo.17698299)]
+
+**Release Date:** 25th March 2026
+
+This patch release fixes a few minor bugs.
+
+### What's Changed
+
+- **Code**
+  - Bug fix: Issue #22 pipes and pumps failing date handled as int instead of datetime
+  - Bug fix: Issue #23 pipe and pump options name in masterplan
+  - Bug fix: few other minors to make the mock up masterplan (shared by email) work
+  
+### What's Unchanged
+
+Everything else but the python library.
+
+### Important Notes
+
+The evaluator is still incomplete.
+A future patch releases of the Python library (0.5.x) will add the last missing feature (complete hydraulic simulations and opex).
+
+---
+
+
 ## The Battle of the Water Futures [Data and Software - [v0.5.1](https://doi.org/10.5281/zenodo.17698299)]
 
 **Release Date:* 23rd March 2026
