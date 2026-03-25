@@ -27,6 +27,7 @@ def configure_energy_system(
 
     solar_farms_res = SolarFarmsResults() 
 
+    SolarFarm.set_dynamic_properties(energysys_db)
     SolarFarm.set_results(solar_farms_res)
 
     solar_farms_descriptions = pd.read_excel(

@@ -12,7 +12,7 @@ from ..pumping_stations.entities import PumpingStation
 from .dynamic_properties import SolarFarmsResults, EnergySysDB
 
 
-@bwf_entity(db_type=None, results_type=SolarFarmsResults)
+@bwf_entity(db_type=EnergySysDB, results_type=SolarFarmsResults)
 @dataclass(frozen=True)
 class SolarFarm:
     
@@ -66,6 +66,7 @@ class SolarFarm:
     
     def __post_init__(self):
         
+        assert self._dynamic_properties is not None
         assert self._results is not None
 
         # Register this solar farm on the connected entity
@@ -133,7 +134,7 @@ class SolarFarm:
     
     @property
     def construction_unit_costs(self) -> pd.Series:
-        return self._dynamic_properties[EnergySysDB.UNIT_COST]["NL0000"]
+        return self._dynamic_properties[EnergySysDB.SOLAR_COST][self.connected_entity.province.state.cbs_id]
     
     
 @dataclass(frozen=True)
