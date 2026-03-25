@@ -316,7 +316,7 @@ def run_hydraulic_simulations(
 
     def compute_hydraulic_results(cluster):
         # Apply demands
-        date_range = pd.date_range("2000-01-01 00:00:00", "2000-01-30 23:00:00", freq="h")
+        date_range = pd.date_range(f"{year}-01-01 00:00:00", f"{year}-01-30 23:00:00", freq="h")
         apply_demand_patterns(
             cluster.network,
             national_context.municipalities_results["demand-total"].loc[date_range]
@@ -366,6 +366,9 @@ def run_hydraulic_simulations(
             # Utilities water exchanges
             # let's sort them to save the results always in order
             sorted_wus = sorted((wu for wu in cluster.water_utilities), key= lambda x: x.bwf_id)
+            sim_results.cross_utilities_flows.columns = [
+                c[:6] for c in sim_results.cross_utilities_flows.columns
+            ] # convert the columns from the pipe name to the connection name
             net_exchanges = sim_results.cross_utilities_flows.sum(axis=0, skipna=True)
             for i, wu_from in enumerate(sorted_wus):
                 for j, wu_to in enumerate(sorted_wus[i+1:]):

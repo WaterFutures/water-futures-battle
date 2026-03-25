@@ -29,9 +29,9 @@ class OpenSource:
         # Let's get the mandatory arguements
         source_id = intervention_desc[WaterSource.ID]
         source_capacity = intervention_desc['source_capacity']
-        pump_option_id = intervention_desc[PumpOption.ID]
+        pump_option_id = intervention_desc['pump_'+PumpOption.ID]
         n_pumps = intervention_desc['n_pumps']
-        pipe_option_id = intervention_desc[PipeOption.ID]
+        pipe_option_id = intervention_desc['pipe_'+PipeOption.ID]
         
         for source, (pumping_station, connection) in water_utility.m_supplies.items():
 
@@ -195,7 +195,7 @@ class InstallPipe:
     ) -> Tuple[float, float]:
         
         cnn_id = intervention_desc[Connection.ID]
-        pipe_option_id = intervention_desc[PipeOption.ID]
+        pipe_option_id = intervention_desc['pipe_'+PipeOption.ID]
         pipe_inst_date = timestampify(year)
 
         connection = next((c for c in water_utility.connections if c.bwf_id == cnn_id), None)
@@ -257,7 +257,7 @@ class InstallPumps:
         ) -> Tuple[float, float]:
 
         source_id = intervention_desc[WaterSource.ID]
-        pump_option_id = intervention_desc[PumpOption.ID]
+        pump_option_id = intervention_desc['pump_'+PumpOption.ID]
         pump_inst_date = timestampify(year)
 
         pump_station = next((ps for ps in water_utility.pumping_stations if ps.source.bwf_id == source_id), None)
@@ -273,7 +273,7 @@ class InstallPumps:
 
         if intervention_desc["behaviour"] == "replace":
             for pump in pump_station.active_pumps(year).values():
-                pump.decommission(pump_option_id)
+                pump.decommission(pump_inst_date)
                 
         cost = 0.0
         emiss = 0.0
