@@ -316,7 +316,7 @@ def run_hydraulic_simulations(
 
     def compute_hydraulic_results(cluster):
         # Apply demands
-        date_range = pd.date_range("2000-01-01 00:00:00", "2000-01-30 23:00:00", freq="h")
+        date_range = pd.date_range(f"{year}-01-01 00:00:00", f"{year}-01-30 23:00:00", freq="h")
         apply_demand_patterns(
             cluster.network,
             national_context.municipalities_results["demand-total"].loc[date_range]
