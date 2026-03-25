@@ -22,7 +22,7 @@ class InstallPipe:
     ) -> Tuple[float, float, Tuple[WaterUtility, WaterUtility]]:
         
         cnn_id = intervention_desc[Connection.ID]
-        pipe_option_id = intervention_desc[PipeOption.ID]
+        pipe_option_id = intervention_desc['pipe_'+PipeOption.ID]
         pipe_inst_date = timestampify(year)
 
         connection = next((c for c in national_context.cross_utility_connections if c.bwf_id == cnn_id), None)
