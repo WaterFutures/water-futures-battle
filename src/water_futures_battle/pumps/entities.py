@@ -172,7 +172,9 @@ class Pump:
         if self._sampled_lifetime <= 0:
             raise ValueError(f"Impossible to fail pump {self.bwf_id}.",
                              "This pump has no sampled lifetime because it has a decommision date.")
-        return self.decommission(self.installation_date.year+self._sampled_lifetime)
+        return self.decommission(
+            self.installation_date+pd.DateOffset(years=self._sampled_lifetime)
+        )
     
     def track_ele_energy(
             self,
