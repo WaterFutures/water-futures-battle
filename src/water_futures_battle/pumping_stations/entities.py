@@ -55,6 +55,13 @@ class PumpingStation:
 
         cls._global_solar_farms[cls.bwf_id].add(a_solar_farm)
         return
+    
+    @property
+    def solar_farms(self) -> Set['SolarFarm']:
+        if self.bwf_id not in self._global_solar_farms:
+            return set()
+        
+        return self._global_solar_farms[self.bwf_id]
 
     @classmethod
     def from_row(
@@ -95,6 +102,16 @@ class PumpingStation:
     @property
     def province(self):
         return self.source.province
+
+    @property
+    def onsite_energy_production(self) -> pd.Series:
+        series_list = [sf.electricity_yield for sf in self.solar_farms]
+        if series_list:
+            total_ele_yield = pd.concat(series_list, axis=1).sum(axis=1)
+        else:
+            total_ele_yield = pd.Series(dtype=float, index=pd.DatetimeIndex([]))
+        
+        return total_ele_yield
     
     def is_active(self, when: BWFTimeLike) -> bool:
         """A pumping station is active if the source is and it has active pumps"""
@@ -110,6 +127,11 @@ class PumpingStation:
     def has_active_pumps(self, when: BWFTimeLike) -> bool:
         return len(self.active_pumps(when=when)) > 0
     
+    def peak_discharge(self, when: BWFTimeLike) -> float:
+        return sum([ p.runout_flow
+            for p in self.active_pumps(when=when).values()
+        ])
+
     def install_pump(
             self,
             pump_option: PumpOption,

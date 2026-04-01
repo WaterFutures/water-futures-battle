@@ -54,7 +54,7 @@
             "packageManager": "ms-python.python:pip"
         },
         {
-            "path": "data/economy/preprocessing-steps",
+            "path": "data/economy/preprocessing-scripts",
             "envManager": "ms-python.python:venv",
             "packageManager": "ms-python.python:pip"
         },
@@ -68,5 +68,7 @@
             "envManager": "ms-python.python:venv",
             "packageManager": "ms-python.python:pip"
         }
-    ]
+    ],
+    "python-envs.defaultPackageManager": "ms-python.python:pip",
+    "python-envs.defaultEnvManager": "ms-python.python:venv"
 }

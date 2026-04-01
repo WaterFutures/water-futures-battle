@@ -257,3 +257,5 @@ data/sources/preprocessing-scripts/*.html
 
 data/connections/preprocessing-scripts/unused_peer_connections.csv
 data/connections/.temp-*/
+
+teams/

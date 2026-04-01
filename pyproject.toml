@@ -1,6 +1,6 @@
 [project]
 name = "water-futures-battle"
-version = "0.5.2"
+version = "0.5.3"
 description = "Python project for the Battle of the Water Futures, originally developed to be hosted at WDSA/CCWI 2026 conference, May 18-21, Paphos, Cyprus."
 readme = "README.md"
 license = "MIT"
@@ -8,7 +8,6 @@ license-files=["LICENSE"]
 keywords=["water", "urban water systems", "smart cities", "battle", "competition", "battle water networks", "planning", "deep uncertainties", "decision-making"]
 classifiers = [
     "Development Status :: 3 - Alpha",
-    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: MacOS",
@@ -60,7 +59,7 @@ Repository = "https://github.com/WaterFutures/water-futures-battle"
 "Zenodo" = "https://doi.org/10.5281/zenodo.17698299"
 
 [build-system]
-requires = ["uv_build>=0.8.17,<0.9.0"]
+requires = ["uv_build>=0.11.2,<0.12.0"]
 build-backend = "uv_build"
 
 [dependency-groups]

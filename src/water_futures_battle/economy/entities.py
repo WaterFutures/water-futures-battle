@@ -3,7 +3,7 @@ from typing import Any, Dict, List
 
 import pandas as pd
 
-from ..core.utility import timestampify
+from ..core.utility import timestampify, BWFTimeLike
 
 @dataclass(frozen=True)
 class BondsSettings:
@@ -61,11 +61,11 @@ class BondIssuance:
         """Calculate total principal repayment at maturity."""
         return self.n_bonds * self.FACE_VALUE
 
-    def is_mature(self, year: int) -> bool:
+    def is_mature(self, year: BWFTimeLike) -> bool:
         """Check if bonds have matured in the current year."""
         return timestampify(year, errors='raise') >= self.maturity_year
 
-    def payment_due(self, year: int) -> float:
+    def payment_due(self, year: BWFTimeLike) -> float:
         """
         Calculate total payment due in a given year.
         Returns coupon payment (and principal if matured).
@@ -83,7 +83,7 @@ class BondIssuance:
 
         return payment
     
-    def interest_due(self, year: int) -> float:
+    def interest_due(self, year: BWFTimeLike) -> float:
         """
         Calculate the interest due in a given year.
         Returns coupon payment
@@ -95,13 +95,44 @@ class BondIssuance:
         
         return self.interest
     
-    def principal_due(self, year: int) -> float:
+    def principal_due(self, year: BWFTimeLike) -> float:
         current_year = timestampify(year, errors='raise')
 
         if current_year == self.maturity_year:
             return self.principal
         
         return 0.0
+
+    def net_present_value(self, year: BWFTimeLike, yield_rate: float) -> float:
+        """
+        Calculates the Net Present Value (NPV) of all remaining cash flows 
+        (interest and principal) from the year onwards.
+        
+        :param year: The year from which we are discounting.
+        :param yield_rate: The annual discount rate (e.g., 0.035 for 3.5%).
+        """
+        ts = timestampify(year, errors='raise')
+        
+        # If the bond has already matured before this year, NPV is 0
+        if ts > self.maturity_year:
+            return 0.0
+            
+        total_npv = 0.0
+        
+        # Start from the evaluation year and go until maturity
+        start_year = ts.year
+        end_year = self.maturity_year.year
+        
+        for year in range(start_year, end_year + 1):
+            payment = self.payment_due(year)
+            
+            if payment > 0:
+                # t is the time delta in years
+                t = year - start_year
+                # Discount the payment to the evaluation_year
+                total_npv += payment / ((1 + yield_rate) ** t)
+                
+        return total_npv
 
     def to_dict(self) -> Dict[str, Any]:
         return {

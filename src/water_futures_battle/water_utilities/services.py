@@ -8,7 +8,7 @@ import pandas as pd
 
 from ..core import Settings
 from ..core.base_model import StaticProperties
-from ..core.utility import timestampify
+from ..core.utility import timestampify, filter_columns
 from ..core.views import get_snapshot, YearlyView
 from ..nrw_model import NRWClass, NRWModelSettings
 from ..nrw_model.dynamic_properties import NRWModelDB
@@ -22,15 +22,14 @@ from ..jurisdictions import (
     generate_water_demand,
     age_distribution_networks
 )
-
-
-
 from ..sources.entities import WaterSource, SourcesContainer
+from ..sources.services import check_groundwater_permits
 from ..pumping_stations.entities import PumpingStation
 from ..pumps.entities import PumpOption
 from ..economy.entities import BondIssuance
+from ..energy.dynamic_properties import EnergySysDB
 from ..energy.entities import SolarFarm
-from ..energy.services import get_solar_radiation_of_year, get_solar_yield
+from ..energy.services import get_solar_radiation_of_year, get_solar_yield, get_hourly_electricity_price_of_year
 from ..pipes.dynamic_properties import PipeOptionsDB
 from ..pipes.entities import PipeOption
 from ..connections.entities import Connection, SupplyConnection, PeerConnection, SelfLoopConnection, ClosedWSourceConnection
@@ -632,6 +631,142 @@ def realise_solar_yields(
         # )
 
     return solar_yields
+
+def settle_operations_impact(
+    water_utility: WaterUtility,
+    energy_sys_db: EnergySysDB,
+    year: int,
+    settings: Settings,
+    pumps_ele_consumption: pd.DataFrame,
+    sources_production: pd.DataFrame
+) -> Tuple[float, float, float]:
+    
+    wu_opex = 0.0
+    wu_emissions = 0.0
+    wu_gw_fines = 0.0
+
+    # Get this year electricity price and emission factor
+    hourly_ele_price = get_hourly_electricity_price_of_year(
+        scope=water_utility.state.cbs_id,
+        energy_sys_db=energy_sys_db,
+        year=year
+    )
+    ts = timestampify(year)
+
+    # emission factor (convert to kgCO2eq)
+    ef = float(energy_sys_db[EnergySysDB.EMISS_FACTOR].asof(ts)[water_utility.state.cbs_id]) / 1000
+    
+    # Opex and emissions of water sources
+    # Eq. 8
+    for source in water_utility.active_sources(when=year):
+        source_opex = 0.0
+
+        # Fixed costs (Fs term of Eq. 5)
+        # Fixed opex is an uncertain unit cost, so we extract the bounds, sample and multiply by the nominal capacity
+        fixed_opex_uc_bounds = source.opex_fixed_unit_cost.loc[ts].values
+        fixed_opex_uc = settings.sources_fixed_opex_uc_rng.uniform(
+            low=fixed_opex_uc_bounds[0],
+            high=fixed_opex_uc_bounds[1]
+        )
+        source_opex += source.nominal_capacity * fixed_opex_uc
+
+        # Eq 7
+        source_production = sources_production[source.bwf_id]
+        source_energy_consumption = source_production * source.opex_vol_enfactor
+        
+        # Eq 6
+        source_energy_production = source.onsite_energy_production
+        source_energy_production = source_energy_production[source_energy_production.index.year == year]
+
+        if not source_energy_production.empty:
+            source_grid_energy = source_energy_consumption - source_energy_production
+            source_grid_energy.clip(lower=0.0)
+        else:
+            source_grid_energy = source_energy_consumption
+
+        # multiply each hour grid energy consumption by its electricity price
+        source_grid_ele_cost = hourly_ele_price * source_grid_energy
+
+        # Add the volumetric cost for energy (second term of Eq 5)
+        source_opex += sum(source_grid_ele_cost)
+
+        # Add the volumetric cost for non-energy related (third and fourth term of Eq 5)
+        source_total_production = source_production.sum()
+
+        source_under_capacity_production = min(
+            source_total_production, # this is m^3/year
+            source.nominal_capacity*365*source.capacity_target_factor # convert also to m^3/year
+        )
+
+        source_over_capacity_production = max(
+            source_total_production - source_under_capacity_production,
+            0.0
+        )
+
+        vol_other_opex_uc_bounds = source.opex_volum_other_unit_cost.loc[ts].values
+        vol_other_opex_uc = settings.sources_vol_other_opex_uc_rng.uniform(
+            low=vol_other_opex_uc_bounds[0],
+            high=vol_other_opex_uc_bounds[1]
+        )
+
+        # Eq 5 (third term)
+        source_opex += source_under_capacity_production * vol_other_opex_uc
+
+        # Eq 5 (fourth term)
+        source_opex += source_over_capacity_production * vol_other_opex_uc * source.opex_volum_other_multiplier
+
+        # Aggregate on global wu opex and emissions
+        wu_opex += source_opex
+        wu_emissions += ef*sum(source_grid_energy)
+
+    # Opex and emissions of pumping stations
+    for pstation in water_utility.active_pumping_stations(when=year):
+
+        # Get the consumption of the pumps belonging to this station using the
+        # filter_columns utility
+        pstat_ele_cons = pumps_ele_consumption[
+            filter_columns(
+                pumps_ele_consumption,
+                logical_part=pstation.bwf_id
+            )
+        ]
+        pstat_ele_cons = pstat_ele_cons.sum(axis=1)
+        
+        pstat_ele_prod = pstation.onsite_energy_production
+        pstat_ele_prod = pstat_ele_prod[pstat_ele_prod.index.year == year]
+
+        if not pstat_ele_prod.empty:
+            pstat_ele_grid = pstat_ele_cons - pstat_ele_prod
+            pstat_ele_grid.clip(lower=0.0)
+        else:
+            pstat_ele_grid = pstat_ele_cons
+
+        pstat_ele_cost = pstat_ele_grid * hourly_ele_price
+
+        wu_opex += sum(pstat_ele_cost)
+        wu_emissions += ef*sum(pstat_ele_grid)
+
+    # Handle the groundwater permits
+    wu_gw_fines = check_groundwater_permits(
+        gw_sources=water_utility.active_gw_sources(when=year),
+        sources_year_production=sources_production,
+        year=year
+    )
+    
+    water_utility.track_opex(
+        when=year,
+        value=wu_opex
+    )
+    water_utility.track_operations_emissions(
+        when=year,
+        value=wu_emissions
+    )
+    water_utility.track_gw_permit_fine(
+        when=year,
+        value=wu_gw_fines
+    )
+
+    return wu_opex, wu_emissions, wu_gw_fines
 
 def age_water_utility(
         wu: WaterUtility,

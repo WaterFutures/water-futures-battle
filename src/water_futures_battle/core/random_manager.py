@@ -14,6 +14,8 @@ class RandomManager:
         'new_sources-construction_time',
         'new_sources-opex_vol_ene_factor',
         'solar_radiation-pvlib_year',
+        'sources-opex-fixed',
+        'sources-opex-volum-other',
     ]
     
     def __init__(self, master_seed: int):

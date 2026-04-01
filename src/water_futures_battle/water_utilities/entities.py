@@ -77,6 +77,8 @@ class WaterUtility():
         'bond_ratio': float,
         'investment_budget': float,
         'capex': float,
+        'opex': float,
+        'gw_permit_fine': float,
         'nrw_mitigation_budget': float
     }
 
@@ -130,6 +132,16 @@ class WaterUtility():
     
     def active_sources(self, when: BWFTimeLike) -> Set[WaterSource]:
         return set(s for s in self.m_supplies.keys() if s.is_active(when=when))
+    
+    @property
+    def gw_sources(self) -> Set[GroundWater]:
+        return set( s
+            for s in self.m_supplies.keys()
+            if s.bwf_id.startswith(GroundWater.ID_PREFIX)
+        )
+    
+    def active_gw_sources(self, when: BWFTimeLike) -> Set[GroundWater]:
+        return set(s for s in self.gw_sources if s.is_active(when=when))
     
     @property
     def solar_farms(self) -> Set[SolarFarm]:
@@ -306,10 +318,26 @@ class WaterUtility():
     @property
     def capex(self) -> pd.Series:
         return self._results[WaterUtilityResults.CAPEX][self.bwf_id]
+    
+    @property
+    def opex(self) -> pd.Series:
+        return self._results[WaterUtilityResults.OPEX][self.bwf_id]
+    
+    @property
+    def gw_permit_fine(self) -> pd.Series:
+        return self._results[WaterUtilityResults.FIN][self.bwf_id]
 
     @property
     def nrw_mitigation_budget(self) -> pd.Series:
         return self._results[WaterUtilityResults.WLR][self.bwf_id]
+
+    @property
+    def ghg_embedded_emissions(self) -> pd.Series:
+        return self._results[WaterUtilityResults.GHG_EMB][self.bwf_id]
+    
+    @property
+    def ghg_operations_emissions(self) -> pd.Series:
+        return self._results[WaterUtilityResults.GHG_OPE][self.bwf_id]
     
     def get_debt_service(
             self,
@@ -349,7 +377,7 @@ class WaterUtility():
         ) -> Self:
         """
         Track the net water exchange between one utility (from, i.e., self) to 
-        another one ($\Delta Q _w^w'(y)$).
+        another one ($Delta Q _w^w'(y)$).
 
         It expect a single value representing the total net exchange between two utilities
         
@@ -407,6 +435,46 @@ class WaterUtility():
 
         self._results.commit(
             a_property=WaterUtilityResults.CAPEX,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=1,
+                freq='YS'
+            ),
+            entity=f'{self.bwf_id}',
+            values=value
+        )
+
+        return self
+
+    def track_opex(
+            self,
+            when: BWFTimeLike,
+            value: float
+        ) -> Self:
+        assert np.ndim(value) == 0, "Value for opex is not a scalar"
+
+        self._results.commit(
+            a_property=WaterUtilityResults.OPEX,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=1,
+                freq='YS'
+            ),
+            entity=f'{self.bwf_id}',
+            values=value
+        )
+
+        return self
+    
+    def track_gw_permit_fine(
+            self,
+            when: BWFTimeLike,
+            value: float
+        ) -> Self:
+        assert np.ndim(value) == 0, "Value for fine is not a scalar"
+
+        self._results.commit(
+            a_property=WaterUtilityResults.FIN,
             timestamps=pd.date_range(
                 start=timestampify(when),
                 periods=1,
@@ -527,6 +595,26 @@ class WaterUtility():
 
         self._results.commit(
             a_property=WaterUtilityResults.GHG_EMB,
+            timestamps=pd.date_range(
+                start=timestampify(when),
+                periods=1,
+                freq='YS'
+            ),
+            entity=f'{self.bwf_id}',
+            values=value
+        )
+
+        return self
+    
+    def track_operations_emissions(
+            self,
+            when: BWFTimeLike,
+            value: float
+        ) -> Self:
+        assert np.ndim(value) == 0, "Value for emissions is not a scalar"
+
+        self._results.commit(
+            a_property=WaterUtilityResults.GHG_OPE,
             timestamps=pd.date_range(
                 start=timestampify(when),
                 periods=1,

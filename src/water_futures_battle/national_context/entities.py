@@ -52,6 +52,12 @@ class WaterUtilitiesCluster:
         return set([
             s for wu in self.water_utilities for s in wu.active_sources(when=self.year)
         ])
+
+    @property
+    def pumping_stations(self) -> Set[PumpingStation]:
+        return set([
+            ps for wu in self.water_utilities for ps in wu.active_pumping_stations(when=self.year)
+        ])
     
     @property
     def filename(self) -> str:
@@ -129,6 +135,9 @@ class NationalContext:
     _all_solar_farms: Set[SolarFarm]
     _all_connections: Set[Connection]
 
+    def __repr__(self):
+        return f"<NationalContext id={id(self)}>"
+
     @property
     def water_utilities_db(self) -> WaterUtilityDB:
         return WaterUtility._dynamic_properties
@@ -144,6 +153,10 @@ class NationalContext:
     @property
     def municipalities_results(self) -> MunicipalitiesResults:
         return Municipality._results
+    
+    @property
+    def municipalities_total_demands(self) -> pd.DataFrame:
+        return Municipality._results[MunicipalitiesResults.DEMAND_TOTAL]
     
     def track_municipalities_undelivered_demand(
             self,
@@ -174,6 +187,10 @@ class NationalContext:
     @property
     def sources_results(self) -> SourcesResults:
         return GroundWater._results
+    
+    @property
+    def sources_production(self) -> pd.DataFrame:
+        return GroundWater._results[SourcesResults.PRODUCTION]
     
     def track_sources_production(
             self, 

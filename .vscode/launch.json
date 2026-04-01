@@ -5,6 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug stage extender",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "1",
+                "bwf_results-historical_stage",
+                "bwf_results-historical_stage"
+            ]
+        },
+        {
             "name": "Run eval on historical stage",
             "type": "debugpy",
             "request": "launch",
@@ -38,13 +50,13 @@
             "justMyCode": false
         },
         {
-            "name": "Run eval on stage 1",
+            "name": "Debug eval on stage 1",
             "type": "debugpy",
             "request": "launch",
             "module": "src.water_futures_battle",
             "args": [
-                "${workspaceFolder}/bwf_results-historical_stage/masterplan.json",
-                "${workspaceFolder}/bwf_results-historical_stage/configuration.yaml"
+                "${workspaceFolder}/teams/whale/1/bwf_inputs-whale-stage_1/masterplan.yaml",
+                "${workspaceFolder}/teams/whale/1/bwf_inputs-whale-stage_1/configuration.yaml"
             ],
             "console": "integratedTerminal"
         }

@@ -12,8 +12,10 @@ import pandas as pd
 
 from ..core import Settings
 from ..core.base_model import StaticProperties
+from ..core.utility import timestampify
 from ..jurisdictions.entities import State
 
+from .enums import GroundwaterPermitDeviation
 from .properties import SourcesResults, GroundWaterDB, SurfaceWaterDB, DesalinationDB
 from .entities import WaterSource, GroundWater, SurfaceWater, Desalination, SourcesContainer, SourcesSettings
 
@@ -124,3 +126,44 @@ def dump_sources(
         DesalinationDB.NAME: as_rel_path(dp_path_des),
         **src_set_config
     }
+
+def check_groundwater_permits(
+        gw_sources: Set[GroundWater],
+        sources_year_production: pd.DataFrame,
+        year: int
+) -> float:
+    
+    total_fines_amount = 0.0
+
+    gw_sources_permits = {
+        s.bwf_id: s.permit
+        for s in gw_sources
+    }
+    gw_sources_id = list(gw_sources_permits.keys())
+
+    gw_sources_cum_year_production = sources_year_production[
+        gw_sources_id
+    ].sum(axis=0)
+
+    gw_permits_deviation = (gw_sources_cum_year_production - pd.Series(gw_sources_permits)).clip(lower=0)
+
+    gw_permit_dev_classes = gw_permits_deviation.apply(GroundwaterPermitDeviation.determine_class)
+
+    ts = timestampify(year)
+    all_fine_schema = GroundWater._dynamic_properties[GroundWaterDB.FINE_AMOUNT].asof(ts)
+
+    for dev_class in gw_permit_dev_classes:
+        # of course, no cost associated with compliant sources
+        if dev_class == GroundwaterPermitDeviation.COMPLIANT:
+            continue
+
+        # non compliant source, we need the fine_schema_for this specific source
+        # simplify
+        fine_schema_col = '-'.join([
+            'NL0000', # this should the highest available "source level"
+            GroundwaterPermitDeviation(dev_class).name
+        ])
+
+        total_fines_amount += float(all_fine_schema[fine_schema_col])
+
+    return total_fines_amount

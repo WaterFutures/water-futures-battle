@@ -29,6 +29,7 @@ class WaterUtilityResults(BWFResult):
     REV = 'revenue'
     WLR = 'NRW_mitigation_budget'
     WIC = 'water_import_cost'
+    FIN = 'gw_permit_fine'
     WUIB = 'investment_budget'
     INT = 'interests_paid'
     PRI = 'principal_amount_paid'
@@ -46,6 +47,7 @@ class WaterUtilityResults(BWFResult):
         REV,
         WLR,
         WIC,
+        FIN,
         WUIB,
         INT,
         PRI,
