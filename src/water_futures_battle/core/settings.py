@@ -1,12 +1,23 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from importlib.resources import files
 from typing import Self, Dict, Any, List
 
 import numpy as np
+import pandas as pd
 
 from .random_manager import RandomManager, FakeLifetimeGenerator
 
 _HISTORICAL_PERIOD_END = 2024
 
+def load_cost_normalisation_df() -> pd.DataFrame:
+    path = files("water_futures_battle.core").joinpath("cost_normalisation.csv")
+    with path.open("r") as f:
+        return pd.read_csv(f, index_col='year')
+    
+try:
+    _cost_normalisation_df = load_cost_normalisation_df()
+except Exception:
+    _cost_normalisation_df = pd.DataFrame(columns=[f"WU{i:02d}" for i in range(1, 11)])
 
 @dataclass(frozen=True)
 class Settings:
@@ -23,6 +34,9 @@ class Settings:
     lifeline_volume: float
     LIFELINE_VOLUME = 'lifeline_volume'
 
+    national_investment_budget: float
+    NIB='national_budget'
+
     AVAILABLE_CORES = 'available_cores'
     available_cores: int
 
@@ -36,8 +50,18 @@ class Settings:
                 master_seed=config[cls.SEED]
             ),
             lifeline_volume=config[cls.LIFELINE_VOLUME],
+            national_investment_budget=config.get(cls.NIB, 0),
             available_cores=config.get(cls.AVAILABLE_CORES, 1),
         )
+    
+    def __post_init__(self):
+        
+        for year in self.years_to_simulate:
+            if year not in _cost_normalisation_df.index:
+                _cost_normalisation_df.loc[year] = {
+                    f"WU{i:02d}": 0.0
+                    for i in range(1, 11)
+                }
 
     @property
     def years_to_simulate(self) -> List[int]:
@@ -78,3 +102,14 @@ class Settings:
     @property
     def solar_radiation_pvlib_year_rng(self) -> np.random.Generator:
         return self.get_random_generator('solar_radiation-pvlib_year')
+    
+    @property
+    def sources_fixed_opex_uc_rng(self) -> np.random.Generator:
+        return self.get_random_generator('sources-opex-fixed')
+
+    @property
+    def sources_vol_other_opex_uc_rng(self) -> np.random.Generator:
+        return self.get_random_generator('sources-opex-volum-other')
+    
+    def _cost_normalization(self, year: int, wu_id: str) -> float:
+        return float(_cost_normalisation_df.loc[year, wu_id])

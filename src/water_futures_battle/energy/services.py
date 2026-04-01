@@ -8,12 +8,13 @@ import pvlib
 
 from ..core import Settings
 from ..core.base_model import StaticProperties
+from ..core.utility import timestampify
 from ..jurisdictions.entities import State
 from ..sources.entities import SourcesContainer
 from ..pumping_stations.entities import PumpingStation
 
 from .dynamic_properties import EnergySysDB, SolarFarmsResults
-from .entities import SolarFarm
+from .entities import SolarFarm, ElectricityPricePattern
 
 def configure_energy_system(
         config: dict,
@@ -95,7 +96,7 @@ def get_solar_radiation_of_year(
 
     times = pd.date_range(
         start=f'{year}-01-01',
-        end=f'{year}-12-31',
+        end=f'{year}-12-31 23:00',
         freq='1h',
         tz=state.time_zone
     )
@@ -127,11 +128,11 @@ def get_solar_radiation_of_year(
         ghi_synthetic[mask] = ghi_clearsky[mask] * target_avg / current_avg
 
     # Scale dni and hic with the same scaling
-    ghi_scale = np.divide(
-        ghi_synthetic.to_numpy(), ghi_clearsky.to_numpy(),
-        where=ghi_clearsky > 0,
-        out=np.zeros_like(ghi_clearsky)
-    )
+    ghi_clearsky_np = ghi_clearsky.to_numpy()
+    ghi_synthetic_np = ghi_synthetic.to_numpy()
+    safe_clearsky = np.where(ghi_clearsky_np > 0, ghi_clearsky_np, 1)
+    ghi_scale = np.where(ghi_clearsky_np > 0, ghi_synthetic_np / safe_clearsky, 0.0)
+
     dni_synthetic = (clearsky['dni'] * ghi_scale)
     dhi_synthetic = (clearsky['dhi'] * ghi_scale)
 
@@ -159,3 +160,42 @@ def get_solar_yield(
     ) -> np.ndarray:
 
     return solar_radiation * solar_farm.capacity / IRRADIANCE_AT_STC * DEFAULT_SOLAR_YIELD_EFFICIENCY
+
+
+def get_hourly_electricity_price_of_year(
+        scope: str,
+        energy_sys_db: EnergySysDB,
+        year: int
+) -> np.ndarray:
+    """
+    Return a year of data combining the electricicty price and electricity price pattern
+    in a given year.
+    """
+    ele_ucs = energy_sys_db[EnergySysDB.EPRICE_UNIT]
+    ele_patterns = energy_sys_db[EnergySysDB.EPRICE_PATT]
+
+    # we create the array by merging the first day (holiday, thus like a sunday)
+    # with 53 weeks, i.e, 53 times a pattern, we then remove the extra days
+    sub_patterns = []
+
+    # First dya of the year: Take a sunday price and data as of 1st January
+    ts = timestampify(year)
+    ele_uc = ele_ucs.asof(ts)[scope]
+    ele_pattern = ele_patterns.asof(ts).to_numpy()
+    sub_patterns.append(
+        ele_uc * ele_pattern[-24:]
+    )
+
+    ts += pd.DateOffset(hours=24)
+    for i in range(53):
+        curr_ts = ts + pd.DateOffset(weeks=i)
+
+        ele_uc = ele_ucs.asof(curr_ts)[scope]
+        ele_pattern = ele_patterns.asof(curr_ts).to_numpy()
+        sub_patterns.append(
+            ele_uc * ele_pattern
+        )
+
+    full_pattern = np.concat(sub_patterns, axis=0)[:24*365]
+    
+    return full_pattern

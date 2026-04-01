@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Callable, Dict, List, Optional, Protocol, Type, TypeVar
+from typing import Callable, Dict, List, Optional, Protocol, Type, TypeVar, Union
 
 import pandas as pd
 
@@ -25,48 +25,156 @@ class PropertiesContainer:
         raise AttributeError(f"'{type(self).__name__}' object has no attribute '{attr}'")
     
     def dump(self,
-             path: Optional[Path] = None,
-             alternative_name: Optional[str] = None,
-             f__index: bool = False,
-             presave_task = None
-            ) -> Path:
+        path: Optional[Path] = None,
+        alternative_name: Optional[str] = None,
+        f__index: bool = False,
+        presave_task = None,
+        format: str = 'xlsx'
+    ) -> Union[Path, List[Path]]:
+        
         base_path = Path(path) if path else Path(os.getcwd())
         base_path.mkdir(exist_ok=True)
 
         base_name = alternative_name if alternative_name else self.name
-        extension = '.xlsx'
-        full_filepath = base_path/Path(base_name+extension)
-        with pd.ExcelWriter(full_filepath) as writer:
-            for sheet, sheet_df in self.dataframes.items():
+        
+        return _dump_to_file(
+            base_path=base_path,
+            base_name=base_name,
+            format=format,
+            a_dict=self.dataframes,
+            f__index=f__index,
+            presave_task=presave_task,
+        )
+        
+def _dump_to_excel(
+        base_path: Path,
+        base_name: str,
+        a_dict: Dict[str, pd.DataFrame],
+        f__index: bool = False,
+        presave_task = None
+    ) -> Path:
+        fp = base_path / f"{base_name}.xlsx"
+        with pd.ExcelWriter(fp) as writer:
+            for sheet, df in a_dict.items():
                 if presave_task:
-                    sheet_df = presave_task(sheet_df)
-                sheet_df.to_excel(writer, sheet_name=sheet, index=f__index)
+                    df = presave_task(df)
+                df.to_excel(writer, sheet_name=sheet, index=f__index)
+        return fp
 
-        return full_filepath
+def _dump_to_csv(
+        base_path: Path,
+        base_name: str,
+        a_dict: Dict[str, pd.DataFrame],
+        f__index: bool = False,
+        presave_task = None
+    ) -> List[Path]:
+        # one csv per sheet  →  base_name-sheet.csv
+        fps = []
+        for sheet, df in a_dict.items():
+            fp = base_path / f"{base_name}-{sheet}.csv"
 
+            if presave_task:
+                df = presave_task(df)
+
+            df.to_csv(fp, index=f__index)
+            fps.append(fp)
+        return fps
+
+ALLOWED_FORMATS = {'xlsx', 'csv', 'parquet'}
+def _dump_to_file(
+        base_path: Path,
+        base_name: str,
+        format: str,
+        a_dict: Dict[str, pd.DataFrame],
+        f__index: bool = False,
+        presave_task = None
+    ) -> Union[Path, List[Path]]:
+
+        if format not in ALLOWED_FORMATS:
+            raise ValueError(f"format must be one of {ALLOWED_FORMATS}, got '{format}'")
+            
+        if format == 'xlsx':
+            return _dump_to_excel(
+                base_path=base_path,
+                base_name=base_name,
+                a_dict=a_dict,
+                f__index=f__index,
+                presave_task=presave_task
+            )
+        
+        elif format == 'csv':
+            return _dump_to_csv(
+                base_path=base_path,
+                base_name=base_name,
+                a_dict=a_dict,
+                f__index=f__index,
+                presave_task=presave_task
+            )
+        
+        else:
+            return _dump_to_csv(
+                base_path=base_path,
+                base_name=base_name,
+                a_dict=a_dict,
+                f__index=f__index,
+                presave_task=presave_task
+            )
 
 class StaticProperties(PropertiesContainer):
     pass
 
 class DynamicProperties(PropertiesContainer):
     
-    def dump(self,
-             path: Optional[Path] = None,
-             alternative_name: Optional[str] = None
-            ) -> Path:
-        def _fix_index_dates(df: pd.DataFrame) -> pd.DataFrame:
-            df = df.copy()
-            df.index = pd.to_datetime(df.index)
-            df.sort_index(inplace=True)
-            df.index = df.index.strftime('%Y-%m-%d')
-            return df
+    HOURLY_YEAR_THRESHOLD = 2 * 8760  # at least 2 years of hourly data to split by year
+    # because if we use one year of data, 25 years of daily values has more points
 
-        return super().dump(
-            path=path,
-            alternative_name=alternative_name,
-            f__index=True,
-            presave_task=_fix_index_dates
-        )
+    def dump(
+            self,
+            path: Optional[Path] = None,
+            alternative_name: Optional[str] = None,
+            format: str = 'xlsx'
+        ) -> Union[Path, List[Path]]:
+        
+            def _fix_index_dates(df: pd.DataFrame) -> pd.DataFrame:
+                df = df.copy()
+                df.index = pd.to_datetime(df.index)
+                df.sort_index(inplace=True)
+
+                if len(df.index) < self.HOURLY_YEAR_THRESHOLD:
+                    df.index = df.index.strftime('%Y-%m-%d')
+                else:
+                    df.index = df.index.strftime('%Y-%m-%d %H:%M')
+                    # Drop columns full of NaNs for elements that were not there in a given year
+                    df.dropna(axis=1, how='all', inplace=True)  
+
+                return df
+
+            dump_kwargs = dict(path=path, alternative_name=alternative_name, f__index=True, presave_task=_fix_index_dates, format=format)
+
+            flat_dfs = {k: v for k, v in self.dataframes.items() if len(v) < self.HOURLY_YEAR_THRESHOLD}
+            by_year_dfs = {k: v for k, v in self.dataframes.items() if len(v) >= self.HOURLY_YEAR_THRESHOLD}
+
+            fps = []
+
+            # Flat sheets → single file under the original name
+            if flat_dfs:
+                fp = PropertiesContainer(self.name, flat_dfs).dump(**dump_kwargs)
+                fps.extend([fp] if isinstance(fp, Path) else fp)
+
+            # Long sheets → one file per year, named "<name>-<year>"
+            if by_year_dfs:
+                all_years = sorted({year for df in by_year_dfs.values() for year in df.index.year})
+                for year in all_years:
+                    year_dict = {
+                        sheet: df[df.index.year == year]
+                        for sheet, df in by_year_dfs.items()
+                        if not df[df.index.year == year].empty
+                    }
+                    fp = PropertiesContainer(f"{self.name}-{year}", year_dict).dump(**dump_kwargs)
+                    fps.extend([fp] if isinstance(fp, Path) else fp)
+
+            return fps[0] if len(fps) == 1 else fps
+
     
 T = TypeVar("T", bound="DynamicProperties")
 

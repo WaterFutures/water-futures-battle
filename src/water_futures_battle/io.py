@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Any, Dict, Set, Tuple
+from typing import Any, Dict, List, Set, Tuple
 
 import pandas as pd
 import requests
@@ -368,7 +368,7 @@ def save_system_status(
         configuration['settings'] = {
             settings.START_YEAR: settings.end_year+1,
             settings.END_YEAR: settings.end_year + len(settings.years_to_simulate),
-            'national_budget': 0,
+            settings.NIB: 0,
             settings.LIFELINE_VOLUME: settings.lifeline_volume,
             settings.SEED: 128,
             settings.AVAILABLE_CORES: settings.available_cores,
@@ -442,40 +442,49 @@ def save_entities_results(
 
     if not save_results_config:
         return
+    
+    format = save_results_config.get('format', 'xlsx')
 
     with Progress() as progress:
         saving_task = progress.add_task("[red]Saving out entities results ", total=5)
 
-        def dump_if_enabled(entity: str, results_obj: BWFResult) -> Path | None: 
+        def dump_if_enabled(
+                entity: str,
+                results_obj: BWFResult,
+                format: str,
+                split_by_year: bool
+            ) -> Path | List[Path] | None: 
             if not save_results_config.get(entity, False):
                 return
             
             if isinstance(save_results_config[entity], bool):
                 return results_obj.dump(
-                    path=result_dir
+                    path=result_dir,
+                    format=format
                 )
 
-            if isinstance(save_results_config[entity], dict) and save_results_config[entity].get('enabled', False):
+            if isinstance(save_results_config[entity], dict) and not save_results_config[entity].get('enabled', False):
                 return
             
             return results_obj.dump(
                     path=result_dir,
-                    subset=save_results_config[entity].get('fields', [])
+                    subset=save_results_config[entity].get('fields', []),
+                    format=format
                 )
 
-        dump_if_enabled('municipalities', national_context.municipalities_results)
+        dump_if_enabled('municipalities', national_context.municipalities_results, format, True)
         progress.update(saving_task, advance=1)
 
-        dump_if_enabled('sources', national_context.sources_results)
+        dump_if_enabled('sources', national_context.sources_results, format, True)
         progress.update(saving_task, advance=1)
 
-        dump_if_enabled('pumps', national_context.pumps_results)
+        dump_if_enabled('pumps', national_context.pumps_results, format, True)
         progress.update(saving_task, advance=1)
 
-        dump_if_enabled('solar_farms', national_context.solar_farms_results)
+        dump_if_enabled('solar_farms', national_context.solar_farms_results, format, True)
         progress.update(saving_task, advance=1)
 
-        dump_if_enabled('water_utilities', national_context.water_utilities_results)
+        dump_if_enabled('water_utilities', national_context.water_utilities_results, format, False)
         progress.update(saving_task, advance=1)
 
     return
@@ -515,6 +524,7 @@ from .services.epanet_utils import (
     apply_electricity_info,
 )
 
+from .services.epanet_utils import PumpingStationRepresentation
 def save_epanet_networks_results(
         result_dir: Path,
         settings: Settings,
@@ -526,13 +536,16 @@ def save_epanet_networks_results(
     if not save_results_config:
         return
 
-    pumping_station_representation = "free_parallel_pumps"
+    pumping_station_representation = PumpingStationRepresentation.FREE_PARALLEL_PUMPS
     if "pumping_stations_as_gpv" in save_results_config and \
             "limit_sources_outflow" in save_results_config:
         if save_results_config["pumping_stations_as_gpv"] is True:
-            pumping_station_representation = "single_gpv"
+            pumping_station_representation = PumpingStationRepresentation.SINGLE_GPV
         elif save_results_config["limit_sources_outflow"] is True:
-            pumping_station_representation = "chocked_parallel_pumps"
+            pumping_station_representation = PumpingStationRepresentation.CHOCKED_PARALLEL_PUMPS
+
+    if "pumping_station_representation" in save_results_config:
+        pumping_station_representation = PumpingStationRepresentation(save_results_config["pumping_station_representation"])
 
     if save_results_config['mode'] == 'average_week':
         weeks_to_save = [-1]
@@ -609,7 +622,9 @@ def save_epanet_networks_results(
                         str(networks_dir / (cluster.filename + '-W'+week_name+'.inp'))
                     )
 
-                    progress.update(saving_task, advance=1)
+                    progress.update(saving_task, advance=len(cluster.water_utilities))
+
+                cluster.network.close()
 
     return
 

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, ClassVar, Dict, Self, Tuple
 
 import numpy as np
@@ -8,6 +8,11 @@ from ..core.base_model import bwf_entity
 from ..core.utility import timestampify, BWFTimeLike, OptionalTimestamp
 
 from .dynamic_properties import PumpOptionsDB, PumpsResults
+
+# Constants for power calculation
+_GRAVITY = 9.81          # m/s²
+_RHO     = 1000.0        # kg/m³
+_Q_CONV  = 1 / 3600      # m³/h → m³/s
 
 @bwf_entity(db_type=PumpOptionsDB, results_type=None)
 @dataclass(frozen=True)
@@ -43,6 +48,12 @@ class PumpOption:
     E = 'efficiency'
     CURVES_COLUMNS = [Q, H, P, E]
 
+    pump_curve_coeffs: Tuple[float, float, float] = field(init=False, repr=True)
+    _flow: np.ndarray = field(init=False, repr=False)
+    _head: np.ndarray = field(init=False, repr=False)
+    _eff: np.ndarray = field(init=False, repr=False)
+    
+
     def __eq__(self, other):
         if not isinstance(other, PumpOption):
             return NotImplemented
@@ -72,13 +83,94 @@ class PumpOption:
 
         return instance
 
+    def __post_init__(self):
+        # Fit a 2nd degree polynomial: H = CQ^2 + BQ + A
+        # polyfit returns [C, B, A]
+        # don't use np.polynomial.Polynomial.fit because it fits the curve wrong
+        # apparently it does some kind of normalization which fucks it up.
+        C, B, A = np.polyfit(
+            self.head_curve.index.to_numpy(),
+            self.head_curve.to_numpy(),
+            2
+        )
+        # Add Zero flow point to aid balancing (inplace because class is immutable)
+        self._curves.loc[0, :] = [
+            max(A,self._curves[self.H].iloc[0]+1), # either interpolated shutoff head or 1 meter over the current lowest value 
+            0., # 0 power, pump is off...
+            self._curves[self.E].min() # lowest efficiency, not really important
+        ]
+        self._curves.sort_index(inplace=True)
+
+        # We bypass immutability substituting the value to the field
+        object.__setattr__(self, 'pump_curve_coeffs', (A, B, C))
+        object.__setattr__(self, "_flow", self.head_curve.index.to_numpy())
+        object.__setattr__(self, "_head", self.head_curve.to_numpy())
+        object.__setattr__(self, "_eff",  self.eff_curve.to_numpy())
+
     @property
     def head_curve(self) -> pd.Series:
         return self._curves[PumpOption.H]
 
     @property
+    def break_power_curve(self) -> pd.Series:
+        return self._curves[PumpOption.P]
+
+    @property
     def eff_curve(self) -> pd.Series:
         return self._curves[PumpOption.E]
+
+    @property
+    def pump_curve_coeff_A(self) -> float:
+        return self.pump_curve_coeffs[0]
+    
+    @property
+    def pump_curve_coeff_B(self) -> float:
+        return self.pump_curve_coeffs[1]
+    
+    @property
+    def pump_curve_coeff_C(self) -> float:
+        return self.pump_curve_coeffs[2]
+
+    def head_at_flow(self, flow: float) -> float:
+        return float(np.interp(flow, self._flow, self._head,
+            left=self.pump_curve_coeff_A, #shutoff head, under minimum flow
+            right=np.nan # nan over, we don't want to use it there
+        ))
+
+    def efficiency_at_flow(self, flow: float) -> float:
+        return float(np.interp(flow, self._flow, self._eff,
+            left=0.0,
+            right=0.0
+        ))
+    
+    def break_power_at_flow(self, flow: float) -> float:
+        head = self.head_at_flow(flow)
+        eff  = self.efficiency_at_flow(flow)
+        if eff <= 0.0:
+            return float('nan')
+        return (_RHO * _GRAVITY * _Q_CONV * flow * head) / ((eff/100) * 1000)
+
+    # -- affinity scaled values
+
+    def head_at_flow_and_speedr(self, flow: float, speed_ratio: float) -> float:
+        if speed_ratio <= 0:
+            raise ValueError("speed_ratio must be > 0")
+        return self.head_at_flow(flow / speed_ratio) * speed_ratio ** 2
+
+    def efficiency_at_flow_and_speedr(self, flow: float, speed_ratio: float) -> float:
+        if speed_ratio <= 0:
+            raise ValueError("speed_ratio must be > 0")
+        return self.efficiency_at_flow(flow / speed_ratio)
+
+    def break_power_at_flow_and_speedr(self, flow: float, speed_ratio: float) -> float:
+        """Hydraulic shaft power in kW."""
+        if speed_ratio <= 0:
+            raise ValueError("speed_ratio must be > 0")
+        head = self.head_at_flow_and_speedr(flow, speed_ratio)
+        eff  = self.efficiency_at_flow_and_speedr(flow, speed_ratio)
+        if eff <= 0.0:
+            return float('nan')
+        return (_RHO * _GRAVITY * _Q_CONV * flow * head) / ((eff/100) * 1000)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -209,3 +301,11 @@ class Pump:
         )
 
         return self
+    
+    @property
+    def shutoff_head(self) -> float:
+        return self._pump_option.pump_curve_coeff_A
+
+    @property
+    def runout_flow(self) -> float:
+        return self._pump_option.head_curve.index.max()

@@ -135,7 +135,14 @@ class SolarFarm:
     @property
     def construction_unit_costs(self) -> pd.Series:
         return self._dynamic_properties[EnergySysDB.SOLAR_COST][self.connected_entity.province.state.cbs_id]
-    
+
+    @property
+    def electricity_yield(self) -> pd.Series:
+        df = self._results[SolarFarmsResults.YIELD]
+        if self.bwf_id not in df.columns:
+        
+            return pd.Series(data=[], index=pd.DatetimeIndex([]))
+        return df[self.bwf_id]
     
 @dataclass(frozen=True)
 class ElectricityPricePattern:
@@ -168,4 +175,13 @@ class ElectricityPricePattern:
             ]].to_numpy()
         )
 
-    
+    @classmethod
+    def from_array(
+        cls,
+        timestamp: pd.Timestamp,
+        values: np.ndarray
+    ) -> Self:
+        return cls(
+            begin_date=timestamp,
+            values=values
+        )

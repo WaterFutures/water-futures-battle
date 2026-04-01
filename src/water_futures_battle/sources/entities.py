@@ -7,7 +7,7 @@ import pandas as pd
 
 from ..core.base_model import bwf_entity, Location
 from ..core.utility import timestampify, BWFTimeLike, OptionalTimestamp, filter_columns
-from ..jurisdictions.entities import Province
+from ..jurisdictions.entities import Province, Municipality
 
 from .enums import SourceSize
 from .properties import SourcesDB, SourcesResults, SourceCostTable
@@ -43,6 +43,9 @@ class WaterSource(Location, ABC):
     # Closest municipality
     _closest_municipality_id: str
     CLOS_M_ID = 'closest_municipality'
+    @property
+    def closest_municipality(self) -> Municipality:
+        return self.province.municipality(self._closest_municipality_id)
     
     # The following variables have the same pattern as explained in the Pipe class (file pipes/entities.py)
     # I.e., "hidden" frozen value, registry and methods to set it up.
@@ -56,10 +59,10 @@ class WaterSource(Location, ABC):
             return self._nominal_capacity
         return self._CAPACITY_REGISTRY.get(self.bwf_id, float('nan'))
     
-    # Capacity also defines the source_size_class, which is Mm^3/year
+    # Capacity also defines the source_size_class
     @property
     def source_size_class(self) -> SourceSize:
-        return SourceSize.determine_class(self.nominal_capacity*365/1e6)
+        return SourceSize.determine_class(self.nominal_capacity)
     
     _activation_date: OptionalTimestamp
     ACT_DATE = 'activation_date'
@@ -228,6 +231,27 @@ class WaterSource(Location, ABC):
         return True
 
     @property
+    def pumping_station(self) -> 'PumpingStation':
+        return self._global_pumping_stations[self.bwf_id]
+
+    @property
+    def solar_farms(self) -> Set['SolarFarm']:
+        if self.bwf_id not in self._global_solar_farms:
+            return set()
+        
+        return self._global_solar_farms[self.bwf_id]
+    
+    @property
+    def onsite_energy_production(self) -> pd.Series:
+        series_list = [sf.electricity_yield for sf in self.solar_farms]
+        if series_list:
+            total_ele_yield = pd.concat(series_list, axis=1).sum(axis=1)
+        else:
+            total_ele_yield = pd.Series(dtype=float, index=pd.DatetimeIndex([]))
+        
+        return total_ele_yield
+
+    @property
     def construction_unit_costs(self) -> pd.Series:
         costs_df = self._dynamic_properties[SourcesDB.UNIT_COST]
 
@@ -241,6 +265,41 @@ class WaterSource(Location, ABC):
         )
 
         return costs
+
+    @property
+    def opex_fixed_unit_cost(self) -> pd.DataFrame:
+        # this is uncertain, so we return a dataframe min-max
+        costs_df = self._dynamic_properties[SourcesDB.OPEX_FIXED]
+
+        costs_df = costs_df[filter_columns(costs_df, self.province.state.cbs_id)]
+        costs_df = costs_df[filter_columns(costs_df, self.source_size_class.name)]
+
+        return costs_df
+
+    @property
+    def opex_volum_other_unit_cost(self) -> pd.DataFrame:
+        # this is uncertain, so we return a dataframe with min-max
+        # this is uncertain, so we return a dataframe min-max
+        costs_df = self._dynamic_properties[SourcesDB.OPEX_VOLUM_OTHER]
+
+        costs_df = costs_df[filter_columns(costs_df, self.province.state.cbs_id)]
+        costs_df = costs_df[filter_columns(costs_df, self.source_size_class.name)]
+
+        return costs_df
+
+    @property
+    def availability_factor(self) -> pd.Series:
+        # By default we return the national availability factor, this is true 
+        # for groundwater and desalination sources
+        return self._dynamic_properties[SourcesDB.AVAILABILITY_FACTOR][self.province.state.cbs_id]
+
+    @property 
+    def available_capacity(self) -> pd.Series:
+        """
+        Available capacity is the nominal capacity of the source reduced by the 
+        availability factor.
+        """
+        return self.nominal_capacity * self.availability_factor
 
     def to_dict(self) -> Dict[str, Any]:
         activ_date = self.activation_date.strftime('%Y-%m-%d') if pd.notna(self.activation_date) else ''
@@ -414,6 +473,18 @@ class SurfaceWater(WaterSource):
 
     def to_dict(self) -> Dict[str, Any]:
         return super().to_dict() | {self.BASIN: self.basin}
+    
+    @property
+    def availability_factor(self) -> pd.Series:
+        # Special case for surface water sources, their availability depends on the basin
+        df = self._dynamic_properties[SourcesDB.AVAILABILITY_FACTOR]
+
+        # if we find our value, we return that one
+        if self.basin in df.columns:
+            return df[self.basin]
+        
+        # default return national value
+        return df[self.province.state.cbs_id]
 
 @bwf_entity(db_type=SourcesDB, results_type=SourcesResults)
 @dataclass(frozen=True)

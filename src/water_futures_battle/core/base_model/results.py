@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Self, Optional, Union
 import numpy as np
 import pandas as pd
 
-from .properties import DynamicProperties
+from .properties import DynamicProperties, PropertiesContainer
 
 class BWFResult(DynamicProperties):
     NAME: str # For type hints, must be defined in derived class, we check in the init
@@ -18,7 +18,13 @@ class BWFResult(DynamicProperties):
             raise TypeError(f"{self.__class__.__name__} must define a class attribute 'NAME'")
         
         dataframes = {
-            var: pd.DataFrame(index=pd.DatetimeIndex([], name="timestamp"))
+            var: pd.DataFrame(
+                index=pd.DatetimeIndex(
+                    [],
+                    name="timestamp"
+                ),
+                dtype=np.float32
+            )
             for var in self.TRACKED_VARIABLES
         }
         super().__init__(name=self.NAME, dataframes=dataframes)
@@ -118,16 +124,20 @@ class BWFResult(DynamicProperties):
         res_df = self.dataframes[a_property]
         
         # let's make space for them in case indexes and columns are not there
-        if (len(res_df.index.difference(timestamps)) > 0 or 
-            any(col not in res_df.columns for col in data_df.columns)
-            ):
-            res_df = res_df.reindex(
-                index=res_df.index.union(timestamps),
-                columns=res_df.columns.union(data_df.columns)
-            )
+        new_timestamps = timestamps.difference(res_df.index)
+        if len(new_timestamps) > 0:
+            res_df = res_df.reindex(res_df.index.union(timestamps))
             res_df.index.name = 'timestamp'
+            res_df = res_df.astype(np.float32)  # reindex fills NaNs as float64
 
-        res_df.loc[timestamps, data_df.columns] = data_df.values
+        new_cols = data_df.columns.difference(res_df.columns)
+        if len(new_cols) > 0:
+            res_df[new_cols] = np.float32(np.nan)  # typed from the start, no cast needed
+
+        res_df.loc[timestamps, data_df.columns] = data_df.values.astype(np.float32)
+        
+        assert (res_df.dtypes == np.float32).all(), \
+            f"dtype drift detected: {res_df.dtypes[res_df.dtypes != np.float32].to_dict()}"
 
         # We modified only the local instance so assign it back
         self.dataframes[a_property] = res_df
@@ -138,15 +148,17 @@ class BWFResult(DynamicProperties):
             self,
             path: Optional[Path] = None,
             alternative_name: Optional[str] = None,
-            subset: Optional[List[str]] = None
-        ) -> Path:
+            subset: Optional[List[str]] = None,
+            format: str = 'xlsx'
+        ) -> Union[Path, List[Path]]:
 
         if not subset:
             # If the user doesn't specifiy a subset of fields, it means it wants all
             
             return super().dump(
                 path=path,
-                alternative_name=alternative_name
+                alternative_name=alternative_name,
+                format=format
             )
          
         # otherwise, we filter the requested field, making sure they exist
@@ -156,16 +168,15 @@ class BWFResult(DynamicProperties):
             if f in self.TRACKED_VARIABLES
         ]
         # we then create a temp DynamicProperties object with the requested fields
-        out_obj = DynamicProperties(
+        return DynamicProperties(
             name=self.NAME,
             dataframes={
                 f: self[f]
                 for f in requested_fields
             }
-        )
-        
-        return out_obj.dump(
+        ).dump(
             path=path,
-            alternative_name=alternative_name
+            alternative_name=alternative_name,
+            format=format
         )
         

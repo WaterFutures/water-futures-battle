@@ -1,6 +1,6 @@
 from enum import IntEnum
 
-_SOURCES_SIZE_CLASSES_BOUNDS_LIST = [0., 4e6, 8e6, 16e6, float('inf')] # in Millions of M^3
+_SOURCES_SIZE_CLASSES_BOUNDS_LIST = [0., 4e6, 8e6, 16e6, float('inf')] # in m^3/year
 _SOURCES_SIZE_CLASSES_BOUNDS = {
     i: (_SOURCES_SIZE_CLASSES_BOUNDS_LIST[i-1], _SOURCES_SIZE_CLASSES_BOUNDS_LIST[i])
     for i in range(1, len(_SOURCES_SIZE_CLASSES_BOUNDS_LIST))
@@ -18,7 +18,7 @@ class SourceSize(IntEnum):
     @classmethod
     def determine_class(cls, nominal_capacity: float) -> 'SourceSize':
         """
-        Determines for a nominal capacity in Mm^3/year the corresponding source 
+        Determines for a nominal capacity in m^3/day the corresponding source 
         size class.
         
         :param cls: Description
@@ -32,7 +32,7 @@ class SourceSize(IntEnum):
         for size_class in cls:
             lower_bound, upper_bound = _SOURCES_SIZE_CLASSES_BOUNDS[size_class.value]
 
-            if lower_bound <= nominal_capacity < upper_bound:
+            if lower_bound <= nominal_capacity*365 < upper_bound:
                 return size_class
             
         # Fallback for error handling (though should be unreachable with float('inf'))
@@ -59,7 +59,7 @@ class GroundwaterPermitDeviation(IntEnum):
         for size_class in cls:
             lower_bound, upper_bound = _WD_SEVERITY_BOUNDS[size_class.value]
 
-            if lower_bound <= value < upper_bound:
+            if lower_bound < value <= upper_bound:
                 return size_class
             
         # Fallback for error handling (though should be unreachable with float('inf'))

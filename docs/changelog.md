@@ -9,6 +9,37 @@ website_page_authors:
 
 # Changelog 🕑
 
+## The Battle of the Water Futures [Data and Software - [v0.5.3](https://doi.org/10.5281/zenodo.17698299)]
+
+**Release Date:** 1st April 2026
+
+This patch release introduces the hydraulic simulations in the evaluator and the calculations of the remaining variables.
+
+### What's Changed
+
+- **Code**
+  - Hydraulics simulations compute delivered and undelivered demand, sources production, and pumping stations' energy expenditure.
+  - Simulation results saving has improved in speed and memory footprint: long results series are now saved by year.
+  - The financial balance are correctly updated and complete.
+
+- **Rules and Information (Website)**
+  - Deadlines shifted by one week.
+  - Submission instructions.
+  
+### What's Unchanged
+
+Everything else.
+
+### Important Notes
+
+The evaluator is complete.
+It takes approx 1 hour to run a simulation of 25 years with an hourly time step of the 12 networks of the competition.
+
+Future patch releases of the Python library should fix only minor bugs.
+
+---
+
+
 ## The Battle of the Water Futures [Data and Software - [v0.5.2](https://doi.org/10.5281/zenodo.17698299)]
 
 **Release Date:** 25th March 2026
