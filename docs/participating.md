@@ -48,22 +48,22 @@ More information about the conference and the abstract and paper submission are 
 <ul>
 <li style="color:lightgray"><strong>14th January 2026</strong>: Abstract submission deadline</li>
 <li style="color:lightgray"><em>26th January 2026</em>: Abstract acceptance notifications</li>
-<li><span style="color:#DF3737;font-weight:bold">3rd April 2026</span>: First stage solution submission deadline</li>
+<li><span style="color:#DF3737;font-weight:bold">10th April 2026</span>: First stage solution submission deadline</li>
 </ul>
 
 **Stage 2**
-- **17th April 2026**: Second stage solution submission deadline
+- **24th April 2026**: Second stage solution submission deadline
 
 **Stage 3**
-- **1st May 2026**: Third stage solution submission deadline
 - **1st May 2026 (optional)**: Short paper submission deadline
+- **8th May 2026**: Third stage solution submission deadline
 - **18th May 2026**: Conference starts! 🎉
 
 ## Submitting a solution 📩
 
-Solutions must be submitted through a form opening during submission week, using the template from the data folder on Zenodo (file named `masterplan`).
-Participants can submit either an Excel file (simplest option with the dropdown options) or JSON/YAML files (for greater customisation and following the naming convention and structure detailed in Section 2.3 of the paper).
-An open-source evaluator will be released before the first submission deadline, enabling participants to test the compatibility of their solution in advance.
+Solutions can be submitted in any of the three example formats provided in the data folder (Excel, JSON, or YAML) and must follow the provided template.
+Name your masterplan file `"masterplan-{abstractID}-stage_{X}"` (e.g. `"masterplan-000-stage_1"`) and email it to <a href="mailto:battlewaterfutures@kwrwater.nl?subject=Competition Updates">battlewaterfutures@kwrwater.nl</a>  with the relevant details in the subject line (e.g. "Masterplan AbstractID Stage 1").
+> Note: the masterplans included in the data folder are for illustrative purposes only, remember to remove those interventions before submittion your solution.
 
 ## Ranking 📊
 
