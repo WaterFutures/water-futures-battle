@@ -446,7 +446,7 @@ def build_epanet_network(
         )
 
     # 3. -- We connect the network nodes between each other
-    for con in peer_connections:
+    for con in sorted(peer_connections, key= lambda c: c.bwf_id):
         assert isinstance(con, PeerConnection)
 
         if not con.has_active_pipe(year):
