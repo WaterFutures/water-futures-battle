@@ -835,7 +835,7 @@ def run_cluster_hydraulics(
 
     # Just convert to numpy for faster lookups
     sources_avcap_timestamps = sources_available_capacities.index
-    sources_available_capacities = sources_available_capacities.to_numpy(dtype=np.float32)
+    sources_available_capacities = sources_available_capacities[sources_id].to_numpy(dtype=np.float32)
     avcap_ptr = 0 # at which index of this df we are
 
     # Cache all sources's pumping station peak discharge
