@@ -577,6 +577,7 @@ class NationalContext:
                 year=year
             )
             for wu_group, wu_add_cons in zip(merged_wu, wu_add_connections)
+            if wu_group
         )
 
         return clusters
