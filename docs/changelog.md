@@ -9,6 +9,31 @@ website_page_authors:
 
 # Changelog 🕑
 
+## The Battle of the Water Futures [Data and Software - [v0.5.4](https://doi.org/10.5281/zenodo.17698299)]
+
+**Release Date:** 8th April 2026
+
+This patch release fixes some minor bugs raised in the GitHub discussions.
+
+### What's Changed
+
+- **Code**
+  - Fix Issue #30
+  - Fix Issue #31
+
+- **Rules and Information (Website)**
+  - Evaluation procedure clarification.
+  
+### What's Unchanged
+
+Rules, deadlines, problem description, and data.
+
+### Important Notes
+
+Future patch releases of the Python library should fix only minor bugs.
+
+---
+
 ## The Battle of the Water Futures [Data and Software - [v0.5.3](https://doi.org/10.5281/zenodo.17698299)]
 
 **Release Date:** 1st April 2026
