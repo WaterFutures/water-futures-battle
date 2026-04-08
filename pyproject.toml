@@ -1,6 +1,6 @@
 [project]
 name = "water-futures-battle"
-version = "0.5.3"
+version = "0.5.4"
 description = "Python project for the Battle of the Water Futures, originally developed to be hosted at WDSA/CCWI 2026 conference, May 18-21, Paphos, Cyprus."
 readme = "README.md"
 license = "MIT"

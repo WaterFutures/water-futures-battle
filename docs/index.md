@@ -56,7 +56,8 @@ If you can't find an answer to your question, just <a href="mailto:battlewaterfu
  
 ## Latest Updates 📢
 
-- *1st April 2026* - **Version 0.5.3**
+- *8th April 2026* - **Version 0.5.4**
+- *1st April 2026* - Version 0.5.3
 - *25th March 2026* - Version 0.5.2
 - *23rd March 2026* - Version 0.5.1
 - *16th March 2026* - Version 0.5.0

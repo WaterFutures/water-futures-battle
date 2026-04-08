@@ -446,7 +446,7 @@ def build_epanet_network(
         )
 
     # 3. -- We connect the network nodes between each other
-    for con in peer_connections:
+    for con in sorted(peer_connections, key= lambda c: c.bwf_id):
         assert isinstance(con, PeerConnection)
 
         if not con.has_active_pipe(year):
@@ -835,7 +835,7 @@ def run_cluster_hydraulics(
 
     # Just convert to numpy for faster lookups
     sources_avcap_timestamps = sources_available_capacities.index
-    sources_available_capacities = sources_available_capacities.to_numpy(dtype=np.float32)
+    sources_available_capacities = sources_available_capacities[sources_id].to_numpy(dtype=np.float32)
     avcap_ptr = 0 # at which index of this df we are
 
     # Cache all sources's pumping station peak discharge
