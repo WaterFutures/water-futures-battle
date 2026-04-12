@@ -15,6 +15,7 @@ website_page_authors:
 If the Python package has been installed, the CLI can be used for running and evaluating different scenarios.
 
 Assuming that the scenario data and configuration is stored in the `data` folder, and the masterplan is stored in `masterplan.yaml`, we can evaluate the masterplan by running:
+
 ```
 water_futures_battle_run_eval masterplan.yaml data/configuration.yaml
 ```
@@ -29,6 +30,7 @@ In this illustrative example, we assume that we want to use the provided BWF eva
 For this, we will proceed in the following steps:
 
 1. Parse the economy configuration file (this is where the inflation can be set) -- note that you might have to adjust the file path depending on your local installation:
+
 ```python
 import pandas as pd
 
@@ -36,6 +38,7 @@ economy_dict = pd.read_excel("data/economy/economy-dynamic_properties.xlsx", ind
 ```
 
 2. Modify the inflation -- here, we simply set it 4% for the years 2025-2049:
+
 ```python
 inflation_df = economy_dict['inflation']
 inflation_df.loc[
@@ -45,6 +48,7 @@ inflation_df.loc[
 ```
 
 3. Save the modified economics configuration -- we store it in a new file named 'economy-my_dynamic_properties', and keep the original configuration file as a backup:
+
 ```python
 from water_futures_battle.base_model import DynamicProperties
 
@@ -53,18 +57,21 @@ new_economy_dps.dump("data/economy")
 ```
 
 Finally, we have to set the new economics configuration in the `configuration.yaml` file in the data folder -- search for the property `economy-dynamic_properties` and replace the old filename with the new one:
+
 ```yaml
 economy:
   economy-dynamic_properties: ./economy/economy-my_dynamic_properties.xlsx
 ```
 
 4. Run the BWF evaluator:
+
 ```
 water_futures_battle_run_eval masterplan.yaml data/configuration.yaml
 ```
 
 You can save the new system status in a custom folder adding at the end of the 
 configuration:
+
 ```yaml
 scenario_name: scenario_x
 ```
