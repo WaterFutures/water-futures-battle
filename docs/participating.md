@@ -66,10 +66,15 @@ Name your masterplan file `"masterplan-{abstractID}-stage_{X}"` (e.g. `"masterpl
 > Note: the masterplans included in the data folder are for illustrative purposes only, remember to remove those interventions before submittion your solution.
 
 Since every participant enters stages 2 and 3 with a different starting system (shaped by their interventions in previous stages) the following process applies after each round's deadline:
-- The stage's exogenous drivers will be publicly released alongside the results of a "status quo" solution (i.e., a solution run with an empty masterplan, serving as a baseline).
+- The stage's exogenous drivers will be shared privately with the teams that provide a correct solution first, then released publicly.
+These will be complemented by the results of a "status quo" solution (i.e., a solution run with an empty masterplan, serving as a baseline).
 - Each team's official results will be sent back privately by the organisers (possibly within the same week).
 Teams should expect to be contacted and remain available to help resolve any errors that may arise during evaluation.
 That said, participants don't need to wait and are free to preview their own results at any time by extending their previous stage outputs with the new solution and running their masterplan independently.
+
+While edge cases may be reviewed, clearly mistaken solutions will default to the do-nothing baseline for that stage.
+A failing solution in one stage does not disqualify the team, and participants can continue with their own solution from the next stage onwards.
+For instructions on how to test your solution locally before submission, see the [how to run scenarios]({{ "evaluator/running-scenarios" | relative_url }}).
 
 ## Ranking 📊
 
