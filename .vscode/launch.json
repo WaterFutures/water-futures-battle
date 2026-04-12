@@ -55,10 +55,29 @@
             "request": "launch",
             "module": "src.water_futures_battle",
             "args": [
-                "${workspaceFolder}/teams/whale/1/bwf_inputs-whale-stage_1/masterplan.yaml",
-                "${workspaceFolder}/teams/whale/1/bwf_inputs-whale-stage_1/configuration.yaml"
+                "${workspaceFolder}/masterplans/masterplan-${input:masterplanFileName}.yaml",
+                "${workspaceFolder}/teams/TEAM00/1/bwf_inputs-TEAM00-stage_1/configuration.yaml"
             ],
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug submission",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.water_futures_battle",
+            "args": [
+                "${env:HOME}/Documents/sandbox/${input:masterplanFileName}",
+                "${env:HOME}/Documents/sandbox/bwf_inputs-test_stage_1/configuration.yaml"
+            ],
+            "console": "integratedTerminal"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "masterplanFileName",
+            "type": "promptString",
+            "description": "Enter the name to the masterplan file",
+            "default": "empty"
         }
     ]
 }

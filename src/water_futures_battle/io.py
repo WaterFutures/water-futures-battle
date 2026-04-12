@@ -85,7 +85,6 @@ def configure_system(
                 os._exit(1)
 
     # Check version file in data folder
-    data_outdated = False
     data_version_file_path = os.path.join(data_path, "VERSION")
     if os.path.isfile(data_version_file_path):
         with open(data_version_file_path) as f:
@@ -95,19 +94,27 @@ def configure_system(
         pkg_version_tuple = parse_version(pkg_version)
         data_version_tuple = parse_version(data_version)
 
+        data_outdated = False
         # Before v0.5.0: require exact match
         if pkg_version_tuple < (0, 5, 0):
             if data_version != pkg_version:
                 data_outdated = True
         else:
             # v0.5.0 and after: only require major/minor match
-            if data_version_tuple[:2] != pkg_version_tuple[:2]:
+            if data_version_tuple[:2] < pkg_version_tuple[:2]:
                 data_outdated = True
-    else:
-        data_outdated = True
 
-    if data_outdated is True:
-        warnings.warn("Your database is outdated. Please consider downloading the latest version -- do not forget to backup your changes to the data!")
+        if data_outdated is True:
+            warnings.warn("Your database is outdated. Please consider downloading the latest version -- do not forget to backup your changes to the data!")
+
+    else:
+        pkg_version = get_package_version()
+        pkg_version_tuple = parse_version(pkg_version)
+        warnings.warn(
+            "We could not locate the VERSION file in your database. We are assuming it's a custom one. "
+            "To turn off this warning, add a VERSION file in your data folder with a version number "
+            f"greater than or equal to the package version: v{pkg_version} (only major and minor version are checked; patch versions are ignored)."
+        )
     
     # Load and parse config
     with open(config_file_path, 'r') as f_yaml:

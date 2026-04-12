@@ -243,9 +243,12 @@ def get_pipe_collection(
                 pipe_option.lifetime[1]
             )
 
-            lifetime = int(settings.pipes_lifetime_rng.integers(
-                *lifetime_bounds
-            ))
+            if lifetime_bounds[0] < lifetime_bounds[1]:
+                lifetime = int(settings.pipes_lifetime_rng.integers(
+                    *lifetime_bounds
+                ))
+            else:
+                lifetime = lifetime_bounds[0]
 
         pipes[i] = Pipe(
             bwf_id=f"{bwf_id_prefix}-{i:02d}",

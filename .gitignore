@@ -259,3 +259,4 @@ data/connections/preprocessing-scripts/unused_peer_connections.csv
 data/connections/.temp-*/
 
 teams/
+bwf_inputs-*/

@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 from ..core import Settings, get_snapshot
-from ..core.utility import timestampify
+from ..core.utility import timestampify, filter_columns
 from ..core.base_model import StaticProperties
 
 from ..nrw_model.enums import NRWClass
@@ -196,12 +196,28 @@ def generate_water_demand(
 
     # get the per_house_demand and per_business_demand in year y (uncertain)
     ts = timestampify(year, errors='raise')
-    per_house_bounds = wdm_db[WaterDemandModelDB.PER_HOUSE_DEMAND][['NL0000-min', 'NL0000-max']].asof(ts)
-    per_business_bounds = wdm_db[WaterDemandModelDB.PER_BUSINESS_DEMAND][['NL0000-min', 'NL0000-max']].asof(ts)
 
-    per_house_demand = RNG.uniform(per_house_bounds['NL0000-min'], per_house_bounds['NL0000-max'])
-    per_business_demand = RNG.uniform(per_business_bounds['NL0000-min'], per_business_bounds['NL0000-max'])
+    def get_per_unit_value(df: pd.DataFrame, ts: pd.Timestamp, municipality: Municipality) -> float:
+        all_values_at_ts = df.asof(ts).dropna()
+        if municipality.cbs_id in all_values_at_ts:
+            return float(all_values_at_ts[municipality.cbs_id])
+        
+        # municipality specific value is not in there, we take the national bounds
+        all_values_at_ts[[f"{municipality.state.cbs_id}-min",f"{municipality.state.cbs_id}-max"]]
+        return float(RNG.uniform(all_values_at_ts.iloc[0], all_values_at_ts.iloc[1]))
 
+    per_house_demand = get_per_unit_value(
+        df=wdm_db[WaterDemandModelDB.PER_HOUSE_DEMAND],
+        ts=ts,
+        municipality=municipality
+    )
+    
+    per_business_demand = get_per_unit_value(
+        df=wdm_db[WaterDemandModelDB.PER_BUSINESS_DEMAND],
+        ts=ts,
+        municipality=municipality
+    )
+    
     # multiply modulated pattern by unit demand by number of units of all 3 patterns
     pattern_h1 = pattern_h1 * n_houses * per_house_demand
     pattern_h2 = pattern_h2 * n_houses * per_house_demand
