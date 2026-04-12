@@ -44,15 +44,15 @@ More information about the conference and the abstract and paper submission are 
 <li style="color:lightgray"><em>8th December 2025</em> - Competition begins: Instructions and first batch of data available</li>
 </ul>
 
-<span style="color:#009344">**Stage 1**</span>
+<span style="color:lightgray">**Stage 1**</span>
 <ul>
 <li style="color:lightgray"><strong>14th January 2026</strong>: Abstract submission deadline</li>
 <li style="color:lightgray"><em>26th January 2026</em>: Abstract acceptance notifications</li>
-<li><span style="color:#DF3737;font-weight:bold">10th April 2026</span>: First stage solution submission deadline</li>
+<li style="color:lightgray">10th April 2026: First stage solution submission deadline</li>
 </ul>
 
-**Stage 2**
-- **24th April 2026**: Second stage solution submission deadline
+<span style="color:#009344">**Stage 2**</span>
+- <span style="color:#DF3737;font-weight:bold">24th April 2026</span>: Second stage solution submission deadline
 
 **Stage 3**
 - **1st May 2026 (optional)**: Short paper submission deadline
