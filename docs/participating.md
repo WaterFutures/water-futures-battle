@@ -44,15 +44,15 @@ More information about the conference and the abstract and paper submission are 
 <li style="color:lightgray"><em>8th December 2025</em> - Competition begins: Instructions and first batch of data available</li>
 </ul>
 
-<span style="color:#009344">**Stage 1**</span>
+<span style="color:lightgray">**Stage 1**</span>
 <ul>
 <li style="color:lightgray"><strong>14th January 2026</strong>: Abstract submission deadline</li>
 <li style="color:lightgray"><em>26th January 2026</em>: Abstract acceptance notifications</li>
-<li><span style="color:#DF3737;font-weight:bold">10th April 2026</span>: First stage solution submission deadline</li>
+<li style="color:lightgray">10th April 2026: First stage solution submission deadline</li>
 </ul>
 
-**Stage 2**
-- **24th April 2026**: Second stage solution submission deadline
+<span style="color:#009344">**Stage 2**</span>
+- <span style="color:#DF3737;font-weight:bold">24th April 2026</span>: Second stage solution submission deadline
 
 **Stage 3**
 - **1st May 2026 (optional)**: Short paper submission deadline
@@ -66,10 +66,15 @@ Name your masterplan file `"masterplan-{abstractID}-stage_{X}"` (e.g. `"masterpl
 > Note: the masterplans included in the data folder are for illustrative purposes only, remember to remove those interventions before submittion your solution.
 
 Since every participant enters stages 2 and 3 with a different starting system (shaped by their interventions in previous stages) the following process applies after each round's deadline:
-- The stage's exogenous drivers will be publicly released alongside the results of a "status quo" solution (i.e., a solution run with an empty masterplan, serving as a baseline).
+- The stage's exogenous drivers will be shared privately with the teams that provide a correct solution first, then released publicly.
+These will be complemented by the results of a "status quo" solution (i.e., a solution run with an empty masterplan, serving as a baseline).
 - Each team's official results will be sent back privately by the organisers (possibly within the same week).
 Teams should expect to be contacted and remain available to help resolve any errors that may arise during evaluation.
 That said, participants don't need to wait and are free to preview their own results at any time by extending their previous stage outputs with the new solution and running their masterplan independently.
+
+While edge cases may be reviewed, clearly mistaken solutions will default to the do-nothing baseline for that stage.
+A failing solution in one stage does not disqualify the team, and participants can continue with their own solution from the next stage onwards.
+For instructions on how to test your solution locally before submission, see the [how to run scenarios]({{ "evaluator/running-scenarios" | relative_url }}).
 
 ## Ranking 📊
 

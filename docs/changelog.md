@@ -9,7 +9,37 @@ website_page_authors:
 
 # Changelog 🕑
 
-## The Battle of the Water Futures [Data and Software - [v0.5.4](https://doi.org/10.5281/zenodo.17698299)]
+## The Battle of the Water Futures [Data and Software - [v1.0.0](https://doi.org/10.5281/zenodo.17698299)]
+
+**Release Date:** 13th April 2026
+
+This major release marks the end of the first stage of the competition.
+It also includes a few minor last-minute adjustments to ensure the competition runs smoothly.
+
+### What's Changed
+
+- **Data**
+  - Correct configuration file for historical period (See [#34](https://github.com/WaterFutures/water-futures-battle/issues/34))
+  - Correct pipe option id in Excel masterplan
+
+- **Code**
+  - Bug fix: solar farm production clipping (See [#35](https://github.com/WaterFutures/water-futures-battle/issues/35))
+  - Few minor bug fixes
+
+- **Rules and Information (Website)**
+  - Evaluation procedure clarification.
+  
+### What's Unchanged
+
+Rules, deadlines, and problem description.
+
+### Important Notes
+
+The new data for stage 2 is shared privately with the teams that completed the first stage successfully.
+
+---
+
+## The Battle of the Water Futures [Data and Software - [v0.5.4](https://doi.org/10.5281/zenodo.19049692)]
 
 **Release Date:** 8th April 2026
 
@@ -34,7 +64,7 @@ Future patch releases of the Python library should fix only minor bugs.
 
 ---
 
-## The Battle of the Water Futures [Data and Software - [v0.5.3](https://doi.org/10.5281/zenodo.17698299)]
+## The Battle of the Water Futures [Data and Software - [v0.5.3](https://doi.org/10.5281/zenodo.19049692)]
 
 **Release Date:** 1st April 2026
 
@@ -65,7 +95,7 @@ Future patch releases of the Python library should fix only minor bugs.
 ---
 
 
-## The Battle of the Water Futures [Data and Software - [v0.5.2](https://doi.org/10.5281/zenodo.17698299)]
+## The Battle of the Water Futures [Data and Software - [v0.5.2](https://doi.org/10.5281/zenodo.19049692)]
 
 **Release Date:** 25th March 2026
 
@@ -90,7 +120,7 @@ A future patch releases of the Python library (0.5.x) will add the last missing 
 ---
 
 
-## The Battle of the Water Futures [Data and Software - [v0.5.1](https://doi.org/10.5281/zenodo.17698299)]
+## The Battle of the Water Futures [Data and Software - [v0.5.1](https://doi.org/10.5281/zenodo.19049692)]
 
 **Release Date:* 23rd March 2026
 
