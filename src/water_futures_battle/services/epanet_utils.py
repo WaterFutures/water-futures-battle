@@ -7,8 +7,6 @@ from typing import Dict, List, NamedTuple, Optional, Set, Tuple
 import itertools
 from epanet_plus import EPyT, EpanetConstants
 from geographiclib.geodesic import Geodesic as Geo
-from epyt_flow.simulation import ScenarioSimulator, EPyT, CustomControlModule, ScadaData
-from epyt_flow.utils import to_seconds
 import numpy as np
 import pandas as pd
 

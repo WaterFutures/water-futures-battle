@@ -101,9 +101,13 @@ class BudgetAllocation:
             for wu in water_utilities
         }
 
-        #check that the policy_arg values sum to 1
-        if sum(alloc_plan.values()) > 1.0:
-            raise ValueError("The custom budget allocation percentages must sum to 1.")
+        #check that the policy_arg values sum doesn't exceed 1 (below 1 your loss)
+        if sum(alloc_plan.values()) > 1.0+1e-8:
+            raise ValueError(
+                "The custom budget allocation percentages must sum to 1."
+                f"Your solution sums to {sum(alloc_plan.values())}"
+                f"Your custom allocation plan: {alloc_plan}"
+            )
 
         return {
             wu_id: wu_share * budget

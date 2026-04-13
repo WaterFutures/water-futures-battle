@@ -373,7 +373,7 @@ def run_hydraulic_simulations(
             for cluster in wutilities_clusters
         )
     else:
-        for cluster in wutilities_clusters:
+        for cluster in sorted(wutilities_clusters, key=lambda cl: cl.filename):
             _run_and_advance(cluster=cluster)
 
     return
@@ -549,6 +549,7 @@ def update_financial_balances(
             - int_pri
             - settings._cost_normalization(year, water_utility.bwf_id)
         )
+        provisional_balance = round(provisional_balance, 2)
 
         # Eq 21.b
         debt = -provisional_balance if provisional_balance < 0.0 else 0.0
@@ -577,7 +578,7 @@ def update_financial_balances(
 
         # Eq 21.c
         updated_balance = provisional_balance + pro
-
+        updated_balance = round(updated_balance, 2)
         if settings._is_simulating_historical_period:
             updated_balance = 0.0 # we said participants will start from 0.0 balance
 

@@ -65,6 +65,8 @@ def configure_water_utilities(
     wu_db = WaterUtilityDB.load_from_file(os.path.join(data_path, desc[WaterUtilityDB.NAME]))
     WaterUtility.set_dynamic_properties(wu_db)
     WaterUtility.set_results(WaterUtilityResults())
+    # Fix balance that for some reason is uploaded as int64
+    WaterUtility._dynamic_properties[WaterUtilityDB.BALANCE] = WaterUtility._dynamic_properties[WaterUtilityDB.BALANCE].astype(float)
 
     # Then, let's start creating the entities
     wu_st_properties = desc['water_utilities-static_properties']
@@ -658,7 +660,7 @@ def settle_operations_impact(
     
     # Opex and emissions of water sources
     # Eq. 8
-    for source in water_utility.active_sources(when=year):
+    for source in sorted(water_utility.active_sources(when=year), key= lambda s: s.bwf_id):
         source_opex = 0.0
 
         # Fixed costs (Fs term of Eq. 5)
@@ -679,8 +681,7 @@ def settle_operations_impact(
         source_energy_production = source_energy_production[source_energy_production.index.year == year]
 
         if not source_energy_production.empty:
-            source_grid_energy = source_energy_consumption - source_energy_production
-            source_grid_energy.clip(lower=0.0)
+            source_grid_energy = (source_energy_consumption - source_energy_production).clip(lower=0.0)
         else:
             source_grid_energy = source_energy_consumption
 
@@ -736,8 +737,7 @@ def settle_operations_impact(
         pstat_ele_prod = pstat_ele_prod[pstat_ele_prod.index.year == year]
 
         if not pstat_ele_prod.empty:
-            pstat_ele_grid = pstat_ele_cons - pstat_ele_prod
-            pstat_ele_grid.clip(lower=0.0)
+            pstat_ele_grid = (pstat_ele_cons - pstat_ele_prod).clip(lower=0.0)
         else:
             pstat_ele_grid = pstat_ele_cons
 

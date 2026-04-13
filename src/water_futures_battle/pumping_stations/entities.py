@@ -282,9 +282,12 @@ def get_pumps_collection(
                 max(current_age, poption.lifetime[0]),
                 poption.lifetime[1]
             )
-            lifetime = settings.get_random_generator('pumps-lifetime').integers(
-                *lifetime_bounds
-            )
+            if lifetime_bounds[0] < lifetime_bounds[1]:
+                lifetime = settings.get_random_generator('pumps-lifetime').integers(
+                    *lifetime_bounds
+                )
+            else:
+                lifetime = lifetime_bounds[0]
 
         pumps[i] = Pump(
             bwf_id=f"{bwf_id_prefix}-{i:02d}",
