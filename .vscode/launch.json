@@ -70,7 +70,18 @@
                 "${env:HOME}/Documents/sandbox/bwf_inputs-test_stage_1/configuration.yaml"
             ],
             "console": "integratedTerminal"
-        }
+        },
+        {
+            "name": "Debug submission evaluation",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.water_futures_battle",
+            "args": [
+                "${workspaceFolder}/teams/${input:teamName}/${input:stageNumber}/masterplan-${input:teamName}-stage_${input:stageNumber}.${input:masterplanExtension}",
+                "${workspaceFolder}/teams/${input:teamName}/${input:stageNumber}/bwf_inputs-${input:teamName}-stage_${input:stageNumber}/configuration.yaml"
+            ],
+            "console": "integratedTerminal"
+        },
     ],
     "inputs": [
         {
@@ -78,6 +89,24 @@
             "type": "promptString",
             "description": "Enter the name to the masterplan file",
             "default": "empty"
+        },
+        {
+            "id": "teamName",
+            "type": "promptString",
+            "description": "Enter the team's name",
+            "default": "TEAM00"
+        },
+        {
+            "id": "stageNumber",
+            "type": "promptString",
+            "description": "Enter the stage number",
+            "default": "1"
+        },
+        {
+            "id": "masterplanExtension",
+            "type": "promptString",
+            "description": "Enter the masterplan's extenstion",
+            "default": "yaml"
         }
     ]
 }
