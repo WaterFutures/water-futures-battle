@@ -9,7 +9,29 @@ website_page_authors:
 
 # Changelog 🕑
 
-## The Battle of the Water Futures [Data and Software - [v1.0.0](https://doi.org/10.5281/zenodo.17698299)]
+## The Battle of the Water Futures [Data and Software - [v1.0.1](https://doi.org/10.5281/zenodo.17698299)]
+
+**Release Date:** 15th April 2026
+
+This patch release introduces a few adjustment to help in stage 2 from what was learned in stage 1.
+
+### What's Changed
+
+- **Code**
+  - Account for "fixed costs" in stage 2 through the cost normalisation hidden file
+  - Helper script to generate a test folder for future stages from a results folder
+  
+### What's Unchanged
+
+Data, rules, deadlines, and problem description.
+
+### Important Notes
+
+The new data for stage 2 and the stage 1 results are shared privately with the teams that completed the first stage successfully.
+
+---
+
+## The Battle of the Water Futures [Data and Software - [v1.0.0](https://doi.org/10.5281/zenodo.19549650)]
 
 **Release Date:** 13th April 2026
 
