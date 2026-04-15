@@ -9,6 +9,8 @@ from .random_manager import RandomManager, FakeLifetimeGenerator
 
 _HISTORICAL_PERIOD_END = 2024
 
+_COST_NORMALISATION = True # Triggers the use of the cost normalisation dataframe in the water utility balances
+
 def load_cost_normalisation_df() -> pd.DataFrame:
     path = files("water_futures_battle.core").joinpath("cost_normalisation.csv")
     with path.open("r") as f:
@@ -43,6 +45,8 @@ class Settings:
     @classmethod
     def from_config(cls, config: Dict[str, Any]) -> Self:
         """Primary constructor from config object (dictionary)"""
+        global _COST_NORMALISATION
+        _COST_NORMALISATION = config.get('_cost_normalisation', True)
         return cls(
             start_year=config[cls.START_YEAR],
             end_year=config[cls.END_YEAR],
@@ -112,4 +116,6 @@ class Settings:
         return self.get_random_generator('sources-opex-volum-other')
     
     def _cost_normalization(self, year: int, wu_id: str) -> float:
+        if not _COST_NORMALISATION:
+            return 0.0
         return float(_cost_normalisation_df.loc[year, wu_id])
