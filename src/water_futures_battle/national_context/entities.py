@@ -245,6 +245,16 @@ class NationalContext:
         return self
     
     @property
+    def all_solar_farms(self) -> Set[SolarFarm]:
+        """
+        Returns the dynamic set of all solar farms installed in the system.
+        """
+        return (
+            set().union(*WaterSource._global_solar_farms.values())
+            | set().union(*PumpingStation._global_solar_farms.values())
+        )
+    
+    @property
     def solar_farms_results(self) -> SolarFarmsResults:
         return SolarFarm._results
 

@@ -358,7 +358,7 @@ def save_system_status(
         # Energy
         configuration['energy_system'] = dump_energy_system(
             national_context.energy_sys,
-            national_context._all_solar_farms,
+            national_context.all_solar_farms,
             results_dir
         )
         progress.update(saving_task, advance=1)
