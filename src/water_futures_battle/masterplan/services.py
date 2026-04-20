@@ -35,20 +35,22 @@ def parse_masterplan(masterplan_file: Path) -> Masterplan:
 
 def parse_excel_masterplan(masterplan_file: Path) -> Dict:
     # Load the Excel file (all sheets except 'DATA')
-    # Using pandas ExcelFile to get sheet names
-    xl = pd.ExcelFile(masterplan_file)
-    sheet_names = [s for s in xl.sheet_names if s.upper() != 'DATA']
+    ALL_SHEETS = [
+        'BUDGET ALLOCATION',
+        'NRW MITIGATION',
+        'PRICE ADJUSTMENT',
+        'OPEN SOURCE', 
+        'CLOSE SOURCE',
+        'INSTALL PIPE',
+        'INSTALL PUMPS',
+        'INSTALL SOLAR',
+    ]
     
     # Load sheets into a dictionary of DataFrames
-    dfs = {s: xl.parse(s) for s in sheet_names}
-    
-    # Helper to normalize sheet names for easier lookup
-    def get_df(name):
-        for k in dfs.keys():
-            if name.upper() in k.upper():
-                return dfs[k]
-        return pd.DataFrame()
-
+    dfs = pd.read_excel(
+        masterplan_file,
+        sheet_name=ALL_SHEETS
+    )
     # Determine unique years across all sheets
     all_years = set()
     for df in dfs.values():
@@ -61,7 +63,7 @@ def parse_excel_masterplan(masterplan_file: Path) -> Dict:
         year_entry = {"year": int(year)}
         
         # --- 1. National Policies ---
-        budget_df = get_df('BUDGET ALLOCATION')
+        budget_df = dfs['BUDGET ALLOCATION']
         if not budget_df.empty:
             year_budget = budget_df[budget_df['YEAR'] == year]
             if not year_budget.empty:
@@ -72,7 +74,7 @@ def parse_excel_masterplan(masterplan_file: Path) -> Dict:
                 }
         
         # --- 2. National Interventions (Pipes connecting utilities) ---
-        pipe_df = get_df('INSTALL PIPE')
+        pipe_df = dfs['INSTALL PIPE']
         if not pipe_df.empty:
             nat_pipes = pipe_df[(pipe_df['YEAR'] == year) & (pipe_df['WATER UTILITY'].str.upper() == 'NATIONAL')]
             if not nat_pipes.empty:
@@ -85,11 +87,10 @@ def parse_excel_masterplan(masterplan_file: Path) -> Dict:
         
         # --- 3. Water Utilities ---
         # Get all unique Water Utility IDs for this year (excluding 'NATIONAL')
+        WU_SHEETS = ALL_SHEETS[1:]
         utilities = set()
-        relevant_sheets = ['NRW MITIGATION', 'PRICE ADJUSTMENT', 'OPEN SOURCE', 
-                           'CLOSE SOURCE', 'INSTALL PIPE', 'INSTALL PUMPS', 'INSTALL SOLAR']
-        for sheet in relevant_sheets:
-            df = get_df(sheet)
+        for sheet in WU_SHEETS:
+            df = dfs[sheet]
             if not df.empty and 'WATER UTILITY' in df.columns:
                 utils = df[(df['YEAR'] == year) & (df['WATER UTILITY'].str.upper() != 'NATIONAL')]['WATER UTILITY'].unique()
                 utilities.update(utils)
@@ -102,7 +103,7 @@ def parse_excel_masterplan(masterplan_file: Path) -> Dict:
             policies = {}
             
             # NRW Mitigation
-            nrw_df = get_df('NRW MITIGATION')
+            nrw_df = dfs['NRW MITIGATION']
             if not nrw_df.empty:
                 wu_nrw = nrw_df[(nrw_df['YEAR'] == year) & (nrw_df['WATER UTILITY'] == wu_id)]
                 if not wu_nrw.empty:
@@ -112,7 +113,7 @@ def parse_excel_masterplan(masterplan_file: Path) -> Dict:
                     }
             
             # Price Adjustment
-            price_df = get_df('PRICE ADJUSTMENT')
+            price_df = dfs['PRICE ADJUSTMENT']
             if not price_df.empty:
                 wu_price = price_df[(price_df['YEAR'] == year) & (price_df['WATER UTILITY'] == wu_id)]
                 if not wu_price.empty:
@@ -131,7 +132,7 @@ def parse_excel_masterplan(masterplan_file: Path) -> Dict:
             interventions = {}
             
             # Open/Close Source
-            os_df = get_df('OPEN SOURCE')
+            os_df = dfs['OPEN SOURCE']
             if not os_df.empty:
                 wu_os = os_df[(os_df['YEAR'] == year) & (os_df['WATER UTILITY'] == wu_id)]
                 if not wu_os.empty:
@@ -141,8 +142,26 @@ def parse_excel_masterplan(masterplan_file: Path) -> Dict:
                          'pipe_option_id': r['PIPE OPTION ID']} for _, r in wu_os.iterrows()
                     ]
 
+            cs_df = dfs['CLOSE SOURCE']
+            if not cs_df.empty:
+                wu_cs = cs_df[(cs_df['YEAR'] == year) & (cs_df['WATER UTILITY'] == wu_id)]
+                if not wu_cs.empty:
+                    interventions['close_source'] = [
+                        {'source_id': r['SOURCE ID']}
+                        for _, r in wu_cs.iterrows()
+                    ]
+
             # Install Pumps/Solar/Pipes (utility level)
-            pumps_df = get_df('INSTALL PUMPS')
+            pipe_df = dfs['INSTALL PIPE']
+            if not pipe_df.empty:
+                wu_pipes = pipe_df[(pipe_df['YEAR'] == year) & (pipe_df['WATER UTILITY'] == wu_id)]
+                if not wu_pipes.empty:
+                    interventions['install_pipe'] = [
+                        {'connection_id': r['CONNECTION ID'], 'pipe_option_id': r['PIPE OPTION ID']}
+                        for _, r in wu_pipes.iterrows()
+                    ]
+
+            pumps_df = dfs['INSTALL PUMPS']
             if not pumps_df.empty:
                 wu_pumps = pumps_df[(pumps_df['YEAR'] == year) & (pumps_df['WATER UTILITY'] == wu_id)]
                 if not wu_pumps.empty:
@@ -152,7 +171,18 @@ def parse_excel_masterplan(masterplan_file: Path) -> Dict:
                         for _, r in wu_pumps.iterrows()
                     ]
 
-            if interventions: wu_entry['interventions'] = interventions
+            solar_df = dfs['INSTALL SOLAR']
+            if not solar_df.empty:
+                wu_solar = solar_df[(solar_df['YEAR'] == year) & (solar_df['WATER UTILITY'] == wu_id)]
+                if not wu_solar.empty:
+                    interventions['install_solar'] = [
+                        {'source_id': r['SOURCE ID'], 'capacity': r['CAPACITY']}
+                        for _, r in wu_solar.iterrows()
+                    ]
+
+            if interventions:
+                wu_entry['interventions'] = interventions
+            
             water_utilities_list.append(wu_entry)
             
         if water_utilities_list:
