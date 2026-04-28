@@ -9,7 +9,32 @@ website_page_authors:
 
 # Changelog 🕑
 
-## The Battle of the Water Futures [Data and Software - [v1.0.1](https://doi.org/10.5281/zenodo.17698299)]
+## The Battle of the Water Futures [Data and Software - [v1.1.0](https://doi.org/10.5281/zenodo.17698299)]
+
+**Release Date:** 28th April 2026
+
+This minor release marks the end of the second stage of the competition.
+
+### What's Changed
+
+- **Code**
+  - New fixed costs for stage 3
+  - Rooom for floating point calculations numerical inaccuracies with custom NRW policy
+  - Fix Issue #37 (solar farms dumping)
+  - Fix Issue #38 (masterplan parsing)
+  - Helper script fix
+  
+### What's Unchanged
+
+Data, rules, deadlines, and problem description.
+
+### Important Notes
+
+The new data for stage 3 and the stage 2 results are shared privately with the teams that completed the stage successfully.
+
+---
+
+## The Battle of the Water Futures [Data and Software - [v1.0.1](https://doi.org/10.5281/zenodo.19549650)]
 
 **Release Date:** 15th April 2026
 

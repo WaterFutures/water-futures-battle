@@ -90,7 +90,7 @@ class NRWMitigation(Policy):
             shares: Dict[str, float]
         ) -> Dict[YearlyView[Municipality], float]:
 
-        if sum(shares.values()) > 1.0:
+        if sum(shares.values()) > 1.0 + 1e-8:
             raise ValueError(
                 "The sum of the municipalities shares for the NRW mitigation exceeds 1. "
                 "Keep the sum below one to correctly allocate the budget."
