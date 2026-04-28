@@ -51,12 +51,14 @@ More information about the conference and the abstract and paper submission are 
 <li style="color:lightgray">10th April 2026: First stage solution submission deadline</li>
 </ul>
 
-<span style="color:#009344">**Stage 2**</span>
-- <span style="color:#DF3737;font-weight:bold">24th April 2026</span>: Second stage solution submission deadline
+<span style="color:lightgray">**Stage 2**</span>
+<ul>
+<li style="color:lightgray"><strong>24th April 2026</strong>: Second stage solution submission deadline</li>
+</ul>
 
-**Stage 3**
-- **1st May 2026 (optional)**: Short paper submission deadline
-- **8th May 2026**: Third stage solution submission deadline
+<span style="color:#009344;font-weight:bold">Stage 3</span>
+- <span style="color:#DF3737;font-weight:bold">1st May 2026 (optional)</span>: Short paper submission deadline
+- <span style="color:#DF3737;font-weight:bold">8th May 2026</span>: Third stage solution submission deadline
 - **18th May 2026**: Conference starts! 🎉
 
 ## Submitting a solution 📩
