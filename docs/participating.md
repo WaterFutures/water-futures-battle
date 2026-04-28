@@ -78,6 +78,12 @@ While edge cases may be reviewed, clearly mistaken solutions will default to the
 A failing solution in one stage does not disqualify the team, and participants can continue with their own solution from the next stage onwards.
 For instructions on how to test your solution locally before submission, see the [how to run scenarios]({{ "evaluator/running-scenarios" | relative_url }}).
 
+## Submitting a full paper 📄
+
+Participants may optionally submit a full paper to complement their submission.
+These papers must comply with the same conference requirements, which can be found [here](https://www.wdsa-ccwi2026.ucy.ac.cy/call-for-papers/).
+The only difference is that the submission does not need to happen through the conference platform; instead, it should be sent by email to the competition organisers at <a href="mailto:battlewaterfutures@kwrwater.nl?subject=Competition Updates">battlewaterfutures@kwrwater.nl</a>.
+
 ## Ranking 📊
 
 Competitor solutions will be evaluated using the four metrics detailed in the problem description: economic performance, environmental impact, reliability, and fairness.
