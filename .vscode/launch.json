@@ -77,8 +77,8 @@
             "request": "launch",
             "module": "src.water_futures_battle",
             "args": [
-                "${workspaceFolder}/teams/${input:teamName}/${input:stageNumber}/masterplan-${input:teamName}-stage_${input:stageNumber}.${input:masterplanExtension}",
-                "${workspaceFolder}/teams/${input:teamName}/${input:stageNumber}/bwf_inputs-${input:teamName}-stage_${input:stageNumber}/configuration.yaml"
+                "${workspaceFolder}/teams/TEAM${input:teamName}/${input:stageNumber}/masterplan-${input:teamName}-stage_${input:stageNumber}.${input:masterplanExtension}",
+                "${workspaceFolder}/teams/TEAM${input:teamName}/${input:stageNumber}/bwf_inputs-TEAM${input:teamName}-stage_${input:stageNumber}/configuration.yaml"
             ],
             "console": "integratedTerminal"
         },

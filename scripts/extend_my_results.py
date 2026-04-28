@@ -6,8 +6,8 @@ import yaml
 
 FILE_EXTENSION_MAP = {
     "climate/climate-dynamic_properties.xlsx": [],
-    "economy/economy-dynamic_properties.xlsx": ['electricity_price-unit_cost', 'electricity_price-pattern'],
-    "energy/energy_system-dynamic_properties.xlsx": [],
+    "economy/economy-dynamic_properties.xlsx": [],
+    "energy/energy_system-dynamic_properties.xlsx": ['electricity_price-unit_cost', 'electricity_price-pattern'],
     "jurisdictions/municipalities-dynamic_properties.xlsx": ['dist_network-age-avg'],
 }
 
