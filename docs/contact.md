@@ -8,7 +8,7 @@ website_page_authors:
 ---
 
 For questions or further information, please contact the team or the corresponding author at
-<a href="mailto:battlewaterfutures@kwrwater.nl">battlewaterfutures@kwrwater.nl</a>.
+<a href="mailto:dennis.zanutto@kwrwater.nl">dennis.zanutto@kwrwater.nl</a>.
 
 Additional resources:
 - [Q&A section of the GitHub repository](https://github.com/WaterFutures/water-futures-battle/discussions) to ask questions or browse previous discussions.

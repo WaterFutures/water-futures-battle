@@ -19,17 +19,11 @@ The objective is to **design and operate** a water distribution system over a lo
 For the first time, this challenge features a staged-design approach, unobservable and unknown uncertainties, and incorporates elements of policymaking and artificial intelligence.
 The solutions will be assessed using a transparent and inspectable **open-source evaluation framework**.
 
-## Next Deadline ⏰ 
+## The Competition Has Concluded 🏁
 
-> **(Optional) full paper submission**: <span style="color:#DF3737">*1st May 2026*</span>
-> 
-> **Third stage solution submission**: <span style="color:#DF3737">*8th May 2026*</span>
+Thank you to everyone who participated. Look out for the upcoming paper describing the competition and its outcomes.
 
-Stay on track with all important dates on our [Timeline page]({{ site.baseurl }}/participating.html#important-dates-).
-
-## Get ahead of everyone! 🥇
-
-**Are you looking for the data? The most up-to-date information are available through multiple channels:**
+In the meantime, these resources remain available:
 
 > 🌐 **[Official Competition Website](https://waterfutures.github.io/water-futures-battle/)** - Full documentation and resources
 >
@@ -41,24 +35,16 @@ Stay on track with all important dates on our [Timeline page]({{ site.baseurl }}
 > 
 > [![arXiv](https://img.shields.io/badge/arXiv-2511.22986-b31b1b.svg)](http://arxiv.org/abs/2511.22986)
 
-**Want to be notified at every update?**
-
-Send an email to <a href="mailto:battlewaterfutures@kwrwater.nl?subject=Competition Updates">battlewaterfutures@kwrwater.nl</a> with the subject "Competition Updates".
-
-We'll share the calendar with you and keep you informed as soon as:
-* Competition guidelines are published.
-* Evaluation modules are released.
-* Submission deadlines are approaching.
-
 **Got a question?**
 
 Check out our [discussion page on GitHub](https://github.com/WaterFutures/water-futures-battle/discussions). Here you can find FAQs and follow the development in real time.
 
-If you can't find an answer to your question, just <a href="mailto:battlewaterfutures@kwrwater.nl">reach out to us</a>  and we'll get back to you!
+If you can't find an answer to your question, just <a href="mailto:dennis.zanutto@kwrwater.nl">reach out to us</a> and we'll get back to you!
  
 ## Latest Updates 📢
 
-- *28th April 2026* - **Version 1.1.0**
+- *?? 2026* - **Version 1.2.0**
+- *28th April 2026* - Version 1.1.0
 - *15th April 2026* - Version 1.0.1
 - *13th April 2026* - Version 1.0.0
 - *8th April 2026* - Version 0.5.4

@@ -9,7 +9,35 @@ website_page_authors:
 
 # Changelog 🕑
 
-## The Battle of the Water Futures [Data and Software - [v1.1.0](https://doi.org/10.5281/zenodo.17698299)]
+## The Battle of the Water Futures [Data and Software - v1.2.0](https://doi.org/10.5281/zenodo.17698299)]
+
+**Release Date:** ?? 2026
+
+This minor release marks the end of the competition and the release for the submitted review paper.
+Look out for the upcoming paper describing the competition and its outcomes. The competition resources remain available on this website and through the linked repositories.
+
+### What's new
+- **Data**
+  - Released the original unparsed data of the battle
+  - Added the anonymised participants' masterplans
+  - Added the reference solution of TEAM00 (only NRW mitigation in stage 2 and 3)
+  - Added participants' presentations at the conference
+- **Code**
+  - Scripts to generate the starting dataset
+  - Scripts to generate the follow-up stages dataset
+
+### What's Changed
+
+- **Code**
+  - Fix Issue #39 (debt upload)
+
+### What's Unchanged
+
+Problem description.
+
+---
+
+## The Battle of the Water Futures [Data and Software - [v1.1.0](https://doi.org/10.5281/zenodo.19848801)]
 
 **Release Date:** 28th April 2026
 
