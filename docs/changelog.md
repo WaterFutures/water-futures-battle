@@ -9,9 +9,9 @@ website_page_authors:
 
 # Changelog 🕑
 
-## The Battle of the Water Futures [Data and Software - v1.2.0](https://doi.org/10.5281/zenodo.17698299)]
+## The Battle of the Water Futures [Data and Software - [v1.2.0](https://doi.org/10.5281/zenodo.17698299)]
 
-**Release Date:** ?? 2026
+**Release Date:** 5th November 2026
 
 This minor release marks the end of the competition and the release for the submitted review paper.
 Look out for the upcoming paper describing the competition and its outcomes. The competition resources remain available on this website and through the linked repositories.
@@ -29,7 +29,7 @@ Look out for the upcoming paper describing the competition and its outcomes. The
 ### What's Changed
 
 - **Code**
-  - Fix Issue #39 (debt upload)
+  - Fix Issue #41 (debt upload)
 
 ### What's Unchanged
 
