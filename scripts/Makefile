@@ -1,6 +1,6 @@
 # Output filenames (in project root)
 OUTPUT_DATA := ../water_futures_battle-data.zip
-OUTPUT_PDF := ../water_futures_battle-preprint.pdf
+OUTPUT_PDF := ../water_futures_battle-problem_description.pdf
 OUTPUT_LATEX := ../water_futures_battle-source.tex
 OUTPUT_LATEX_CLEANED := ../water_futures_battle-source_cleaned.tex
 OUTPUT_SUBMISSION := ../water_futures_battle-arxiv_submission.zip
@@ -55,6 +55,8 @@ PREPRO_HTML_FILES = \
 	
 DATA_FILES = \
 	VERSION \
+	LICENSE \
+	NOTICE.md \
 	configuration.yaml \
 	masterplan.yaml \
 	masterplan.json \

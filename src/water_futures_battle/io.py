@@ -238,7 +238,7 @@ def configure_system_ex(
         )
         progress.update(config_task, advance=1)
 
-        if settings.start_year > 2000:
+        if settings.start_year > 2000 and settings.start_year < 2100:
             # Unless you use the original data folder (which starts with 2000),
             # the input files have been generated using the evaluator, which doens't 
             # update the costs and ages the utilities in the last year because it 

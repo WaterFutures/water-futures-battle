@@ -1,0 +1,120 @@
+years:
+  - year: 2025                                                                                  
+    national_policies:
+      budget_allocation:
+        policy: by_population # or "by_income" or the corresponding inverse policies
+    
+    national_interventions:
+      # Install here inter-provincial pipes connecting water utilities
+      install_pipe:
+        - connection_id: CP0002
+          pipe_option_id: PI01
+
+    water_utilities:
+      - water_utility: WU02
+        policies:
+          nrw_mitigation:
+            budget: 30000
+            policy: by_nrw_class
+
+          pricing_adjustment:
+            policy: by_inflation
+
+          bond_ratio:
+            value: 2
+
+        interventions:
+          open_source: # Provide source identifier, capacity, and info about the connection
+          - source_id: SG0206
+            source_capacity: 100
+            pump_option_id: PU03
+            n_pumps: 6
+            pipe_option_id: PI02
+
+          # Multiple sources can be added like this
+          - source_id: SG0207
+            source_capacity: 50
+            pump_option_id: PU01
+            n_pumps: 4
+            pipe_option_id: PI03
+
+          close_source: # Provide only the source identifier
+            - source_id: SG0211
+            
+          # Multiple sources can be removed like this.
+            - source_id: SG0212
+
+          install_pipe: # Provide connection identifier and pipe option
+            - connection_id: CG0103
+              pipe_option_id: PI01
+
+              # Multiple pipes can be added like this.
+            - connection_id: CG3032
+              pipe_option_id: PI08
+
+          install_pumps: # Provide source identifier, pump option, quantity, AND behaviour for an already open station
+            - source_id: SG0204
+              pump_option_id: PU03
+              n_pumps: 3
+              behaviour: replace
+
+            - source_id: SG0205
+              pump_option_id: PU04
+              n_pumps: 4
+              behaviour: new
+
+          install_solar: # Provide location and capacity
+            - source_id: SG0209
+              capacity: 20
+            # Multiple sources can be added like this
+            - source_id: SG0200
+              capacity: 20        
+
+      - water_utility: WU03
+        policies:
+          nrw_mitigation:
+            budget: 40000
+            policy: custom
+            policy_args:
+              GM1680 : 0.08333
+              GM0106 : 0.08333
+              GM1681 : 0.08333
+              GM0109 : 0.08333
+              GM0114 : 0.08333
+              GM0118 : 0.08333
+              GM0119 : 0.08333
+              GM1731 : 0.08333
+              GM1699 : 0.08333
+              GM1730 : 0.08333
+              GM1701 : 0.08333
+              GM1690 : 0.08333
+
+      - water_utility: WU04
+        policies:
+          nrw_mitigation:
+            budget: 40000
+            policy: by_population
+
+          pricing_adjustment:
+            policy: custom
+            policy_args:
+              fixed_component: 0.03 # Annual increase for fixed costs (3%)
+              variable_component: 0.02 # Annual increase for variable costs (2%)
+              selling_price: 0.05 # Annual increase for water sales to other provinces (5%)
+
+# Policies remain in place until amended, in the following year you can overwrite the parameters
+  - year: 2026
+    national_policies:
+      budget_allocation:
+        policy: custom
+        policy_args:
+          WU01: 0.10
+          WU02: 0.10
+          WU03: 0.10
+          WU04: 0.10
+          WU05: 0.10
+          WU06: 0.10
+          WU07: 0.10
+          WU08: 0.10    
+          WU09: 0.10
+          WU10: 0.10

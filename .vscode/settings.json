@@ -67,8 +67,14 @@
             "path": "data/climate/preprocessing-scripts",
             "envManager": "ms-python.python:venv",
             "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "bwf_competition_analysis",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
         }
     ],
     "python-envs.defaultPackageManager": "ms-python.python:pip",
-    "python-envs.defaultEnvManager": "ms-python.python:venv"
+    "python-envs.defaultEnvManager": "ms-python.python:venv",
+    "python.REPL.enableREPLSmartSend": false
 }

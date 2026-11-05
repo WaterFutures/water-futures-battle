@@ -1,0 +1,99 @@
+state:
+    name: Netherlands
+    id: NL0000
+    jurisdictions-static_properties: ./jurisdictions/jurisdictions-static_properties.xlsx
+    municipalities-dynamic_properties: ./jurisdictions/municipalities-dynamic_properties.xlsx
+
+water_demand_model:
+    water_demand_model-static_properties: ./water_demand_model/water_demand_model-static_properties.xlsx
+    water_demand_model-dynamic_properties: ./water_demand_model/water_demand_model-dynamic_properties.xlsx
+
+nrw_model:
+    nrw_model-intervention_success_prob-min: 0.9
+    nrw_model-dynamic_properties: ./nrw_model/nrw_model-dynamic_properties.xlsx
+
+sources:
+    sources-static_properties: ./sources/sources-static_properties.xlsx
+    groundwater-dynamic_properties: ./sources/groundwater-dynamic_properties.xlsx
+    surface_water-dynamic_properties: ./sources/surface_water-dynamic_properties.xlsx
+    desalination-dynamic_properties: ./sources/desalination-dynamic_properties.xlsx
+    groundwater-construction_size-max_permit_surplus: 0.3
+    surface_water-construction_size-min: 21918 # 8M m^3/year
+    surface_water-construction_size-max: 123288 # 45M m^3/year
+    desalination-construction_size-min: 21918 # 8M m^3/year
+    desalination-construction_size-max: 136986 # 50M m^3/year
+
+pumping_infrastructure:
+    pumping_stations-static_properties: ./pumping_stations/pumping_stations-static_properties.xlsx
+    pump_options-static_properties: ./pumps/pump_options-static_properties.xlsx
+    pump_options-dynamic_properties: ./pumps/pump_options-dynamic_properties.xlsx
+
+piping_infrastructure:
+    connections-static_properties: ./connections/connections-static_properties.xlsx
+    pipes-dynamic_properties: ./pipes/pipes-dynamic_properties.xlsx
+    pipe_options-static_properties: ./pipes/pipe_options-static_properties.xlsx
+    pipe_options-dynamic_properties: ./pipes/pipe_options-dynamic_properties.xlsx
+
+climate:
+    climate-dynamic_properties: ./climate/climate-dynamic_properties.xlsx
+
+economy:
+    economy-dynamic_properties: ./economy/economy-dynamic_properties.xlsx
+
+    bonds:
+        risk_free_rate: 1.0
+        spread_sensitivity: 1.0
+        maturity: 25
+        static_properties: ./economy/bonds-static_properties.xlsx
+
+energy_system:
+    solar_farms-static_properties: ./energy/solar_farms-static_properties.xlsx
+    energy_system-dynamic_properties: ./energy/energy_system-dynamic_properties.xlsx
+
+water_utilities:
+    water_utilities-static_properties: ./water_utilities/water_utilities-static_properties.xlsx
+    water_utilities-dynamic_properties: ./water_utilities/water_utilities-dynamic_properties.xlsx
+
+settings:
+    start_year: 2000
+    end_year: 2024
+    national_budget: 0
+    lifeline_volume: 80
+    seed: 128
+    available_cores: 2
+
+# Scenario name for results directory naming
+scenario_name: historical_stage
+
+# Results output configuration
+save_results:
+
+    # Entities, those that have results (extra are ignored)
+    entities:
+        format: csv
+
+        # Save everything as it is tracked by the evaluator
+        sources: true
+
+        municipalities: true
+        # Save subset of info, for example, ignore total demand because it takes too long
+        # municipalities:
+            # enabled: true
+            # fields: [demand-billable, demand-undelivered]
+        
+        pumps: true
+        solar_farms: true
+        water_utilities: true
+
+    # Analyitcs (special preprocessed variables from the entitie)
+    analytics:
+        peak_demands: true
+        # Nothing else for now
+
+    # Epanet networks, save a snapshot of the system with patterns and values for a week
+    # as used in the evaluator
+    epanet_networks:
+        mode: average_week # Options: average_week, specific_weeks
+        weeks: [26] # Only used if mode is 'specific_weeks' (list of int 1-52)
+        pumping_stations_as_gpv: False 
+        limit_sources_outflow: False

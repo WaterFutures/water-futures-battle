@@ -30,9 +30,21 @@ def configure_economy(
     economy_db = EconomyDB.load_from_file(os.path.join(data_path, config[EconomyDB.NAME]))
 
     # For each water utility, create the bond that were already existing
-    bonds = {}
+    bonds_dict: Dict[str, Set[BondIssuance]] = {}
+    bonds_df = pd.read_excel(
+        os.path.join(data_path, bonds_config['static_properties'])
+    )
+    for _, row in bonds_df.iterrows():
+        wu_id = str(row['water_utility_id'])
 
-    return bnd_settings, economy_db, bonds
+        if wu_id not in bonds_dict:
+            bonds_dict[wu_id] = set()
+
+        bonds_dict[wu_id].add(
+            BondIssuance.from_row(row)
+        )
+
+    return bnd_settings, economy_db, bonds_dict
 
 def bond_price(
         face_value: float,
