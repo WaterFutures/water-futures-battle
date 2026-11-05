@@ -7,6 +7,14 @@ website_page_authors:
   - D. Zanutto
 ---
 
+# The Competition Has Concluded 🏁
+
+Thank you to everyone who participated. Look out for the upcoming paper describing the competition and its outcomes.
+
+In the meantime, this page remains available for the reviewers.
+
+---
+
 # How to participate
 
 On this page you can find the [rules](#participation-rules-), [deadlines](#important-dates-️), [submission](#submitting-a-solution-) and [ranking](#ranking-) procedures.
@@ -56,9 +64,9 @@ More information about the conference and the abstract and paper submission are 
 <li style="color:lightgray"><strong>24th April 2026</strong>: Second stage solution submission deadline</li>
 </ul>
 
-<span style="color:#009344;font-weight:bold">Stage 3</span>
-- <span style="color:#DF3737;font-weight:bold">1st May 2026 (optional)</span>: Short paper submission deadline
-- <span style="color:#DF3737;font-weight:bold">8th May 2026</span>: Third stage solution submission deadline
+<span style="color:lightgray">Stage 3</span>
+- <span style="color:lightgray">1st May 2026 (optional)</span>: Short paper submission deadline
+- <span style="color:lightgray">8th May 2026</span>: Third stage solution submission deadline
 - **18th May 2026**: Conference starts! 🎉
 
 ## Submitting a solution 📩
