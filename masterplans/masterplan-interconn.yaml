@@ -1,0 +1,22 @@
+years:
+  - year: 2025
+    national_interventions:
+      install_pipe:
+        - connection_id: CP0001
+          pipe_option_id: PI09
+        - connection_id: CP0003
+          pipe_option_id: PI10
+        - connection_id: CP0007
+          pipe_option_id: PI10
+        - connection_id: CP0022
+          pipe_option_id: PI10
+        - connection_id: CP0025
+          pipe_option_id: PI10
+        - connection_id: CP0011
+          pipe_option_id: PI10
+        - connection_id: CP0015
+          pipe_option_id: PI10
+        - connection_id: CP0024
+          pipe_option_id: PI10
+        - connection_id: CP0026
+          pipe_option_id: PI10

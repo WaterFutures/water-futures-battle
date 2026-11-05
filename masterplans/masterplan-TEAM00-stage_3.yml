@@ -1,0 +1,261 @@
+years:
+- year: 2075
+  water_utilities:
+  - water_utility: WU01
+    policies:
+      nrw_mitigation:
+        budget: 12764923
+        policy: by_nrw_class
+  - water_utility: WU02
+    policies:
+      nrw_mitigation:
+        budget: 14892410
+        policy: by_nrw_class
+  - water_utility: WU03
+    policies:
+      nrw_mitigation:
+        budget: 10637435
+        policy: by_nrw_class
+  - water_utility: WU04
+    policies:
+      nrw_mitigation:
+        budget: 21274871
+        policy: by_nrw_class
+  - water_utility: WU05
+    policies:
+      nrw_mitigation:
+        budget: 42549741
+        policy: by_nrw_class
+  - water_utility: WU06
+    policies:
+      nrw_mitigation:
+        budget: 21274871
+        policy: by_nrw_class
+  - water_utility: WU07
+    policies:
+      nrw_mitigation:
+        budget: 46804715
+        policy: by_nrw_class
+  - water_utility: WU08
+    policies:
+      nrw_mitigation:
+        budget: 85099483
+        policy: by_nrw_class
+  - water_utility: WU09
+    policies:
+      nrw_mitigation:
+        budget: 38294767
+        policy: by_nrw_class
+  - water_utility: WU10
+    policies:
+      nrw_mitigation:
+        budget: 17019896
+        policy: by_nrw_class
+- year: 2080
+  water_utilities:
+  - water_utility: WU01
+    policies:
+      nrw_mitigation:
+        budget: 20998303
+        policy: by_nrw_class
+  - water_utility: WU02
+    policies:
+      nrw_mitigation:
+        budget: 24498020
+        policy: by_nrw_class
+  - water_utility: WU03
+    policies:
+      nrw_mitigation:
+        budget: 17498586
+        policy: by_nrw_class
+  - water_utility: WU04
+    policies:
+      nrw_mitigation:
+        budget: 34997171
+        policy: by_nrw_class
+  - water_utility: WU05
+    policies:
+      nrw_mitigation:
+        budget: 69994344
+        policy: by_nrw_class
+  - water_utility: WU06
+    policies:
+      nrw_mitigation:
+        budget: 34997171
+        policy: by_nrw_class
+  - water_utility: WU07
+    policies:
+      nrw_mitigation:
+        budget: 76993779
+        policy: by_nrw_class
+  - water_utility: WU08
+    policies:
+      nrw_mitigation:
+        budget: 139988688
+        policy: by_nrw_class
+  - water_utility: WU09
+    policies:
+      nrw_mitigation:
+        budget: 62994909
+        policy: by_nrw_class
+  - water_utility: WU10
+    policies:
+      nrw_mitigation:
+        budget: 27997738
+        policy: by_nrw_class
+- year: 2085
+  water_utilities:
+  - water_utility: WU01
+    policies:
+      nrw_mitigation:
+        budget: 32124363
+        policy: by_nrw_class
+  - water_utility: WU02
+    policies:
+      nrw_mitigation:
+        budget: 37478423
+        policy: by_nrw_class
+  - water_utility: WU03
+    policies:
+      nrw_mitigation:
+        budget: 26770301
+        policy: by_nrw_class
+  - water_utility: WU04
+    policies:
+      nrw_mitigation:
+        budget: 53540605
+        policy: by_nrw_class
+  - water_utility: WU05
+    policies:
+      nrw_mitigation:
+        budget: 107081210
+        policy: by_nrw_class
+  - water_utility: WU06
+    policies:
+      nrw_mitigation:
+        budget: 53540605
+        policy: by_nrw_class
+  - water_utility: WU07
+    policies:
+      nrw_mitigation:
+        budget: 117789330
+        policy: by_nrw_class
+  - water_utility: WU08
+    policies:
+      nrw_mitigation:
+        budget: 214162418
+        policy: by_nrw_class
+  - water_utility: WU09
+    policies:
+      nrw_mitigation:
+        budget: 96373088
+        policy: by_nrw_class
+  - water_utility: WU10
+    policies:
+      nrw_mitigation:
+        budget: 42832483
+        policy: by_nrw_class
+- year: 2090
+  water_utilities:
+  - water_utility: WU01
+    policies:
+      nrw_mitigation:
+        budget: 45639963
+        policy: by_nrw_class
+  - water_utility: WU02
+    policies:
+      nrw_mitigation:
+        budget: 53246623
+        policy: by_nrw_class
+  - water_utility: WU03
+    policies:
+      nrw_mitigation:
+        budget: 38033301
+        policy: by_nrw_class
+  - water_utility: WU04
+    policies:
+      nrw_mitigation:
+        budget: 76066605
+        policy: by_nrw_class
+  - water_utility: WU05
+    policies:
+      nrw_mitigation:
+        budget: 152133207
+        policy: by_nrw_class
+  - water_utility: WU06
+    policies:
+      nrw_mitigation:
+        budget: 76066605
+        policy: by_nrw_class
+  - water_utility: WU07
+    policies:
+      nrw_mitigation:
+        budget: 167346529
+        policy: by_nrw_class
+  - water_utility: WU08
+    policies:
+      nrw_mitigation:
+        budget: 304266414
+        policy: by_nrw_class
+  - water_utility: WU09
+    policies:
+      nrw_mitigation:
+        budget: 136919887
+        policy: by_nrw_class
+  - water_utility: WU10
+    policies:
+      nrw_mitigation:
+        budget: 60853283
+        policy: by_nrw_class
+- year: 2095
+  water_utilities:
+  - water_utility: WU01
+    policies:
+      nrw_mitigation:
+        budget: 63587447
+        policy: by_nrw_class
+  - water_utility: WU02
+    policies:
+      nrw_mitigation:
+        budget: 74185355
+        policy: by_nrw_class
+  - water_utility: WU03
+    policies:
+      nrw_mitigation:
+        budget: 52989541
+        policy: by_nrw_class
+  - water_utility: WU04
+    policies:
+      nrw_mitigation:
+        budget: 105979080
+        policy: by_nrw_class
+  - water_utility: WU05
+    policies:
+      nrw_mitigation:
+        budget: 211958159
+        policy: by_nrw_class
+  - water_utility: WU06
+    policies:
+      nrw_mitigation:
+        budget: 105979080
+        policy: by_nrw_class
+  - water_utility: WU07
+    policies:
+      nrw_mitigation:
+        budget: 233153976
+        policy: by_nrw_class
+  - water_utility: WU08
+    policies:
+      nrw_mitigation:
+        budget: 423916318
+        policy: by_nrw_class
+  - water_utility: WU09
+    policies:
+      nrw_mitigation:
+        budget: 190762343
+        policy: by_nrw_class
+  - water_utility: WU10
+    policies:
+      nrw_mitigation:
+        budget: 84783263
+        policy: by_nrw_class

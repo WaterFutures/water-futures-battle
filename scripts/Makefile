@@ -55,6 +55,8 @@ PREPRO_HTML_FILES = \
 	
 DATA_FILES = \
 	VERSION \
+	LICENSE \
+	NOTICE.md \
 	configuration.yaml \
 	masterplan.yaml \
 	masterplan.json \

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Self
 
 import pandas as pd
 
@@ -50,6 +50,19 @@ class BondIssuance:
 
     def __hash__(self) -> int:
         return hash(self.bwf_id)
+    
+    @classmethod
+    def from_row(
+        cls,
+        row_data: pd.Series | Dict[str, Any]
+    ) -> Self:
+        return cls(
+            bwf_id=str(row_data[BondIssuance.ID]),
+            n_bonds=int(row_data[BondIssuance.N_BONDS]),
+            issue_date=pd.to_datetime(row_data[BondIssuance.ISSUE_DATE], errors='raise'),
+            maturity_year=pd.to_datetime(row_data[BondIssuance.MATURITY_DATE], errors='raise'),
+            coupon_rate=float(row_data[BondIssuance.COUPON_RATE]),
+        )
 
     @property
     def interest(self) -> float:

@@ -261,3 +261,12 @@ data/connections/.temp-*/
 teams
 teams/
 bwf_inputs-*/
+
+# Output of scripts/generate_authors_tex.py
+authors.tex
+authors_credit.tex
+authors.md
+
+bwf_competition_analysis/assets/
+.agents/skills
+.claude/skills

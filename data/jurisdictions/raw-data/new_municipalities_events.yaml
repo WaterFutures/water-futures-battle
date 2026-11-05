@@ -1,0 +1,72 @@
+mergers: [ ]
+  # - date: 2032-01-01
+  #   name: someplace
+  #   latitude: 52.1
+  #   longitude: 4.5
+  #   elevation: 3
+  #   province: PV20
+  #   closing:
+  #     - GM0193
+  #     - GM0642
+  #   DP-R1: DP03
+  #   DP-R2: DP04
+  #   DP-B: DP31
+  #   pop_flow: 5000
+  # - date: 2041-01-01
+  #   name: anotherplace
+  #   latitude: 52.0
+  #   longitude: 4.7
+  #   elevation: 1
+  #   province: PV28
+  #   closing:
+  #     - GM0637
+  #     - GM0638
+  #   DP-R1: DP01
+  #   DP-R2: DP02
+  #   DP-B: DP31
+  #   pop_flow: 5000
+  # - date: 2026-01-01
+  #   name: yetanotherplace
+  #   latitude: 52.0
+  #   longitude: 4.7
+  #   elevation: 1
+  #   province: PV28
+  #   closing:
+  #     - GM1891
+  #     - GM1970
+  #   DP-R1: DP15
+  #   DP-R2: DP17
+  #   DP-B: DP32
+  #   pop_flow: 20000
+
+absorptions: [ ]
+  # - date: 2030-01-01
+  #   receiving_id: GM1963
+  #   closing:
+  #     - GM0613
+  #   DP-R1: DP10
+  #   DP-R2: DP12
+  #   DP-B: DP32
+  #   pop_flow: 0
+  # - date: 2030-01-01
+  #   receiving_id: GM1991
+  #   closing:
+  #     - GM0755
+  #     - GM0828
+  #     - GM1721
+  #   DP-R1: DP11
+  #   DP-R2: DP13
+  #   DP-B: DP33
+  #   pop_flow: 100
+
+# UPDATE: I don't think it makes sense to have absorptions, because the receiving
+# municipality would end up with duplicate connections; one already in place for
+# the absorbing municipality, and one for the municipality being absorbed.
+# At the end of the day, an absorption is just a special case of a merger wher
+# the new municipality appears at the same location of one the two old ones.
+# To avoid confusions, we force the closure of all connections involved in the merger
+# in the year of the merger and the decision by the participants of the diameter
+# of the pipe for the new connection. Basically they need to decide how to connect
+# the new municipality.
+# Since this requires them to know which municipality ets created before the stage 
+# begins, we skip this for the first stage and keep it only for the second and third.
